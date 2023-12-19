@@ -1,0 +1,44 @@
+{
+  "name": "pieces-whippy",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/pieces/whippy/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/packages/pieces/whippy",
+        "tsConfig": "packages/pieces/whippy/tsconfig.lib.json",
+        "packageJson": "packages/pieces/whippy/package.json",
+        "main": "packages/pieces/whippy/src/index.ts",
+        "assets": [
+          "packages/pieces/whippy/*.md"
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies",
+        "updateBuildableProjectDepsInPackageJson": true
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs pieces-whippy {args.ver} {args.tag}",
+      "dependsOn": [
+        "build"
+      ]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "packages/pieces/whippy/**/*.ts",
+          "packages/pieces/whippy/package.json"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
