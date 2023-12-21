@@ -29,30 +29,32 @@ export const createContact = createAction({
         const email = context.propsValue['getEmail'];
         const name = context.propsValue['getName'];
         const phoneNumber = context.propsValue['getPhone'];
-    
+
         const options = {
             method: 'POST',
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
-                'X-WHIPPY-KEY': apiKey
+                'X-WHIPPY-KEY': apiKey,
             },
             body: JSON.stringify({
                 phone: phoneNumber,
                 email: email,
                 name: name,
-                opt_in_to_all_channels: true
-            })
+            }),
         };
-    
+
         try {
             const response = await fetch('https://api.whippy.co/v1/contacts', options);
             const responseData = await response.json();
             console.log(responseData);
+
+            // Return the API response
+            return responseData;
         } catch (error) {
             console.error(error);
+            // Return an error status
+            return false;
         }
-    
-        return true;
-    }
+    },
 });

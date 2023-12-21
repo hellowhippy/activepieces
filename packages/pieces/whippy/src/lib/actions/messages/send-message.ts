@@ -28,24 +28,33 @@ export const sendMessage = createAction({
             //let phoneNumber = data.phoneNumber;
             //let message = data.message;
 
+            const apiKey = context.propsValue['getAPIKey'];
+
             const options = {
                 method: 'POST',
                 headers: {
-                  accept: 'application/json',
-                  'content-type': 'application/json',
-                  'X-WHIPPY-KEY': context.propsValue['getAPIKey']
+                    accept: 'application/json',
+                    'content-type': 'application/json',
+                    'X-WHIPPY-KEY': apiKey,
                 },
-                body: JSON.stringify({from: '+12133381105', to: context.propsValue['getToNumber'], body: context.propsValue['getMessage']})
-              };
-              
-              fetch('https://api.whippy.co/v1/messaging/sms', options)
-                .then(response => response.json())
-                .then(response => console.log(response))
-                .catch(err => console.error(err));
-
-
-        //});
-
-		return true;
-	},
+                body: JSON.stringify({
+                    from: '+12133381105',
+                    to: context.propsValue['getToNumber'],
+                    body: context.propsValue['getMessage'],
+                }),
+            };
+    
+            try {
+                const response = await fetch('https://api.whippy.co/v1/messaging/sms', options);
+                const responseData = await response.json();
+                console.log(responseData);
+    
+                // Return the API response
+                return responseData;
+            } catch (error) {
+                console.error(error);
+                // Return an error status
+                return false;
+            }
+        },
 });
