@@ -1,5 +1,6 @@
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { httpClient, HttpMethod } from "@activepieces/pieces-common";
+import { APICallParams, callAPI } from "../../api/api";
 
 export const createNote = createAction({
 	name: 'create_note', 
@@ -27,27 +28,16 @@ export const createNote = createAction({
         const note = context.propsValue['getNote'];
         const phoneNumber = context.propsValue['getToNumber'];
 
-        const options = {
+        const apiParams : APICallParams = {
+            url: 'https://api.whippy.co/v1/messaging/note',
             method: 'POST',
-            headers: {
-                accept: 'application/json',
-                'content-type': 'application/json',
-                'X-WHIPPY-KEY': apiKey,
-            },
-            body: JSON.stringify({ from: '+12133381105', to: phoneNumber, body: note }),
+            apiKey: apiKey,
+            body: { from: '+12133381105', to: phoneNumber, body: note },
         };
 
-        try {
-            const response = await fetch('https://api.whippy.co/v1/messaging/note', options);
-            const responseData = await response.json();
-            console.log(responseData);
-
-            // Return the API response
-            return responseData;
-        } catch (error) {
-            console.error(error);
-            // Return an error status
-            return false;
-        }
+        // Call the generic API function
+        const response = await callAPI(apiParams);
+        // Return the API response
+        return response;
     },
 });
