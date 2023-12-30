@@ -4,8 +4,7 @@ import {
   PieceAuth,
   StoreScope,
 } from '@activepieces/pieces-framework';
-import { httpClient, HttpMethod } from '@activepieces/pieces-common';
-import { callAPI, APICallParams } from '../../api/api';
+import { Message } from '../../api/api';
 
 export const sendMessage = createAction({
   name: 'send_message',
@@ -28,24 +27,22 @@ export const sendMessage = createAction({
     }),
   },
   async run(context) {
-    //context.store.get('message', StoreScope.FLOW).then((data:any)=>{
-    //let phoneNumber = data.phoneNumber;
-    //let message = data.message;
-
     const apiKey = context.propsValue['getAPIKey'];
     const message = context.propsValue['getMessage'];
     const toNumber = context.propsValue['getToNumber'];
 
-    const apiParams: APICallParams = {
-      url: 'https://api.whippy.co/v1/messaging/sms',
-      method: 'POST',
-      apiKey: apiKey,
-      body: { from: '+12133381105', to: toNumber, body: message },
-    };
-
-    // Call the generic API function
-    const response = await callAPI(apiParams);
-    
-    return response;
+    try {
+      // Call the generic API function
+      const response = await Message.sendMessage(apiKey, '+12133381105', toNumber, message);
+      if (response.success) {
+        return response.data; 
+      } else {
+        console.error(response.message);
+        return false;
+      }
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   },
 });
