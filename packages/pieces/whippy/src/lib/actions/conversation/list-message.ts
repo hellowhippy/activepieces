@@ -1,4 +1,5 @@
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { Conversation } from "../../api/api";
 
 export const listMessage = createAction({
     name: 'list_message',
@@ -21,25 +22,17 @@ export const listMessage = createAction({
         const limit = 10;
         const offset = 0;
 
-        const url = `https://api.whippy.co/v1/conversations/${conversationId}?messages[limit]=${limit}&messages[offset]=${offset}`;
-
-        const options = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                'X-WHIPPY-KEY': apiKey,
-            },
-        };
-
         try {
-            const response = await fetch(url, options);
-            const responseData = await response.json();
-            console.log(responseData);
-
-            return responseData;
-        } catch (error) {
+            const response = await Conversation.listMessages(apiKey, conversationId, limit, offset);
+            if (response.success) {
+              return response.data; 
+            } else {
+              console.error(response.message);
+              return false;
+            }
+          } catch (error) {
             console.error(error);
             return false;
-        }
+          }
     },
 });

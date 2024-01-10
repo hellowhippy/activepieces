@@ -1,4 +1,5 @@
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { Contact } from '../../api/api';
 
 export const updateContact = createAction({
   name: 'update_contact', 
@@ -35,31 +36,17 @@ export const updateContact = createAction({
     const name = context.propsValue['getName'];
     const phoneNumber = context.propsValue['getPhone'];
 
-    const options = {
-      method: 'PUT', // Use PUT method for updating
-      headers: {
-        accept: 'application/json',
-        'content-type': 'application/json',
-        'X-WHIPPY-KEY': apiKey,
-      },
-      body: JSON.stringify({
-        phone: phoneNumber,
-        email: email,
-        name: name,
-      }),
-    };
-
     try {
-      const response = await fetch(`https://api.whippy.co/v1/contacts/${contactId}`, options);
-      const responseData = await response.json();
-      console.log(responseData);
-
-      return responseData;
+      const response = await Contact.updateContacts(apiKey, contactId, email, name, phoneNumber?.toString());
+      if (response.success) {
+        return response.data; 
+      } else {
+        console.error(response.message);
+        return false;
+      }
     } catch (error) {
       console.error(error);
-
-    return false;
-
+      return false;
     }
   }
 });
