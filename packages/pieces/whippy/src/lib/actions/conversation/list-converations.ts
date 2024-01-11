@@ -1,3 +1,11 @@
+/**
+List Conversations Action
+
+This action list conversations in Whippy. 
+
+API Documentation: https://docs.whippy.ai/reference/getconversations
+*/
+
 import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
 import { Conversation } from "../../api/api";
 
@@ -21,21 +29,21 @@ export const listConversations = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
-        const limit = context.propsValue['getLimit'];
-        const unreadCount = context.propsValue['getUnreadCount'];
+      const apiKey = context.propsValue['getAPIKey'];
+      const limit = context.propsValue['getLimit'];
+      const unreadCount = context.propsValue['getUnreadCount'];
 
-        try {
-            const response = await Conversation.listConversations(apiKey, limit, unreadCount);
-            if (response.success) {
-              return response.data; 
-            } else {
-              console.error(response.message);
-              return false;
-            }
-          } catch (error) {
-            console.error(error);
+      try {
+          const response = await Conversation.listConversations(apiKey, limit, unreadCount);
+          if (response.success) {
+            return response.data; 
+          } else {
+            console.error(response.message);
             return false;
           }
+        } catch (error) {
+          console.error(error);
+          return false;
+        }
     },
 });

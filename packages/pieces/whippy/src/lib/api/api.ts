@@ -13,7 +13,7 @@ export interface ApiResponse<T> {
     message: string;
 }
 
-const rootUrl: string = 'https://api.whippy.co/v1';
+const rootUrl = 'https://api.whippy.co/v1';
 
 export async function callAPI<T>({ url, method, apiKey, body }: APICallParams): Promise<ApiResponse<T>> {
     const options = {
@@ -32,7 +32,7 @@ export async function callAPI<T>({ url, method, apiKey, body }: APICallParams): 
         // Use ApiResponse<T> to specify the expected data type
         return {
             success: true,
-            data: responseData as T, // Type assertion here
+            data: responseData as T,
             message: 'API request successful',
         };
     } catch (error) {
@@ -40,13 +40,12 @@ export async function callAPI<T>({ url, method, apiKey, body }: APICallParams): 
         // Return an ApiResponse with success: false and an error message
         return {
             success: false,
-            data: error as T, // Type assertion here
+            data: error as T,
             message: 'API request failed',
         };
     }
 }
 
-// Message class
 export class Message {
     static async sendMessage(apiKey: string, from: string, to: string, message: string): Promise<ApiResponse<any>> {
         const apiParams: APICallParams = {
@@ -56,12 +55,10 @@ export class Message {
             body: { from: from, to: to, body: message },
         };
 
-        // Call the generic API function
         return await callAPI(apiParams);
     }
 }
 
-// Note class
 export class Note {
     static async createNote(apiKey: string,from: string, note: string, phoneNumber: string): Promise<ApiResponse<any>> {
         const apiParams: APICallParams = {
@@ -71,12 +68,10 @@ export class Note {
             body: { from: from, to: phoneNumber, body: note },
         };
 
-        // Call the generic API function
         return await callAPI(apiParams);
     }
 }
 
-// Contact class
 export class Contact {
     static async createContact(apiKey: string, email: string | undefined, name: string | undefined, phoneNumber: string): Promise<ApiResponse<any>> {
         const apiParams: APICallParams = {
@@ -90,7 +85,6 @@ export class Contact {
             },
         };
 
-        // Call the generic API function
         return await callAPI(apiParams);
     }
 
@@ -106,7 +100,6 @@ export class Contact {
             },
         };
 
-        // Call the generic API function
         return await callAPI(apiParams);
     }
 
@@ -122,12 +115,10 @@ export class Contact {
             },
         };
 
-        // Call the generic API function
         return await callAPI(apiParams);
     }
 }
 
-// Conversation class
 export class Conversation {
     static async listConversations(apiKey: string, limit: number | undefined, unreadCount: number | undefined): Promise<ApiResponse<any>> {
         const apiParams: APICallParams = {
@@ -140,7 +131,6 @@ export class Conversation {
             },
         };
 
-        // Call the generic API function
         return await callAPI(apiParams);
     }
 
@@ -153,7 +143,6 @@ export class Conversation {
             },
         };
 
-        // Call the generic API function
         return await callAPI(apiParams);
     }
 }

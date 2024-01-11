@@ -1,9 +1,13 @@
-import {
-  createAction,
-  Property,
-  PieceAuth,
-  StoreScope,
-} from '@activepieces/pieces-framework';
+/**
+Send SMS Action
+
+This action sends sms in Whippy. to (Destination phone number) 
+and from (Phone of an existing channel belonging to your organization) are required.
+
+API Documentation: https://docs.whippy.ai/reference/sendsms
+*/
+
+import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Message } from '../../api/api';
 
 export const sendMessage = createAction({

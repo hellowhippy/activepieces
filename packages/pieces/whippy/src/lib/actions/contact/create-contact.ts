@@ -1,3 +1,11 @@
+/**
+Create Contact Action
+
+This action creates a contact in Whippy. Phone number is required. 
+
+API Documentation: https://docs.whippy.ai/reference/createcontact-1
+*/
+
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Contact } from '../../api/api';
 
@@ -7,7 +15,7 @@ export const createContact = createAction({
   displayName:'Create Contact',
   description: 'Create Contact',
 	props: {
-        // Properties to ask from the user, in this ask we will take number of
+        // Properties to ask from the user
 		getAPIKey: Property.ShortText({
 			displayName: 'API Key',
 			required: true,
@@ -26,22 +34,22 @@ export const createContact = createAction({
 		}),
 	},
 	async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
-        const email = context.propsValue['getEmail'];
-        const name = context.propsValue['getName'];
-        const phoneNumber = context.propsValue['getPhone'];
+      const apiKey = context.propsValue['getAPIKey'];
+      const email = context.propsValue['getEmail'];
+      const name = context.propsValue['getName'];
+      const phoneNumber = context.propsValue['getPhone'];
 
-        try {
-            const response = await Contact.createContact(apiKey, email, name, phoneNumber.toString());
-            if (response.success) {
-              return response.data; 
-            } else {
-              console.error(response.message);
-              return false;
-            }
-          } catch (error) {
-            console.error(error);
+      try {
+          const response = await Contact.createContact(apiKey, email, name, phoneNumber.toString());
+          if (response.success) {
+            return response.data; 
+          } else {
+            console.error(response.message);
             return false;
           }
-        },
+        } catch (error) {
+          console.error(error);
+          return false;
+        }
+    },
 });

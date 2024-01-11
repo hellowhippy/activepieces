@@ -1,3 +1,12 @@
+/**
+Create Note Action
+
+This action creates a note in Whippy. to (Destination phone number) 
+and from (Phone of an existing channel belonging to your organization) are required.
+
+API Documentation: https://docs.whippy.ai/reference/createconversationnote
+*/
+
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Note } from '../../api/api';
 
