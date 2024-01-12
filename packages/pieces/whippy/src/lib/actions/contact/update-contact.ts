@@ -45,7 +45,7 @@ export const updateContact = createAction({
     const phoneNumber = context.propsValue['getPhone'];
 
     try {
-      const response = await Contact.updateContacts(apiKey, contactId, email, name, phoneNumber?.toString());
+      const response = await Contact.updateContacts(apiKey, contactId, email, name, `+${phoneNumber?.toString()}`);
       if (response.success) {
         return response.data; 
       } else {

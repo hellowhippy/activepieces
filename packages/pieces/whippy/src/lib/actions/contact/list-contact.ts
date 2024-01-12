@@ -40,7 +40,7 @@ export const listContacts = createAction({
       const phone = context.propsValue['getPhone'];
 
       try {
-          const response = await Contact.listContacts(apiKey, name, email, phone?.toString());
+          const response = await Contact.listContacts(apiKey, name, email, `+${phone?.toString()}`);
           if (response.success) {
             return response.data; 
           } else {

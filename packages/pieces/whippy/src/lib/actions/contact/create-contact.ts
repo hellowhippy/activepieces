@@ -40,8 +40,8 @@ export const createContact = createAction({
       const phoneNumber = context.propsValue['getPhone'];
 
       try {
-          const response = await Contact.createContact(apiKey, email, name, phoneNumber.toString());
-          if (response.success) {
+        const response = await Contact.createContact(apiKey, email, name, `+${phoneNumber.toString()}`);
+        if (response.success) {
             return response.data; 
           } else {
             console.error(response.message);

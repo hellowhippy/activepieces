@@ -3,7 +3,12 @@ export interface APICallParams {
     url: string;
     method: string;
     apiKey: string;
-    body: object;
+    body?: object;
+    params?: { // Make params optional
+        name: string | undefined;
+        email: string | undefined;
+        phone: string | undefined;
+    };
 }
 
 // Define a generic ApiResponse interface
@@ -93,10 +98,10 @@ export class Contact {
             url: `${rootUrl}/contacts?limit=50&offset=0`,
             method: 'GET',
             apiKey: apiKey,
-            body: {
-                phone: phone,
-                email: email,
+            params: {
                 name: name,
+                email: email,
+                phone: phone,
             },
         };
 
@@ -125,10 +130,6 @@ export class Conversation {
             url: `${rootUrl}/conversations?limit=${limit}&unread_count=${unreadCount}`,
             method: 'GET',
             apiKey: apiKey,
-            body: {
-                unreadCount: unreadCount,
-                limit: limit,
-            },
         };
 
         return await callAPI(apiParams);
@@ -139,8 +140,6 @@ export class Conversation {
             url: `${rootUrl}/conversations/${conversationId}?messages[limit]=${limit}&messages[offset]=${offset}`,
             method: 'GET',
             apiKey: apiKey,
-            body: {
-            },
         };
 
         return await callAPI(apiParams);
