@@ -35,6 +35,10 @@ import { listCustomPropertyValues } from "./lib/actions/custom-object/list-custo
 import { createCustomProperty } from "./lib/actions/custom-object/create-custom-property";
 import { updateCustomObject } from "./lib/actions/custom-object/update-custom-object";
 import { updateCustomProperty } from "./lib/actions/custom-object/update-custom-property";
+import { listApplications } from "./lib/triggers/developer-applications/list-applications";
+import { createApplication } from "./lib/triggers/developer-applications/create-developer-application";
+import { showApplication } from "./lib/triggers/developer-applications/show-developer-application";
+import { updateApplication } from "./lib/triggers/developer-applications/update-developer-application";
 
 export const whippy = createPiece({
   displayName: "Whippy",
@@ -43,5 +47,10 @@ export const whippy = createPiece({
   logoUrl: "https://www.whippy.ai/logo.svg",
   authors: [],
   actions: [sendMessage,createContact,createNote,updateContact,listContacts,listMessage,listConversations,listUserChannels,listChannels,showChannels,createSequenceContacts,getSequences,listSequenceContact,listSequenceRun,showSequences,showSequenceRun,listAutomation,showOrganization,createTag,updateTag,listTags,deleteTag,listCampaignContacts,listCampaigns,sendCampaign,showCampaign,createCustomObjects,createCustomProperty,createCustomRecord,listCustomObjectRecords,listCustomObjects,listCustomPropertyValues,updateCustomObject,updateCustomProperty],
-  triggers: [],
+  triggers: [listApplications,createApplication,updateApplication,showApplication],
 });
+
+export const appAuth = PieceAuth.SecretText({
+  displayName: "API Key",
+  required: true
+})
