@@ -1,6 +1,8 @@
 import { TriggerStrategy, createTrigger, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
 import { createCommon } from "../../common";
+import { getAccessTokenOrThrow } from "@activepieces/pieces-common";
+import { nanoid } from "nanoid";
 
 export const createApplication = createTrigger({
   auth: appAuth,
@@ -40,27 +42,45 @@ export const createApplication = createTrigger({
   type: TriggerStrategy.WEBHOOK,
   async onEnable(context) {
     const target: any = {
-        api_key_id: context.propsValue.api_key_id,
-        description: context.propsValue.description,
-        name: context.propsValue.name,
-        active: context.propsValue.active
+      api_key_id: context.propsValue.api_key_id,
+      description: context.propsValue.description,
+      name: context.propsValue.name,
+      active: context.propsValue.active
     }
-
-    const webhook = await createCommon.subscribeWebhook(context.auth, {
-        event: 'APPLICATIONS.CREATED',
-        target: target,
-        webhookUrl: context.webhookUrl
+    const randomTag = `create_developer_application_${nanoid()}`;
+    await createCommon.subscribeWebhook(
+        target,
+        randomTag,
+        context.webhookUrl,
+        getAccessTokenOrThrow(context.auth)
+    );
+    await context.store?.put<WebhookInformation>('_create_application_trigger', {
+        tag: randomTag,
     });
-    await context.store.put(`_create_application_trigger`, webhook);
   },
   async onDisable(context) {
-    // const webhook = await context.store.get<WebhookInformation>(`_create_application_trigger`);
-
-    // if (webhook) {
-    //     await createCommon.unsubscribeWebhook(context.auth, webhook.name);
-    // }
+    const target: any = {
+      api_key_id: context.propsValue.api_key_id,
+      description: context.propsValue.description,
+      name: context.propsValue.name,
+      active: context.propsValue.active
+    }
+    const response = await context.store?.get<WebhookInformation>(
+      '_create_application_trigger'
+    );
+    if (response !== null && response !== undefined) {
+        await createCommon.unsubscribeWebhook(
+            target,
+            response.tag,
+            getAccessTokenOrThrow(context.auth)
+        );
+  }
   },
   async run(context) {
     return [context.payload.body];
   },
 });
+
+interface WebhookInformation {
+  tag: string;
+}

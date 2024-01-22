@@ -1,6 +1,8 @@
 import { TriggerStrategy, createTrigger, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { showCommon, WebhookInformation } from "../../common";
+import { showCommon } from "../../common";
+import { nanoid } from "nanoid";
+import { getAccessTokenOrThrow } from "@activepieces/pieces-common";
 
 export const showApplication = createTrigger({
   auth: appAuth,
@@ -18,25 +20,34 @@ export const showApplication = createTrigger({
   },
   type: TriggerStrategy.WEBHOOK,
   async onEnable(context) {
-    const target: any = {
-        id: context.propsValue.id
-    }
-
-    const webhook = await showCommon.subscribeWebhook(context.auth, {
-        event: 'APPLICATION.SHOWED',
-        target: target,
-        webhookUrl: context.webhookUrl
+    const randomTag = `show_developer_application_${nanoid()}`;
+    await showCommon.subscribeWebhook(
+        context.propsValue.id,
+        randomTag,
+        context.webhookUrl,
+        getAccessTokenOrThrow(context.auth)
+    );
+    await context.store?.put<WebhookInformation>('_show_application_trigger', {
+        tag: randomTag,
     });
-    await context.store.put(`_show_application_trigger`, webhook);
   },
   async onDisable(context) {
-    // const webhook = await context.store.get<WebhookInformation>(`_show_application_trigger`);
-
-    // if (webhook) {
-    //     await showCommon.unsubscribeWebhook(context.auth, webhook.name);
-    // }
+    const response = await context.store?.get<WebhookInformation>(
+      '_show_application_trigger'
+    );
+    if (response !== null && response !== undefined) {
+        await showCommon.unsubscribeWebhook(
+            context.propsValue.id,
+            response.tag,
+            getAccessTokenOrThrow(context.auth)
+        );
+  }
   },
   async run(context) {
     return [context.payload.body];
   },
 });
+
+interface WebhookInformation {
+  tag: string;
+}

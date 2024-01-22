@@ -1,6 +1,8 @@
 import { TriggerStrategy, createTrigger, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { updateCommon, WebhookInformation } from "../../common";
+import { updateCommon } from "../../common";
+import { nanoid } from "nanoid";
+import { getAccessTokenOrThrow } from "@activepieces/pieces-common";
 
 export const updateApplication = createTrigger({
   auth: appAuth,
@@ -45,28 +47,48 @@ export const updateApplication = createTrigger({
   type: TriggerStrategy.WEBHOOK,
   async onEnable(context) {
     const target: any = {
-        id: context.propsValue.id,
         api_key_id: context.propsValue.api_key_id,
         description: context.propsValue.description,
         name: context.propsValue.name,
         active: context.propsValue.active
+      }
+      const randomTag = `update_developer_application_${nanoid()}`;
+      await updateCommon.subscribeWebhook(
+        context.propsValue.id,
+        target,
+        randomTag,
+        context.webhookUrl,
+        getAccessTokenOrThrow(context.auth)
+      );
+      await context.store?.put<WebhookInformation>('_update_application_trigger', {
+          tag: randomTag,
+      });
+    },
+    async onDisable(context) {
+      const target: any = {
+        api_key_id: context.propsValue.api_key_id,
+        description: context.propsValue.description,
+        name: context.propsValue.name,
+        active: context.propsValue.active
+      }
+      const response = await context.store?.get<WebhookInformation>(
+        '_update_application_trigger'
+      );
+      if (response !== null && response !== undefined) {
+          await updateCommon.unsubscribeWebhook(
+            context.propsValue.id,
+            target,
+            response.tag,
+            getAccessTokenOrThrow(context.auth)
+          );
     }
-
-    const webhook = await updateCommon.subscribeWebhook(context.auth, {
-        event: 'APPLICATION.UPDATED',
-        target: target,
-        webhookUrl: context.webhookUrl
-    });
-    await context.store.put(`_update_application_trigger`, webhook);
-  },
-  async onDisable(context) {
-    // const webhook = await context.store.get<WebhookInformation>(`_show_application_trigger`);
-
-    // if (webhook) {
-    //     await showCommon.unsubscribeWebhook(context.auth, webhook.name);
-    // }
-  },
-  async run(context) {
-    return [context.payload.body];
-  },
-});
+    },
+    async run(context) {
+      return [context.payload.body];
+    },
+  });
+  
+  interface WebhookInformation {
+    tag: string;
+  }
+  

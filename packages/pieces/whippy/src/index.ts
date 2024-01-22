@@ -39,6 +39,13 @@ import { listApplications } from "./lib/triggers/developer-applications/list-app
 import { createApplication } from "./lib/triggers/developer-applications/create-developer-application";
 import { showApplication } from "./lib/triggers/developer-applications/show-developer-application";
 import { updateApplication } from "./lib/triggers/developer-applications/update-developer-application";
+import { callwhippyapi } from "./lib/common";
+import { HttpMethod } from "@activepieces/pieces-common";
+import { showDeveloperEndpoint } from "./lib/triggers/developer-endpoints/show-developer-endpoint";
+import { updateDeveloperEndpoint } from "./lib/triggers/developer-endpoints/update-developer-endpoint";
+import { createDeveloperEndpoint } from "./lib/triggers/developer-endpoints/create-developer-endpoint";
+import { listDeveloperEndpoints } from "./lib/triggers/developer-endpoints/list-endpoints";
+
 
 export const whippy = createPiece({
   displayName: "Whippy",
@@ -47,10 +54,34 @@ export const whippy = createPiece({
   logoUrl: "https://www.whippy.ai/logo.svg",
   authors: [],
   actions: [sendMessage,createContact,createNote,updateContact,listContacts,listMessage,listConversations,listUserChannels,listChannels,showChannels,createSequenceContacts,getSequences,listSequenceContact,listSequenceRun,showSequences,showSequenceRun,listAutomation,showOrganization,createTag,updateTag,listTags,deleteTag,listCampaignContacts,listCampaigns,sendCampaign,showCampaign,createCustomObjects,createCustomProperty,createCustomRecord,listCustomObjectRecords,listCustomObjects,listCustomPropertyValues,updateCustomObject,updateCustomProperty],
-  triggers: [listApplications,createApplication,updateApplication,showApplication],
+  triggers: [listApplications, createApplication, showApplication, updateApplication, 
+	// showDeveloperEndpoint,
+	// updateDeveloperEndpoint, createDeveloperEndpoint, listDeveloperEndpoints
+],
 });
 
-export const appAuth = PieceAuth.SecretText({
-  displayName: "API Key",
-  required: true
+export const appAuth = PieceAuth.OAuth2({
+  required: true,
+  tokenUrl: 'https://api.whippy.co/oauth/token',
+  authUrl: 'https://admin.whippy.co/oauth/authorize',
+  scope: ['webhooks:write', 'applications:read'],
 })
+
+export const whippyAuth = PieceAuth.SecretText({
+	displayName: 'API Key',
+	description: "Enter API KEY",
+	required: true,
+	validate: async ({auth}) => {
+		try{
+			await callwhippyapi( HttpMethod.GET , "endpoints" , auth , undefined);
+			return{
+				valid: true,
+			};
+		}catch(e){
+			return{
+				valid: false,
+				error: 'Invalid API Key',
+			};
+		}
+	}
+});

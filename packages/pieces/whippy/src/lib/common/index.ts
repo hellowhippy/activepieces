@@ -1,4 +1,4 @@
-import { AuthenticationType, HttpMethod, HttpRequest, httpClient } from "@activepieces/pieces-common"
+import { AuthenticationType, HttpMessageBody, HttpMethod, HttpRequest, HttpResponse, httpClient } from "@activepieces/pieces-common"
 
 export interface WebhookInformation {
     limit: string
@@ -10,174 +10,171 @@ export interface WebhookInformation {
 const baseUrl = 'https://api.whippy.co/v1/';
 
 export const listCommon = {
-    async subscribeWebhook(auth: any, data: {
-    event: string,
-    target: {
-        limit: number,
+    subscribeWebhook: async (limit: number,
         offset: number,
         name: string,
-        active: string
-    },
-    webhookUrl: string
-}) {
-    const request: HttpRequest = {
-        method: HttpMethod.GET,
-        url: `${baseUrl}/applications?limit=${data.target.limit}&offset=${data.target.offset}&name=${data.target.name}&active=${data.target.active}`,
-        authentication: {
-            type: AuthenticationType.BEARER_TOKEN,
-            token: auth.access_token,
-        },
-        body: {
-            address: data.webhookUrl,
-            triggers: [data.event]
+        active: string,
+        tag: string, webhookUrl: string, accessToken: string) => {
+        const request: HttpRequest = {
+            method: HttpMethod.GET,
+            url: `${baseUrl}/developers/applications/webhooks/${tag}`,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            authentication: {
+                type: AuthenticationType.BEARER_TOKEN,
+                token: accessToken,
+            },
+            body: {
+                address: webhookUrl,
+            },
+            queryParams: {
+                limit: limit.toString(),
+                offset: offset.toString(),
+                name: name,
+                active: active
+            }
         }
+        await httpClient.sendRequest(request);
+    },
+
+    async unsubscribeWebhook(target: string, tag: string, accessToken: string) {
+        const request: HttpRequest = {
+            method: HttpMethod.DELETE,
+            url: `${baseUrl}/developers/applications/webhooks/${tag}`,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            authentication: {
+                type: AuthenticationType.BEARER_TOKEN,
+                token: accessToken,
+            },
+        };
+        return await httpClient.sendRequest(request);
     }
-
-    const response = await httpClient.sendRequest<WebhookInformation>(request);
-    return response.body;
-},
-
-// async unsubscribeWebhook(auth: any, webhookId: string) {
-//     const request: HttpRequest = {
-//         method: HttpMethod.DELETE,
-//         url: `${baseUrl}/webhooks/${webhookId}`,
-//         authentication: {
-//             type: AuthenticationType.BEARER_TOKEN,
-//             token: auth.access_token,
-//         }
-//     };
-
-//     const response = await httpClient.sendRequest(request);
-//     return response;
-//     }
 }
 
 export const createCommon = {
-    async subscribeWebhook(auth: any, data: {
-        event: string,
-        target: {
-            api_key_id: string,
-            description: string,
-            name: string,
-            active: string
-        },
-        webhookUrl: string
-    }) {
+    subscribeWebhook: async (target: string, tag: string, webhookUrl: string, accessToken: string) => {
         const request: HttpRequest = {
             method: HttpMethod.POST,
-            url: `${baseUrl}/applications`,
-            authentication: {
-                type: AuthenticationType.BEARER_TOKEN,
-                token: auth.access_token,
+            url: `${baseUrl}/developers/applications/webhooks/${tag}`,
+            headers: {
+                "Content-Type": "application/json"
             },
             body: {
-                address: data.webhookUrl,
-                triggers: [data.event],
-                target: data.target
-            }
-        }
-  
-        const response = await httpClient.sendRequest<WebhookInformation>(request);
-        return response.body;
+                enabled: true,
+                url: webhookUrl,
+                target: target
+            },
+            authentication: {
+                type: AuthenticationType.BEARER_TOKEN,
+                token: accessToken,
+            },
+            queryParams: {},
+        };
+
+        await httpClient.sendRequest(request);
     },
   
-    // async unsubscribeWebhook(auth: any, webhookId: string) {
-    //     const request: HttpRequest = {
-    //         method: HttpMethod.DELETE,
-    //         url: `${baseUrl}/webhooks/${webhookId}`,
-    //         authentication: {
-    //             type: AuthenticationType.BEARER_TOKEN,
-    //             token: auth.access_token,
-    //         }
-    //     };
-  
-    //     const response = await httpClient.sendRequest(request);
-    //     return response;
-    // }
+    async unsubscribeWebhook(target: string, tag: string, accessToken: string) {
+        const request: HttpRequest = {
+            method: HttpMethod.DELETE,
+            url: `${baseUrl}/developers/applications/webhooks/${tag}`,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            authentication: {
+                type: AuthenticationType.BEARER_TOKEN,
+                token: accessToken,
+            },
+        };
+        return await httpClient.sendRequest(request);
+    }
   }
 
 export const showCommon = {
-    async subscribeWebhook(auth: any, data: {
-        event: string,
-        target: {
-            id: string
-        },
-        webhookUrl: string
-    }) {
+    subscribeWebhook: async (id: string, tag: string, webhookUrl: string, accessToken: string) => {
         const request: HttpRequest = {
             method: HttpMethod.GET,
-            url: `${baseUrl}/applications/${data.target.id}`,
+            url: `${baseUrl}/developers/applications/${id}/webhooks/${tag}`,
+            headers: {
+                "Content-Type": "application/json"
+            },
             authentication: {
                 type: AuthenticationType.BEARER_TOKEN,
-                token: auth.access_token,
+                token: accessToken,
             },
             body: {
-                address: data.webhookUrl,
-                triggers: [data.event]
-            }
+                address: webhookUrl
+            },
+            queryParams: {},
         }
 
-        const response = await httpClient.sendRequest<WebhookInformation>(request);
-        return response.body;
+        await httpClient.sendRequest(request);
     },
 
-    // async unsubscribeWebhook(auth: any, webhookId: string) {
-    //     const request: HttpRequest = {
-    //         method: HttpMethod.DELETE,
-    //         url: `${baseUrl}/webhooks/${webhookId}`,
-    //         authentication: {
-    //             type: AuthenticationType.BEARER_TOKEN,
-    //             token: auth.access_token,
-    //         }
-    //     };
-
-    //     const response = await httpClient.sendRequest(request);
-    //     return response;
-    // }
+    async unsubscribeWebhook(id: string, tag: string, accessToken: string) {
+        const request: HttpRequest = {
+            method: HttpMethod.DELETE,
+            url: `${baseUrl}/developers/applications/${id}/webhooks/${tag}`,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            authentication: {
+                type: AuthenticationType.BEARER_TOKEN,
+                token: accessToken,
+            },
+        };
+        return await httpClient.sendRequest(request);
+    }
 }
 
 
 export const updateCommon = {
-    async subscribeWebhook(auth: any, data: {
-        event: string,
-        target: {
-            id: string,
-            api_key_id: string,
-            description: string,
-            name: string,
-            active: string
-        },
-        webhookUrl: string
-    }) {
+    subscribeWebhook: async (id: string, target: string, tag: string, webhookUrl: string, accessToken: string) => {
         const request: HttpRequest = {
             method: HttpMethod.PUT,
-            url: `${baseUrl}/applications/${data.target.id}`,
+            url: `${baseUrl}/developers/applications/${id}/webhooks/${tag}`,
+            headers: {
+                "Content-Type": "application/json"
+            },
             authentication: {
                 type: AuthenticationType.BEARER_TOKEN,
-                token: auth.access_token,
+                token: accessToken,
             },
             body: {
-                address: data.webhookUrl,
-                triggers: [data.event],
-                target: data.target
+                address: webhookUrl,
+                target: target
             }
         }
-
-        const response = await httpClient.sendRequest<WebhookInformation>(request);
-        return response.body;
+        await httpClient.sendRequest(request);
     },
 
-    // async unsubscribeWebhook(auth: any, webhookId: string) {
-    //     const request: HttpRequest = {
-    //         method: HttpMethod.DELETE,
-    //         url: `${baseUrl}/webhooks/${webhookId}`,
-    //         authentication: {
-    //             type: AuthenticationType.BEARER_TOKEN,
-    //             token: auth.access_token,
-    //         }
-    //     };
+    async unsubscribeWebhook(id: string, target: string, tag: string, accessToken: string) {
+        const request: HttpRequest = {
+            method: HttpMethod.DELETE,
+            url: `${baseUrl}/developers/applications/${id}/webhooks/${tag}`,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            authentication: {
+                type: AuthenticationType.BEARER_TOKEN,
+                token: accessToken,
+            },
+        };
+        return await httpClient.sendRequest(request);
+    }
+}
 
-    //     const response = await httpClient.sendRequest(request);
-    //     return response;
-    // }
+export async function callwhippyapi<T extends HttpMessageBody>(method: HttpMethod, apiUrl: string, accessToken: string, body: any | undefined): Promise<HttpResponse<T>> {
+    return await httpClient.sendRequest<T>({
+        method: method,
+        url: `https://api.whippy.co/v1/${apiUrl}`,
+        authentication: {
+            type: AuthenticationType.BEARER_TOKEN,
+            token: accessToken
+        },
+        body: body
+    })
 }

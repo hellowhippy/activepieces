@@ -1,6 +1,8 @@
 import { TriggerStrategy, createTrigger, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { listCommon, WebhookInformation } from "../../common";
+import { listCommon } from "../../common";
+import { nanoid } from "nanoid";
+import { getAccessTokenOrThrow } from "@activepieces/pieces-common";
 
 export const listApplications = createTrigger({
   auth: appAuth,
@@ -45,22 +47,48 @@ export const listApplications = createTrigger({
         name: context.propsValue.name,
         active: context.propsValue.active
     }
-
-    const webhook = await listCommon.subscribeWebhook(context.auth, {
-        event: 'APPLICATIONS.LISTED',
-        target: target,
-        webhookUrl: context.webhookUrl
-    });
-    await context.store.put(`_list_applications_trigger`, webhook);
+    const randomTag = `list_developer_application_${nanoid()}`;
+    if (target.limit !== null && target.limit !== undefined && 
+      target.offset !== null && target.offset !== undefined &&
+      target.name !== null && target.name !== undefined &&
+      target.active !== null && target.active !== undefined) {
+      await listCommon.subscribeWebhook(
+        target.limit?.toString(),
+        target.offset?.toString(),
+        target.name,
+        target.active,
+        randomTag,
+        context.webhookUrl,
+        getAccessTokenOrThrow(context.auth)
+      );
+      await context.store?.put<WebhookInformation>('_list_application_trigger', {
+          tag: randomTag,
+      });
+    }
   },
   async onDisable(context) {
-    // const webhook = await context.store.get<WebhookInformation>(`_list_applications_trigger`);
-
-    // if (webhook) {
-    //     await listCommon.unsubscribeWebhook(context.auth, webhook.name);
-    // }
+    const target: any = {
+      limit: context.propsValue.limit,
+      offset: context.propsValue.offset,
+      name: context.propsValue.name,
+      active: context.propsValue.active
+    }
+    const response = await context.store?.get<WebhookInformation>(
+      '_list_application_trigger'
+    );
+    if (response !== null && response !== undefined) {
+        await listCommon.unsubscribeWebhook(
+          target,
+          response.tag,
+          getAccessTokenOrThrow(context.auth)
+        );
+  }
   },
   async run(context) {
     return [context.payload.body];
   },
 });
+
+interface WebhookInformation {
+  tag: string;
+}
