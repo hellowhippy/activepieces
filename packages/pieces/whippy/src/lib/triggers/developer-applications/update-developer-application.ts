@@ -58,7 +58,7 @@ export const updateApplication = createTrigger({
         target,
         randomTag,
         context.webhookUrl,
-        getAccessTokenOrThrow(context.auth)
+        context.auth
       );
       await context.store?.put<WebhookInformation>('_update_application_trigger', {
           tag: randomTag,
@@ -79,7 +79,7 @@ export const updateApplication = createTrigger({
             context.propsValue.id,
             target,
             response.tag,
-            getAccessTokenOrThrow(context.auth)
+            context.auth
           );
     }
     },

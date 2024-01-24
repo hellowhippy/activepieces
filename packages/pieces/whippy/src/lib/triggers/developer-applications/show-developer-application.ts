@@ -25,7 +25,7 @@ export const showApplication = createTrigger({
         context.propsValue.id,
         randomTag,
         context.webhookUrl,
-        getAccessTokenOrThrow(context.auth)
+        context.auth
     );
     await context.store?.put<WebhookInformation>('_show_application_trigger', {
         tag: randomTag,
@@ -39,7 +39,7 @@ export const showApplication = createTrigger({
         await showCommon.unsubscribeWebhook(
             context.propsValue.id,
             response.tag,
-            getAccessTokenOrThrow(context.auth)
+            context.auth
         );
   }
   },

@@ -52,7 +52,7 @@ export const createApplication = createTrigger({
         target,
         randomTag,
         context.webhookUrl,
-        getAccessTokenOrThrow(context.auth)
+        context.auth
     );
     await context.store?.put<WebhookInformation>('_create_application_trigger', {
         tag: randomTag,
@@ -72,7 +72,7 @@ export const createApplication = createTrigger({
         await createCommon.unsubscribeWebhook(
             target,
             response.tag,
-            getAccessTokenOrThrow(context.auth)
+            context.auth
         );
   }
   },

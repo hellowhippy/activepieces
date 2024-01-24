@@ -54,34 +54,30 @@ export const whippy = createPiece({
   logoUrl: "https://www.whippy.ai/logo.svg",
   authors: [],
   actions: [sendMessage,createContact,createNote,updateContact,listContacts,listMessage,listConversations,listUserChannels,listChannels,showChannels,createSequenceContacts,getSequences,listSequenceContact,listSequenceRun,showSequences,showSequenceRun,listAutomation,showOrganization,createTag,updateTag,listTags,deleteTag,listCampaignContacts,listCampaigns,sendCampaign,showCampaign,createCustomObjects,createCustomProperty,createCustomRecord,listCustomObjectRecords,listCustomObjects,listCustomPropertyValues,updateCustomObject,updateCustomProperty],
-  triggers: [listApplications, createApplication, showApplication, updateApplication, 
-	// showDeveloperEndpoint,
-	// updateDeveloperEndpoint, createDeveloperEndpoint, listDeveloperEndpoints
-],
+  triggers: [listApplications, createApplication, showApplication, updateApplication, showDeveloperEndpoint,
+	updateDeveloperEndpoint, createDeveloperEndpoint, listDeveloperEndpoints],
 });
 
-export const appAuth = PieceAuth.OAuth2({
-  required: true,
-  tokenUrl: 'https://api.whippy.co/oauth/token',
-  authUrl: 'https://admin.whippy.co/oauth/authorize',
-  scope: ['webhooks:write', 'applications:read'],
-})
-
-export const whippyAuth = PieceAuth.SecretText({
-	displayName: 'API Key',
-	description: "Enter API KEY",
-	required: true,
-	validate: async ({auth}) => {
-		try{
-			await callwhippyapi( HttpMethod.GET , "endpoints" , auth , undefined);
-			return{
-				valid: true,
-			};
-		}catch(e){
-			return{
-				valid: false,
-				error: 'Invalid API Key',
-			};
-		}
-	}
-});
+export const appAuth = PieceAuth.SecretText({
+	displayName: "API Key",
+	required: true
+  })
+  
+  export const whippyAuth = PieceAuth.SecretText({
+	  displayName: 'API Key',
+	  description: "Enter API KEY",
+	  required: true,
+	  validate: async ({auth}) => {
+		  try{
+			  await callwhippyapi( HttpMethod.GET , "endpoints" , auth , undefined);
+			  return{
+				  valid: true,
+			  };
+		  }catch(e){
+			  return{
+				  valid: false,
+				  error: 'Invalid API Key',
+			  };
+		  }
+	  }
+  });
