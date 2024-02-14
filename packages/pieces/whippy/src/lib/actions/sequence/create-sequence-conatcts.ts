@@ -8,17 +8,14 @@ API Documentation: https://docs.whippy.ai/reference/createsequencecontacts
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Sequence } from "../../api/api";
+import { appAuth } from "../../../index";
 
 export const createSequenceContacts = createAction({
     name: 'create_sequence_contacts',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'Create Sequence Contacts',
     description: 'Create Sequence Contacts',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getSequenceID: Property.ShortText({
             displayName: 'Sequence ID',
             required: true,
@@ -65,7 +62,7 @@ export const createSequenceContacts = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const seqID = context.propsValue['getSequenceID'];
         const fromNumber = context.propsValue['getFromNumber'];
         const toNumber = context.propsValue['getToNumber'];

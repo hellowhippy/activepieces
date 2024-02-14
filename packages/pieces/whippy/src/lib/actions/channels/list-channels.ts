@@ -8,21 +8,19 @@ API Documentation: https://docs.whippy.ai/reference/getchannels
 
 import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
 import { Channels } from '../../api/api';
+import { appAuth } from "../../../index";
+
 
 export const listChannels = createAction({
     name: 'list_channels', 
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'List Channels',
     description: 'List channels',
     props: {
         // Properties to ask from the user
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
 
         try {
             const response = await Channels.listChannels(apiKey);

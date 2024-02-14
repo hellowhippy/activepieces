@@ -8,17 +8,14 @@ API Documentation: https://docs.whippy.ai/reference/getsequenceruns
 
 import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
 import { Sequence } from "../../api/api";
+import { appAuth } from "../../../index";
 
 export const listSequenceRun = createAction({
     name: 'list_sequence_run', 
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'List Sequences Run',
     description: 'Get a list of sequence runs based on filters',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getSequenceId: Property.ShortText({
             displayName: 'Sequence ID',
             required: true,
@@ -71,7 +68,7 @@ export const listSequenceRun = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const sequenceId = context.propsValue['getSequenceId'];
         const limit = context.propsValue['getLimit'] || 50;
         const offset = context.propsValue['getOffset'] || 0;

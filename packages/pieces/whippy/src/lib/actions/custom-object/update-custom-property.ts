@@ -9,17 +9,14 @@ API Documentation: https://docs.whippy.ai/reference/updatecustompropertyvalue
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { CustomObject } from "../../api/api";
+import { appAuth } from "../../../index";
 
 export const updateCustomProperty = createAction({
     name: 'update_custom_property',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'Update Custom Property',
     description: 'Update Custom Property',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getCustomId: Property.ShortText({
             displayName: 'Custom Object ID',
             required: true,
@@ -38,7 +35,7 @@ export const updateCustomProperty = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const customId = context.propsValue['getCustomId'];
         const recordId = context.propsValue['getCustomRecordId'];
         const propertyId = context.propsValue['getPropertyId'];

@@ -9,18 +9,15 @@ API Documentation: https://docs.whippy.ai/reference/createconversationnote
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Note } from '../../api/api';
+import { appAuth } from "../../../index";
 
 export const createNote = createAction({
   name: 'create_note', 
-  auth: PieceAuth.None(),
+  auth: appAuth,
   displayName:'Create Note',
   description: 'Create Note',
   props: {
     // Properties to ask from the user, in this ask we will take number of
-    getAPIKey: Property.ShortText({
-      displayName: 'API Key',
-      required: true,
-    }),
     getNote: Property.LongText({
       displayName: 'Create Note',
       required: false,
@@ -31,7 +28,7 @@ export const createNote = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.propsValue['getAPIKey'];
+    const apiKey = context.auth;
     const note = context.propsValue['getNote'] || '';   
     const phoneNumber = context.propsValue['getToNumber'];
 

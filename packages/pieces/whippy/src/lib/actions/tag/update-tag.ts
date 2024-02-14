@@ -8,19 +8,15 @@ API Documentation: https://docs.whippy.ai/reference/updatetag
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Tag } from '../../api/api';
-
+import { appAuth } from "../../../index";
 
 export const updateTag = createAction({
   name: 'update_tag', 
-  auth: PieceAuth.None(),
+  auth: appAuth,
   displayName: 'Update Tag',
   description: 'Update Tag',
   props: {
     // Properties to ask from the user
-    getAPIKey: Property.ShortText({
-      displayName: 'API Key',
-      required: true,
-    }),
     getTagId: Property.ShortText({
       displayName: 'Tag ID',
       required: true,
@@ -51,7 +47,7 @@ export const updateTag = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.propsValue['getAPIKey'];
+    const apiKey = context.auth;
     const tagId = context.propsValue['getTagId'];
     const colorCode = context.propsValue['getColor'];
     const name = context.propsValue['getName'];

@@ -9,17 +9,14 @@ API Documentation: https://docs.whippy.ai/reference/updatecustomobjectrecord
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { CustomObject } from "../../api/api";
+import { appAuth } from "../../../index";
 
 export const updateCustomObject = createAction({
     name: 'update_custom_object',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'Update Custom Object',
     description: 'Update Custom Object',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getCustomId: Property.ShortText({
             displayName: 'Custom Object ID',
             required: true,
@@ -42,7 +39,7 @@ export const updateCustomObject = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const customId = context.propsValue['getCustomId'];
         const recordId = context.propsValue['getCustomRecordId'];
         const associatedId = context.propsValue['getAssociatedId'];

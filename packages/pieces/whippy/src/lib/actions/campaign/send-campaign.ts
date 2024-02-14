@@ -7,17 +7,15 @@ API Documentation: https://docs.whippy.ai/reference/sendcampaign
 */
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { appAuth } from "../../../index";
+
 
 export const sendCampaign = createAction({
     name: 'send_campaign',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'Send Campaign',
     description: 'Send Campaign',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getFromNumber: Property.ShortText({
             displayName: 'Sending Number',
             required: true,
@@ -62,7 +60,7 @@ export const sendCampaign = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const fromNumber = context.propsValue['getFromNumber'];
         const toNumber = context.propsValue['getToNumber'];
         const title = context.propsValue['getTitle'];

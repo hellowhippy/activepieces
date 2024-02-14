@@ -8,17 +8,14 @@ API Documentation: https://docs.whippy.ai/reference/getcampaigncontacts
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Campaign } from "../../api/api";
+import { appAuth } from "../../../index";
 
 export const listCampaignContacts = createAction({
     name: 'list_campaign_contacts',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'List Campaign Contacts',
     description: 'List Campaign Contacts',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getId: Property.ShortText({
             displayName: 'Campaign ID',
             required: true,
@@ -53,7 +50,7 @@ export const listCampaignContacts = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const campaignID = context.propsValue['getId'];
         const limit = context.propsValue['getLimit'];
         const offset = context.propsValue['getOffset'];

@@ -8,10 +8,12 @@ API Documentation: https://docs.whippy.ai/reference/getcampaigns
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Campaign } from "../../api/api";
+import { appAuth } from "../../../index";
+
 
 export const listCampaigns = createAction({
     name: 'list_campaigns',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'List Campaigns',
     description: 'List Campaigns',
     props: {
@@ -33,7 +35,7 @@ export const listCampaigns = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const limit = context.propsValue['getLimit'] || 50 ;
         const offset = context.propsValue['getOffset'] || 0;
         const title = context.propsValue['getTitle'] || "";

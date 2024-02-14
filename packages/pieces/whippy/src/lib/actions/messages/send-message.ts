@@ -9,18 +9,15 @@ API Documentation: https://docs.whippy.ai/reference/sendsms
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Message } from '../../api/api';
+import { appAuth } from "../../../index";
 
 export const sendMessage = createAction({
   name: 'send_message',
-  auth: PieceAuth.None(),
+  auth: appAuth,
   displayName: 'Send Text Message',
   description: 'Send Text Message',
   props: {
     // Properties to ask from the user, in this ask we will take number of
-    getAPIKey: Property.ShortText({
-      displayName: 'API Key',
-      required: true,
-    }),
     getMessage: Property.ShortText({
       displayName: 'Text Message',
       required: true,
@@ -31,7 +28,7 @@ export const sendMessage = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.propsValue['getAPIKey'];
+    const apiKey = context.auth;
     const message = context.propsValue['getMessage'];
     const toNumber = context.propsValue['getToNumber'];
 

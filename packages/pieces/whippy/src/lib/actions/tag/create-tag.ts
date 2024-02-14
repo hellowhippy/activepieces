@@ -8,18 +8,15 @@ API Documentation: https://docs.whippy.ai/reference/createtag
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Tag } from '../../api/api';
+import { appAuth } from "../../../index";
 
 export const createTag = createAction({
   name: 'create_tag', 
-  auth: PieceAuth.None(),
+  auth: appAuth,
   displayName:'Create Tag',
   description: 'Create Tag',
   props: {
     // Properties to ask from the user, in this ask we will take number of
-    getAPIKey: Property.ShortText({
-      displayName: 'API Key',
-      required: true,
-    }),
     getName: Property.LongText({
       displayName: 'Tag Name',
       required: false,
@@ -30,7 +27,7 @@ export const createTag = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.propsValue['getAPIKey'];
+    const apiKey = context.auth;
     const name = context.propsValue['getName'] || '';   
     const colorCode = context.propsValue['getColor'];
 

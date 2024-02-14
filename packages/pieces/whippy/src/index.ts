@@ -46,10 +46,15 @@ import { updateDeveloperEndpoint } from "./lib/triggers/developer-endpoints/upda
 import { createDeveloperEndpoint } from "./lib/triggers/developer-endpoints/create-developer-endpoint";
 import { listDeveloperEndpoints } from "./lib/triggers/developer-endpoints/list-endpoints";
 
+export const appAuth = PieceAuth.SecretText({
+	displayName: "API Key",
+	description: 'Enter your API key',
+	required: true
+  })
 
 export const whippy = createPiece({
   displayName: "Whippy",
-  auth: PieceAuth.None(),
+  auth: appAuth,
   minimumSupportedRelease: '0.9.0',
   logoUrl: "https://www.whippy.ai/logo.svg",
   authors: [],
@@ -57,13 +62,8 @@ export const whippy = createPiece({
   triggers: [listApplications, createApplication, showApplication, updateApplication, showDeveloperEndpoint,
 	updateDeveloperEndpoint, createDeveloperEndpoint, listDeveloperEndpoints],
 });
-
-export const appAuth = PieceAuth.SecretText({
-	displayName: "API Key",
-	required: true
-  })
   
-  export const whippyAuth = PieceAuth.SecretText({
+export const whippyAuth = PieceAuth.SecretText({
 	  displayName: 'API Key',
 	  description: "Enter API KEY",
 	  required: true,
@@ -80,4 +80,4 @@ export const appAuth = PieceAuth.SecretText({
 			  };
 		  }
 	  }
-  });
+});

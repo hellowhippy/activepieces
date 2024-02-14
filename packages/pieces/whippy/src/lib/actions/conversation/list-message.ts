@@ -8,24 +8,21 @@ API Documentation: https://docs.whippy.ai/reference/getconversation
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Conversation } from "../../api/api";
+import { appAuth } from "../../../index";
 
 export const listMessage = createAction({
     name: 'list_message',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'List Message',
     description: 'Fetch a message details',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getConversationId: Property.ShortText({
             displayName: 'Conversation ID',
             required: true,
         }),
     },
     async run(context) {
-      const apiKey = context.propsValue['getAPIKey'];
+      const apiKey = context.auth;
       const conversationId = context.propsValue['getConversationId'];
       const limit = 10;
       const offset = 0;

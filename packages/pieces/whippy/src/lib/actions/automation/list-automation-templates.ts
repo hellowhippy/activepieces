@@ -8,19 +8,15 @@ API Documentation: https://docs.whippy.ai/reference/getautomationtemplates
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Automation } from '../../api/api';
-
+import { appAuth } from "../../../index";
 
 export const listAutomation = createAction({
   name: 'list_automation', 
-  auth: PieceAuth.None(),
+  auth: appAuth,
   displayName: 'List Automation',
   description: 'List Automation',
   props: {
     // Properties to ask from the user
-    getAPIKey: Property.ShortText({
-      displayName: 'API Key',
-      required: true,
-    }),
     getLimit: Property.Number({
       displayName: 'Limit',
       required: false,
@@ -55,7 +51,7 @@ export const listAutomation = createAction({
       }),
   },
   async run(context) {
-    const apiKey = context.propsValue['getAPIKey'];
+    const apiKey = context.auth;
     const limit = context.propsValue['getLimit'] || 50;
     const offset = context.propsValue['getOffset'] || 0;
     const title = context.propsValue['getTitle'] || "";

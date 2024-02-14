@@ -9,10 +9,11 @@ API Documentation: https://docs.whippy.ai/reference/createcustomobjectrecord
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { CustomObject } from "../../api/api";
+import { appAuth } from "../../../index";
 
 export const createCustomRecord = createAction({
     name: 'create_custom_record',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'Create Custom Record',
     description: 'Create Custom Record',
     props: {
@@ -38,7 +39,7 @@ export const createCustomRecord = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const customId = context.propsValue['getCustomId'];
         const associatedId = context.propsValue['getAssociatedId'];
         const recordType = context.propsValue['getRecordType'];

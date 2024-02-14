@@ -8,17 +8,14 @@ API Documentation: https://docs.whippy.ai/reference/listcustompropertyvalues
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { CustomObject } from "../../api/api";
+import { appAuth } from "../../../index";
 
 export const listCustomPropertyValues = createAction({
     name: 'list_custom_property_values',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'List Custom Property Values',
     description: 'List Custom Property Values',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getCusId: Property.ShortText({
             displayName: 'Custom ID',
             required: false,
@@ -51,7 +48,7 @@ export const listCustomPropertyValues = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const customId = context.propsValue['getCusId'];
         const limit = context.propsValue['getLimit'];
         const offset = context.propsValue['getOffset'];

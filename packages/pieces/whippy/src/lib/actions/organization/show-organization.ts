@@ -8,20 +8,17 @@ API Documentation: https://docs.whippy.ai/reference/getorganization
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Organization } from "../../api/api";
+import { appAuth } from "../../../index";
 
 export const showOrganization = createAction({
     name: 'show_organization',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'Show Organization',
     description: 'Show Organization',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
     },
     async run(context) {
-      const apiKey = context.propsValue['getAPIKey'];
+      const apiKey = context.auth;
 
       try {
           const response = await Organization.showOrganization(apiKey);

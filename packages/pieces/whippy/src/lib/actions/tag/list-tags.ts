@@ -8,18 +8,15 @@ API Documentation: https://docs.whippy.ai/reference/gettags
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Tag } from '../../api/api';
+import { appAuth } from "../../../index";
 
 export const listTags = createAction({
   name: 'list_tags', 
-  auth: PieceAuth.None(),
+  auth: appAuth,
   displayName:'List Tags',
   description: 'List Tags',
   props: {
     // Properties to ask from the user, in this ask we will take number of
-    getAPIKey: Property.ShortText({
-      displayName: 'API Key',
-      required: true,
-    }),
     getLimit: Property.Number({
         displayName: 'Limit',
         required: false,
@@ -43,7 +40,7 @@ export const listTags = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.propsValue['getAPIKey'];
+    const apiKey = context.auth;
     const limit = context.propsValue['getLimit'];
     const offset = context.propsValue['getOffset'];
     const search = context.propsValue['getSearch'];

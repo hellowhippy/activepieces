@@ -8,18 +8,15 @@ API Documentation: https://docs.whippy.ai/reference/getsequences
 
 import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
 import { Sequence } from "../../api/api";
+import { appAuth } from "../../../index";
 
 export const getSequences = createAction({
     name: 'get_sequences', 
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'Get Sequences',
     description: 'Get Sequences',
     props: {
         // Properties to ask from the user
-        apiKey: Property.ShortText({
-          displayName: 'API Key',
-          required: true,
-        }),
         limit: Property.Number({
           displayName: 'Limit',
           required: false,
@@ -36,7 +33,7 @@ export const getSequences = createAction({
         }),
       },
     async run(context) {
-        const apiKey = context.propsValue['apiKey'];
+        const apiKey = context.auth;
         const limit = context.propsValue['limit'];
         const offset = context.propsValue['offset'];
         const title = context.propsValue['title'];

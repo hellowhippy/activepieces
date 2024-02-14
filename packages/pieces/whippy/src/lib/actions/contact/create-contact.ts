@@ -8,18 +8,16 @@ API Documentation: https://docs.whippy.ai/reference/createcontact-1
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Contact } from '../../api/api';
+import { appAuth } from "../../../index";
+
 
 export const createContact = createAction({
 	name: 'create_contact', 
-  auth: PieceAuth.None(),
+  auth: appAuth,
   displayName:'Create Contact',
   description: 'Create Contact',
 	props: {
         // Properties to ask from the user
-		getAPIKey: Property.ShortText({
-			displayName: 'API Key',
-			required: true,
-		}),
         getEmail: Property.ShortText({
 			displayName: 'Contact Email Address',
 			required: false,
@@ -34,7 +32,7 @@ export const createContact = createAction({
 		}),
 	},
 	async run(context) {
-      const apiKey = context.propsValue['getAPIKey'];
+      const apiKey = context.auth;
       const email = context.propsValue['getEmail'];
       const name = context.propsValue['getName'];
       const phoneNumber = context.propsValue['getPhone'];

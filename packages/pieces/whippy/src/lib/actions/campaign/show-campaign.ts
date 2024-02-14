@@ -8,10 +8,12 @@ API Documentation: https://docs.whippy.ai/reference/getcampaign
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { Campaign } from "../../api/api";
+import { appAuth } from "../../../index";
+
 
 export const showCampaign = createAction({
     name: 'show_campaign',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'Show Campaign',
     description: 'Show Campaign',
     props: {
@@ -25,7 +27,7 @@ export const showCampaign = createAction({
         }),
     },
     async run(context) {
-      const apiKey = context.propsValue['getAPIKey'];
+      const apiKey = context.auth;
       const campaignID = context.propsValue['getId'];
 
       try {

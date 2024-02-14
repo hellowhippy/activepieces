@@ -8,17 +8,14 @@ API Documentation: https://docs.whippy.ai/reference/listcustomobjects
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { CustomObject } from "../../api/api";
+import { appAuth } from "../../../index";
 
 export const listCustomObjects = createAction({
     name: 'list_custom_objects',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'List Custom Objects',
     description: 'List Custom Objects',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getLimit: Property.Number({
             displayName: 'Limit',
             required: false,
@@ -29,7 +26,7 @@ export const listCustomObjects = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const limit = context.propsValue['getLimit'];
         const offset = context.propsValue['getOffset'];
 

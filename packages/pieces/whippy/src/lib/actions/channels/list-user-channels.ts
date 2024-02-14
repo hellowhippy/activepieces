@@ -8,18 +8,16 @@ API Documentation: https://docs.whippy.ai/reference/listuserchannels-1
 
 import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
 import { Channels } from '../../api/api';
+import { appAuth } from "../../../index";
+
 
 export const listUserChannels = createAction({
     name: 'list_user_channels', 
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'List User Channels',
     description: 'List channels for a user',
     props: {
         // Properties to ask from the user
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getChannelId: Property.ShortText({
             displayName: 'Channel ID',
             required: true,
@@ -34,7 +32,7 @@ export const listUserChannels = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const channelId = context.propsValue['getChannelId'];
         const offset = context.propsValue['getOffset'];
         const limit = context.propsValue['getLimit'];

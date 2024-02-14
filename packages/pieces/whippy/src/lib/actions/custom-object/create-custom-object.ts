@@ -8,17 +8,14 @@ API Documentation: https://docs.whippy.ai/reference/createcustomobject
 
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
 import { CustomObject } from "../../api/api";
+import { appAuth } from "../../../index";
 
 export const createCustomObjects = createAction({
     name: 'create_custom_objects',
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'Create Custom Objects',
     description: 'Create Custom Objects',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getCustomProperties: Property.Object({
             displayName: 'Custom Object Properties',
             required: true,
@@ -76,7 +73,7 @@ export const createCustomObjects = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const key = context.propsValue['getKey'];
         const label = context.propsValue['getLabel'];
         const customProperties = context.propsValue['getCustomProperties'];

@@ -8,25 +8,22 @@ API Documentation: https://docs.whippy.ai/reference/getsequence
 
 import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
 import { Sequence } from "../../api/api";
+import { appAuth } from '../../../index';
 
 export const showSequences = createAction({
     name: 'show_sequences', 
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'Show Sequences',
     description: 'Show Sequences',
     props: {
         // Properties to ask from the user
-        getAPIKey: Property.ShortText({
-          displayName: 'API Key',
-          required: true,
-      }),
         getSequenceId: Property.ShortText({
           displayName: 'Sequence ID',
           required: true,
       }),
       },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const sequenceId = context.propsValue['getSequenceId'];
 
         try {

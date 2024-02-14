@@ -9,17 +9,14 @@ API Documentation: https://docs.whippy.ai/reference/getsequenceruns
 import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
 import { Sequence } from "../../api/api";
 import { BooleanInput } from '@angular/cdk/coercion';
+import { appAuth } from "../../../index";
 
 export const listSequenceContact = createAction({
     name: 'list_sequence_contact', 
-    auth: PieceAuth.None(),
+    auth: appAuth,
     displayName: 'List Sequences Contact',
     description: 'Get a list of sequence contacts based on filters',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getSequenceId: Property.ShortText({
             displayName: 'Sequence ID',
             required: true,
@@ -142,7 +139,7 @@ export const listSequenceContact = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.propsValue['getAPIKey'];
+        const apiKey = context.auth;
         const sequenceId = context.propsValue['getSequenceId'];
         const limit = context.propsValue['getLimit'] || 50;
         const offset = context.propsValue['getOffset'] || 0;
