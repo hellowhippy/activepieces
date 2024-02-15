@@ -6,7 +6,7 @@ This action lists campaigns in Whippy.
 API Documentation: https://docs.whippy.ai/reference/getcampaigns
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property} from "@activepieces/pieces-framework";
 import { Campaign } from "../../api/api";
 import { appAuth } from "../../../index";
 

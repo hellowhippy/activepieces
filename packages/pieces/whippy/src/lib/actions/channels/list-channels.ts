@@ -6,7 +6,7 @@ This action Lists channels (locations) for an organization.
 API Documentation: https://docs.whippy.ai/reference/getchannels
 */
 
-import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
+import { createAction } from "@activepieces/pieces-framework";
 import { Channels } from '../../api/api';
 import { appAuth } from "../../../index";
 

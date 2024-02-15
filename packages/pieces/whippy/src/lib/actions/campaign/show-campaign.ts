@@ -6,7 +6,7 @@ This action shows a campaign in Whippy. Campaign ID is required.
 API Documentation: https://docs.whippy.ai/reference/getcampaign
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property} from "@activepieces/pieces-framework";
 import { Campaign } from "../../api/api";
 import { appAuth } from "../../../index";
 

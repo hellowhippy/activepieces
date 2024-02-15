@@ -6,7 +6,7 @@ This action creates a tag in Whippy.
 API Documentation: https://docs.whippy.ai/reference/createtag
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property} from "@activepieces/pieces-framework";
 import { Tag } from '../../api/api';
 import { appAuth } from "../../../index";
 

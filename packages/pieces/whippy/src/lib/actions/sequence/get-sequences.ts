@@ -6,7 +6,7 @@ This action Lists sequences for an organization based on filters.
 API Documentation: https://docs.whippy.ai/reference/getsequences
 */
 
-import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Sequence } from "../../api/api";
 import { appAuth } from "../../../index";
 

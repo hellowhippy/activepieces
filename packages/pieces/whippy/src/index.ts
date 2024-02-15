@@ -1,6 +1,5 @@
 
 import { createPiece, PieceAuth } from "@activepieces/pieces-framework";
-import { getWhippyName } from "./lib/actions/whippy";
 import { sendMessage } from "./lib/actions/messages/send-message";
 import { createContact } from "./lib/actions/contact/create-contact";
 import { createNote } from "./lib/actions/messages/create-note";
@@ -35,16 +34,26 @@ import { listCustomPropertyValues } from "./lib/actions/custom-object/list-custo
 import { createCustomProperty } from "./lib/actions/custom-object/create-custom-property";
 import { updateCustomObject } from "./lib/actions/custom-object/update-custom-object";
 import { updateCustomProperty } from "./lib/actions/custom-object/update-custom-property";
-import { listApplications } from "./lib/triggers/developer-applications/list-applications";
-import { createApplication } from "./lib/triggers/developer-applications/create-developer-application";
-import { showApplication } from "./lib/triggers/developer-applications/show-developer-application";
-import { updateApplication } from "./lib/triggers/developer-applications/update-developer-application";
-import { callwhippyapi } from "./lib/common";
-import { HttpMethod } from "@activepieces/pieces-common";
-import { showDeveloperEndpoint } from "./lib/triggers/developer-endpoints/show-developer-endpoint";
-import { updateDeveloperEndpoint } from "./lib/triggers/developer-endpoints/update-developer-endpoint";
-import { createDeveloperEndpoint } from "./lib/triggers/developer-endpoints/create-developer-endpoint";
-import { listDeveloperEndpoints } from "./lib/triggers/developer-endpoints/list-endpoints";
+import { messageCreated } from "./lib/triggers/message_created";
+import { messageUpdated } from "./lib/triggers/message-updated";
+import { campaignCreated } from "./lib/triggers/campaign-created";
+import { campaignUpdated } from "./lib/triggers/campaign-updated";
+import { contactCreated } from "./lib/triggers/contact-created";
+import { contactUpdated } from "./lib/triggers/contact-updated";
+import { conversationCreated } from "./lib/triggers/conversation-created";
+import { leadNew } from "./lib/triggers/lead-new";
+import { conversationUpdated } from "./lib/triggers/conversation-updated";
+import { templateCreated } from "./lib/triggers/message-template-created";
+import { templateDeleted } from "./lib/triggers/message-template-deleted";
+import { templateUpdated } from "./lib/triggers/message-template-updated";
+import { sequenceCreated } from "./lib/triggers/sequence-created";
+import { sequenceRunCreated } from "./lib/triggers/sequence-run-created";
+import { sequenceRunUpdated } from "./lib/triggers/sequence-run-updated";
+import { sequenceUpdated } from "./lib/triggers/sequence-updated";
+import { stepContactCreated } from "./lib/triggers/step-contact-created";
+import { stepContactUpdated } from "./lib/triggers/step-contact-updated";
+import { stepCreated } from "./lib/triggers/step-created";
+// import { stepUpdated } from "./lib/triggers/step-updated";
 
 export const appAuth = PieceAuth.SecretText({
 	displayName: "API Key",
@@ -59,25 +68,7 @@ export const whippy = createPiece({
   logoUrl: "https://www.whippy.ai/logo.svg",
   authors: [],
   actions: [sendMessage,createContact,createNote,updateContact,listContacts,listMessage,listConversations,listUserChannels,listChannels,showChannels,createSequenceContacts,getSequences,listSequenceContact,listSequenceRun,showSequences,showSequenceRun,listAutomation,showOrganization,createTag,updateTag,listTags,deleteTag,listCampaignContacts,listCampaigns,sendCampaign,showCampaign,createCustomObjects,createCustomProperty,createCustomRecord,listCustomObjectRecords,listCustomObjects,listCustomPropertyValues,updateCustomObject,updateCustomProperty],
-  triggers: [listApplications, createApplication, showApplication, updateApplication, showDeveloperEndpoint,
-	updateDeveloperEndpoint, createDeveloperEndpoint, listDeveloperEndpoints],
-});
-  
-export const whippyAuth = PieceAuth.SecretText({
-	  displayName: 'API Key',
-	  description: "Enter API KEY",
-	  required: true,
-	  validate: async ({auth}) => {
-		  try{
-			  await callwhippyapi( HttpMethod.GET , "endpoints" , auth , undefined);
-			  return{
-				  valid: true,
-			  };
-		  }catch(e){
-			  return{
-				  valid: false,
-				  error: 'Invalid API Key',
-			  };
-		  }
-	  }
+  triggers: [messageCreated, messageUpdated, campaignCreated, campaignUpdated, contactCreated, contactUpdated,
+    conversationCreated, conversationUpdated, leadNew, templateCreated, templateDeleted, templateUpdated, sequenceCreated,
+    sequenceUpdated, sequenceRunCreated, sequenceRunUpdated, stepContactCreated, stepContactUpdated, stepCreated],
 });

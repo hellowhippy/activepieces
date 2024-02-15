@@ -6,7 +6,7 @@ This action list automation template in Whippy.
 API Documentation: https://docs.whippy.ai/reference/getautomationtemplates
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Automation } from '../../api/api';
 import { appAuth } from "../../../index";
 

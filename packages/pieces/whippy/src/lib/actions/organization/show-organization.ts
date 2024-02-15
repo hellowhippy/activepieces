@@ -6,7 +6,7 @@ This action shows a organization in Whippy.
 API Documentation: https://docs.whippy.ai/reference/getorganization
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction } from "@activepieces/pieces-framework";
 import { Organization } from "../../api/api";
 import { appAuth } from "../../../index";
 

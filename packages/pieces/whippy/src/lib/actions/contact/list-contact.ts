@@ -6,7 +6,7 @@ This action list all contacts in Whippy.
 API Documentation: https://docs.whippy.ai/reference/getcontacts-1
 */
 
-import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Contact } from '../../api/api';
 import { appAuth } from "../../../index";
 

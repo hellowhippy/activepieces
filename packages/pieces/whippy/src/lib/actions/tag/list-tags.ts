@@ -6,7 +6,7 @@ This action list tags in Whippy.
 API Documentation: https://docs.whippy.ai/reference/gettags
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Tag } from '../../api/api';
 import { appAuth } from "../../../index";
 

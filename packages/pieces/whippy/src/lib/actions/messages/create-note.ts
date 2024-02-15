@@ -7,7 +7,7 @@ and from (Phone of an existing channel belonging to your organization) are requi
 API Documentation: https://docs.whippy.ai/reference/createconversationnote
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Note } from '../../api/api';
 import { appAuth } from "../../../index";
 

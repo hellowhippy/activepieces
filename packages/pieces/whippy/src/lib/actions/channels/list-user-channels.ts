@@ -6,7 +6,7 @@ This action Returns a list of Users in given Organization with access to the Cha
 API Documentation: https://docs.whippy.ai/reference/listuserchannels-1
 */
 
-import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Channels } from '../../api/api';
 import { appAuth } from "../../../index";
 

@@ -7,7 +7,7 @@ custom_property_id and value are required.
 API Documentation: https://docs.whippy.ai/reference/updatecustompropertyvalue
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { CustomObject } from "../../api/api";
 import { appAuth } from "../../../index";
 

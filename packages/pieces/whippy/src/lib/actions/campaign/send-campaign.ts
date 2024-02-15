@@ -6,7 +6,7 @@ This action sends campaigns in Whippy. From, To, and Title are required.
 API Documentation: https://docs.whippy.ai/reference/sendcampaign
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property} from "@activepieces/pieces-framework";
 import { appAuth } from "../../../index";
 
 

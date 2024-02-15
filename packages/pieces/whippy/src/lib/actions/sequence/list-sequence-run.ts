@@ -6,7 +6,7 @@ This action Lists sequence runs based on filters.
 API Documentation: https://docs.whippy.ai/reference/getsequenceruns
 */
 
-import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Sequence } from "../../api/api";
 import { appAuth } from "../../../index";
 

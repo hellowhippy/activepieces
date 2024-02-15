@@ -6,7 +6,7 @@ This action Returns information about a specific channel with working hours. Cha
 API Documentation: https://docs.whippy.ai/reference/getchannel
 */
 
-import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Channels } from '../../api/api';
 import { appAuth } from "../../../index";
 

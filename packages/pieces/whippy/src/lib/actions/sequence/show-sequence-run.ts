@@ -6,7 +6,7 @@ This action Get a single sequence run based on the sequence id and the sequence 
 API Documentation: https://docs.whippy.ai/reference/getsinglesequencerun
 */
 
-import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Sequence } from "../../api/api";
 import { appAuth } from "../../../index";
 

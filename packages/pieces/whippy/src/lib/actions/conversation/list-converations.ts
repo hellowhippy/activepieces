@@ -6,7 +6,7 @@ This action list conversations in Whippy.
 API Documentation: https://docs.whippy.ai/reference/getconversations
 */
 
-import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Conversation } from "../../api/api";
 import { appAuth } from "../../../index";
 

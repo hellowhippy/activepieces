@@ -6,7 +6,7 @@ This action lists a custom property values in Whippy.
 API Documentation: https://docs.whippy.ai/reference/listcustompropertyvalues
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { CustomObject } from "../../api/api";
 import { appAuth } from "../../../index";
 

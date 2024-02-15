@@ -6,7 +6,7 @@ This action creates a custom objects in Whippy. Key and Label are required.
 API Documentation: https://docs.whippy.ai/reference/createcustomobject
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { CustomObject } from "../../api/api";
 import { appAuth } from "../../../index";
 

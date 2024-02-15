@@ -6,7 +6,7 @@ This action creates a contact in Whippy. Phone number is required.
 API Documentation: https://docs.whippy.ai/reference/createcontact-1
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property} from "@activepieces/pieces-framework";
 import { Contact } from '../../api/api';
 import { appAuth } from "../../../index";
 

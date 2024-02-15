@@ -6,7 +6,7 @@ This action creates a custom property in Whippy. Custom_object_id, Key, type and
 API Documentation: https://docs.whippy.ai/reference/createcustomproperty
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { CustomObject } from "../../api/api";
 import { appAuth } from "../../../index";
 

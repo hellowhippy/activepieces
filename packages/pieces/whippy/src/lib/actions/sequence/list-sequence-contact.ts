@@ -6,9 +6,8 @@ This actionLists sequence contacts based on filters.
 API Documentation: https://docs.whippy.ai/reference/getsequenceruns
 */
 
-import { createAction, Property, PieceAuth } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Sequence } from "../../api/api";
-import { BooleanInput } from '@angular/cdk/coercion';
 import { appAuth } from "../../../index";
 
 export const listSequenceContact = createAction({

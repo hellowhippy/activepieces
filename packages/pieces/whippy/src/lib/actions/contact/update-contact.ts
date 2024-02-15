@@ -6,7 +6,7 @@ This action updates a contact in Whippy. Contact ID is required.
 API Documentation: https://docs.whippy.ai/reference/updatecontact-1
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Contact } from '../../api/api';
 import { appAuth } from "../../../index";
 

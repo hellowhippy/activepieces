@@ -6,7 +6,7 @@ This action show a conversation in Whippy. Conversation ID is required.
 API Documentation: https://docs.whippy.ai/reference/getconversation
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Conversation } from "../../api/api";
 import { appAuth } from "../../../index";
 

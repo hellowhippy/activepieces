@@ -1,12 +1,12 @@
 /**
-List Campaign Conatcts Action
+List Campaign Contacts Action
 
 This action lists campaign contacts in Whippy. Campaign ID is required.
 
 API Documentation: https://docs.whippy.ai/reference/getcampaigncontacts
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Campaign } from "../../api/api";
 import { appAuth } from "../../../index";
 

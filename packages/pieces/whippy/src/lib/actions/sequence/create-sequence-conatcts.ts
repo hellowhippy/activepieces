@@ -6,7 +6,7 @@ This action creates a sequence contacts in Whippy. Sequence ID, From, and To are
 API Documentation: https://docs.whippy.ai/reference/createsequencecontacts
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Sequence } from "../../api/api";
 import { appAuth } from "../../../index";
 

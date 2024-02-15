@@ -7,7 +7,7 @@ associated_record_id and associated_record_type are required.
 API Documentation: https://docs.whippy.ai/reference/updatecustomobjectrecord
 */
 
-import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { CustomObject } from "../../api/api";
 import { appAuth } from "../../../index";
 
