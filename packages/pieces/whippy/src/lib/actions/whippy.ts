@@ -1,5 +1,4 @@
 import { createAction, Property, PieceAuth, StoreScope } from "@activepieces/pieces-framework";
-import { httpClient, HttpMethod } from "@activepieces/pieces-common";
 
 export const getWhippyName = createAction({
 	name: 'get_whippy_name', // Must be a unique across the piece, this shouldn't be changed.

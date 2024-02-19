@@ -6,12 +6,12 @@ This action updates a tag in Whippy. Tag ID is required.
 API Documentation: https://docs.whippy.ai/reference/updatetag
 */
 
-import { createAction, Property} from "@activepieces/pieces-framework";
+import { createAction, Property } from '@activepieces/pieces-framework';
 import { Tag } from '../../api/api';
-import { appAuth } from "../../../index";
+import { appAuth } from '../../../index';
 
 export const updateTag = createAction({
-  name: 'update_tag', 
+  name: 'update_tag',
   auth: appAuth,
   displayName: 'Update Tag',
   description: 'Update Tag',
@@ -28,22 +28,22 @@ export const updateTag = createAction({
     getName: Property.LongText({
       displayName: 'Tag Name',
       required: false,
-    }), 
+    }),
     getState: Property.StaticDropdown({
-        displayName: 'Tag State',
-        required: false,
-        options: {
-            options: [
-                {
-                    label: 'archived',    
-                    value: 'archived'
-                },
-                {
-                    label: 'active',
-                    value: 'active'
-                }
-            ]
-        }
+      displayName: 'Tag State',
+      required: false,
+      options: {
+        options: [
+          {
+            label: 'archived',
+            value: 'archived',
+          },
+          {
+            label: 'active',
+            value: 'active',
+          },
+        ],
+      },
     }),
   },
   async run(context) {
@@ -53,27 +53,33 @@ export const updateTag = createAction({
     const name = context.propsValue['getName'];
     const state = context.propsValue['getState'];
 
-    if(name !== undefined)
-    {
-        name.replace(/\s+/g,' ').trim()
+    if (name !== undefined) {
+      name.replace(/\s+/g, ' ').trim();
     }
+    
     function isValidHexColor(color: string) {
-        const hexColorRegex = /^#[0-9A-Fa-f]{6}$/;
-        return hexColorRegex.test(color);
+      const hexColorRegex = /^#[0-9A-Fa-f]{6}$/;
+      return hexColorRegex.test(color);
     }
-    if (colorCode !== undefined)
-    {
-        if (isValidHexColor(colorCode)) {
-            console.log('Valid color code:', colorCode);
-        } else {
-            console.error('Invalid color code:', colorCode);
-        }
+
+    if (colorCode !== undefined) {
+      if (isValidHexColor(colorCode)) {
+        console.log('Valid color code:', colorCode);
+      } else {
+        console.error('Invalid color code:', colorCode);
+      }
     }
 
     try {
-      const response = await Tag.udpateTag(apiKey, tagId, colorCode, name, state);
+      const response = await Tag.updateTag(
+        apiKey,
+        tagId,
+        colorCode,
+        name,
+        state
+      );
       if (response.success) {
-        return response.data; 
+        return response.data;
       } else {
         console.error(response.message);
         return false;
@@ -82,5 +88,5 @@ export const updateTag = createAction({
       console.error(error);
       return false;
     }
-  }
+  },
 });

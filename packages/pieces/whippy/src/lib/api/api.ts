@@ -322,7 +322,7 @@ export class Tag {
         return await callAPI(apiParams);
     }
 
-    static async udpateTag(apiKey: string, tagId: string, color: string | undefined, name: string | undefined, state: string | undefined): Promise<ApiResponse<any>> {
+    static async updateTag(apiKey: string, tagId: string, color: string | undefined, name: string | undefined, state: string | undefined): Promise<ApiResponse<any>> {
         const apiParams: APICallParams = {
             url: `${rootUrl}/tags/${tagId}`,
             method: 'PUT',
@@ -384,7 +384,6 @@ export class Campaign {
 
 export class CustomObject {
     static async createCustomObjects(apiKey: string, key: string, label: string, customProperties: object): Promise<ApiResponse<any>> {
-        console.log("----------------", customProperties)
         const apiParams: APICallParams = {
             url: `${rootUrl}/custom_objects`,
             method: 'POST',
