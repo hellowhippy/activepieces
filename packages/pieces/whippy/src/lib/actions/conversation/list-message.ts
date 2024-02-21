@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/getconversation
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { Conversation } from "../../api/api";
-import { appAuth } from "../../../index";
+import { appAuth } from "../../..";
 
 export const listMessage = createAction({
     name: 'list_message',
@@ -16,28 +16,43 @@ export const listMessage = createAction({
     displayName: 'List Message',
     description: 'Fetch a message details',
     props: {
-        getConversationId: Property.ShortText({
-            displayName: 'Conversation ID',
-            required: true,
-        }),
+      getConversationId: Property.ShortText({
+        displayName: 'Conversation ID',
+        required: true,
+      }),
+      getMessages: Property.Object({
+        displayName: 'Messages',
+        description: 'Messages Object',
+        required: false,
+        defaultValue: {
+          limit: Property.Number({
+            displayName: 'Limit',
+            description: 'Limit of conversation messages to return',
+            required: false,
+          }),
+          offset: Property.Number({
+            displayName: 'Offset',
+            description: 'Offset for the messages filter',
+            required: false,
+          }),
+        },
+      }),
     },
     async run(context) {
       const apiKey = context.auth;
       const conversationId = context.propsValue['getConversationId'];
-      const limit = 10;
-      const offset = 0;
+      const messages = context.propsValue['getMessages'];
 
       try {
-          const response = await Conversation.listMessages(apiKey, conversationId, limit, offset);
-          if (response.success) {
-            return response.data; 
-          } else {
-            console.error(response.message);
-            return false;
-          }
-        } catch (error) {
-          console.error(error);
+        const response = await Conversation.listMessages(apiKey, conversationId, messages);
+        if (response.success) {
+          return response.data; 
+        } else {
+          console.error(response.message);
           return false;
         }
+      } catch (error) {
+        throw new Error(`Failed to list message: ${error}`);
+      }
     },
 });

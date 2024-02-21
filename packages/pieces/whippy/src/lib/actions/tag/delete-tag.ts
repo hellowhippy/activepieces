@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/deletetag
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { Tag } from '../../api/api';
-import { appAuth } from "../../../index";
+import { appAuth } from "../../..";
 
 export const deleteTag = createAction({
   name: 'delete_tag', 
@@ -16,7 +16,6 @@ export const deleteTag = createAction({
   displayName: 'Delete Tag',
   description: 'Delete Tag',
   props: {
-    // Properties to ask from the user
     getTagId: Property.ShortText({
       displayName: 'Tag ID',
       required: true,
@@ -35,8 +34,7 @@ export const deleteTag = createAction({
         return false;
       }
     } catch (error) {
-      console.error(error);
-      return false;
+      throw new Error(`Failed to delete tag: ${error}`);
     }
   }
 });

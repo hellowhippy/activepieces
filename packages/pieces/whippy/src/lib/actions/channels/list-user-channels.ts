@@ -7,9 +7,8 @@ API Documentation: https://docs.whippy.ai/reference/listuserchannels-1
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
-import { Channels } from '../../api/api';
-import { appAuth } from "../../../index";
-
+import { appAuth } from "../../..";
+import { Channels } from "../../api/api";
 
 export const listUserChannels = createAction({
     name: 'list_user_channels', 
@@ -17,7 +16,6 @@ export const listUserChannels = createAction({
     displayName: 'List User Channels',
     description: 'List channels for a user',
     props: {
-        // Properties to ask from the user
         getChannelId: Property.ShortText({
             displayName: 'Channel ID',
             required: true,
@@ -46,8 +44,7 @@ export const listUserChannels = createAction({
                 return false;
             }
         } catch (error) {
-            console.error(error);
-            return false;
+            throw new Error(`Failed to list user channels: ${error}`);
         }
     },
 });

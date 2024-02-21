@@ -7,8 +7,19 @@ API Documentation: https://docs.whippy.ai/reference/createsequencecontacts
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
+import { appAuth } from "../../..";
 import { Sequence } from "../../api/api";
-import { appAuth } from "../../../index";
+
+interface ToNumber {
+    custom_a: string;
+    custom_b: string;
+    custom_c: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    name: string;
+    phone: string;
+}
 
 export const createSequenceContacts = createAction({
     name: 'create_sequence_contacts',
@@ -31,7 +42,7 @@ export const createSequenceContacts = createAction({
             defaultValue: {
                 custom_object_id: "",
                 resource: Property.StaticDropdown({
-                    displayName: '',
+                    displayName: 'Resource',
                     required: false,
                     options: { options: [{ label: 'contact', value: 'contact' }, { label: 'step_contact', value: 'step_contact' }] }
                 }),
@@ -45,11 +56,11 @@ export const createSequenceContacts = createAction({
             displayName: 'Scheduling Time',
             required: false,
         }),
-        getToNumber: Property.Object({
+        getToNumber:  Property.Array({
             displayName: 'Destination Number',
             required: true,
             description: 'List of contacts that would receive the campaign.',
-            defaultValue: {
+            defaultValue: [{
                 custom_a: "",
                 custom_b: "",
                 custom_c: "",
@@ -58,7 +69,7 @@ export const createSequenceContacts = createAction({
                 last_name: "",
                 name: "",
                 phone: "",
-            },
+            }] as ToNumber[],
         }),
     },
     async run(context) {
@@ -71,8 +82,8 @@ export const createSequenceContacts = createAction({
         const customData = context.propsValue['getCustomData'];
 
       try {
-          const response = await Sequence.createSequenceContacts(apiKey, seqID, fromNumber, toNumber, stepID, scheduleAt,
-            customData);
+          const response = await Sequence.createSequenceContacts(apiKey, seqID, `+${fromNumber.toString()}`,
+          toNumber, stepID, scheduleAt, customData);
           if (response.success) {
             return response.data; 
           } else {
@@ -80,8 +91,7 @@ export const createSequenceContacts = createAction({
             return false;
           }
         } catch (error) {
-          console.error(error);
-          return false;
+            throw new Error(`Failed to create sequence contacts: ${error}`);
         }
     },
 });

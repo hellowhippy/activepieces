@@ -6,10 +6,9 @@ This action shows a campaign in Whippy. Campaign ID is required.
 API Documentation: https://docs.whippy.ai/reference/getcampaign
 */
 
-import { createAction, Property} from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
+import { appAuth } from "../../..";
 import { Campaign } from "../../api/api";
-import { appAuth } from "../../../index";
-
 
 export const showCampaign = createAction({
     name: 'show_campaign',
@@ -17,10 +16,6 @@ export const showCampaign = createAction({
     displayName: 'Show Campaign',
     description: 'Show Campaign',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getId: Property.ShortText({
             displayName: 'Campaign ID',
             required: true,
@@ -39,8 +34,7 @@ export const showCampaign = createAction({
             return false;
           }
         } catch (error) {
-          console.error(error);
-          return false;
+          throw new Error(`Failed to show campaign: ${error}`);
         }
     },
 });

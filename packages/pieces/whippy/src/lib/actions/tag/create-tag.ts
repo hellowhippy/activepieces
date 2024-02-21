@@ -6,9 +6,9 @@ This action creates a tag in Whippy.
 API Documentation: https://docs.whippy.ai/reference/createtag
 */
 
-import { createAction, Property} from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
 import { Tag } from '../../api/api';
-import { appAuth } from "../../../index";
+import { appAuth } from "../../..";
 
 export const createTag = createAction({
   name: 'create_tag', 
@@ -16,7 +16,6 @@ export const createTag = createAction({
   displayName:'Create Tag',
   description: 'Create Tag',
   props: {
-    // Properties to ask from the user, in this ask we will take number of
     getName: Property.LongText({
       displayName: 'Tag Name',
       required: false,
@@ -57,8 +56,7 @@ export const createTag = createAction({
           return false;
         }
       } catch (error) {
-        console.error(error);
-        return false;
+        throw new Error(`Failed to create tag: ${error}`);
       }
     },
 });

@@ -6,9 +6,9 @@ This action lists a custom objects in Whippy.
 API Documentation: https://docs.whippy.ai/reference/listcustomobjects
 */
 
-import { createAction, Property} from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
+import { appAuth } from "../../..";
 import { CustomObject } from "../../api/api";
-import { appAuth } from "../../../index";
 
 export const listCustomObjects = createAction({
     name: 'list_custom_objects',
@@ -26,7 +26,7 @@ export const listCustomObjects = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.auth;
+      const apiKey = context.auth;
         const limit = context.propsValue['getLimit'];
         const offset = context.propsValue['getOffset'];
 
@@ -39,8 +39,7 @@ export const listCustomObjects = createAction({
             return false;
           }
         } catch (error) {
-          console.error(error);
-          return false;
+          throw new Error(`Failed to list custom objects: ${error}`);
         }
     },
 });

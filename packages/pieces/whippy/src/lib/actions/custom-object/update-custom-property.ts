@@ -8,8 +8,8 @@ API Documentation: https://docs.whippy.ai/reference/updatecustompropertyvalue
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
+import { appAuth } from "../../..";
 import { CustomObject } from "../../api/api";
-import { appAuth } from "../../../index";
 
 export const updateCustomProperty = createAction({
     name: 'update_custom_property',
@@ -50,8 +50,7 @@ export const updateCustomProperty = createAction({
             return false;
           }
         } catch (error) {
-          console.error(error);
-          return false;
+          throw new Error(`Failed to update custom property: ${error}`);
         }
     },
 });

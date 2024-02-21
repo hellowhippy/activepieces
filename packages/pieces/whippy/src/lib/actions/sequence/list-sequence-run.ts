@@ -7,8 +7,8 @@ API Documentation: https://docs.whippy.ai/reference/getsequenceruns
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
+import { appAuth } from "../../..";
 import { Sequence } from "../../api/api";
-import { appAuth } from "../../../index";
 
 export const listSequenceRun = createAction({
     name: 'list_sequence_run', 
@@ -87,8 +87,7 @@ export const listSequenceRun = createAction({
                 return false;
             }
         } catch (error) {
-            console.error(error);
-            return false;
+            throw new Error(`Failed to list sequence run: ${error}`);
         }
     },
 });

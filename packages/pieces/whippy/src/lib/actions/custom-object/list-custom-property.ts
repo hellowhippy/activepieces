@@ -7,8 +7,8 @@ API Documentation: https://docs.whippy.ai/reference/listcustompropertyvalues
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
+import { appAuth } from "../../..";
 import { CustomObject } from "../../api/api";
-import { appAuth } from "../../../index";
 
 export const listCustomPropertyValues = createAction({
     name: 'list_custom_property_values',
@@ -29,11 +29,11 @@ export const listCustomPropertyValues = createAction({
             required: false,
         }),
         getLimit: Property.Number({
-            displayName: '50',
+            displayName: 'Limit',
             required: false,
         }),
         getOffset: Property.Number({
-            displayName: '0',
+            displayName: 'Offset',
             required: false,
         }),
         getBefore: Property.DateTime({
@@ -49,13 +49,13 @@ export const listCustomPropertyValues = createAction({
     },
     async run(context) {
         const apiKey = context.auth;
-        const customId = context.propsValue['getCusId'];
-        const limit = context.propsValue['getLimit'];
-        const offset = context.propsValue['getOffset'];
-        const associatedId = context.propsValue['getAssociatedId'];
-        const resourceType = context.propsValue['getResourceType'];
-        const before = context.propsValue['getBefore'];
-        const after = context.propsValue['getAfter'];
+        const customId = context.propsValue['getCusId'] || '36b720b0-a79f-4bb9-82b1-a22acf5b14ad';
+        const limit = context.propsValue['getLimit'] || 50;
+        const offset = context.propsValue['getOffset'] || 0;
+        const associatedId = context.propsValue['getAssociatedId'] || '423b2341-24d8-4577-b149-1170a662047f';
+        const resourceType = context.propsValue['getResourceType'] || 'contact';
+        const before = context.propsValue['getBefore'] || '2022-11-03T00:00:00Z';
+        const after = context.propsValue['getAfter'] || '2022-11-03T00:00:00Z';
 
       try {
           const response = await CustomObject.listCustomProperty(apiKey, customId, limit, offset, associatedId, resourceType, before, after);
@@ -66,8 +66,7 @@ export const listCustomPropertyValues = createAction({
             return false;
           }
         } catch (error) {
-          console.error(error);
-          return false;
+            throw new Error(`Failed to list custom property: ${error}`);
         }
     },
 });

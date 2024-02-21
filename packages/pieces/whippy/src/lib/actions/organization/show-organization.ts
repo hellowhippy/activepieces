@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/getorganization
 
 import { createAction } from "@activepieces/pieces-framework";
 import { Organization } from "../../api/api";
-import { appAuth } from "../../../index";
+import { appAuth } from "../../..";
 
 export const showOrganization = createAction({
     name: 'show_organization',
@@ -29,8 +29,7 @@ export const showOrganization = createAction({
             return false;
           }
         } catch (error) {
-          console.error(error);
-          return false;
+          throw new Error(`Failed to show organization: ${error}`);
         }
     },
 });

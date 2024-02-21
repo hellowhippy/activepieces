@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/updatecontact-1
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { Contact } from '../../api/api';
-import { appAuth } from "../../../index";
+import { appAuth } from "../../..";
 
 export const updateContact = createAction({
   name: 'update_contact', 
@@ -16,7 +16,6 @@ export const updateContact = createAction({
   displayName: 'Update Contact',
   description: 'Update Contact',
   props: {
-    // Properties to ask from the user
     getContactId: Property.ShortText({
       displayName: 'Contact ID',
       required: true,
@@ -50,8 +49,7 @@ export const updateContact = createAction({
         return false;
       }
     } catch (error) {
-      console.error(error);
-      return false;
+      throw new Error(`Failed to update contact: ${error}`);
     }
   }
 });

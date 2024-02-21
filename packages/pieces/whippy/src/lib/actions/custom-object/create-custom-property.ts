@@ -7,8 +7,8 @@ API Documentation: https://docs.whippy.ai/reference/createcustomproperty
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
+import { appAuth } from "../../..";
 import { CustomObject } from "../../api/api";
-import { appAuth } from "../../../index";
 
 export const createCustomProperty = createAction({
     name: 'create_custom_property',
@@ -64,8 +64,7 @@ export const createCustomProperty = createAction({
             return false;
           }
         } catch (error) {
-          console.error(error);
-          return false;
+            throw new Error(`Failed to create custom property: ${error}`);
         }
     },
 });

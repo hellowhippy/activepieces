@@ -7,9 +7,8 @@ API Documentation: https://docs.whippy.ai/reference/getchannel
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
-import { Channels } from '../../api/api';
-import { appAuth } from "../../../index";
-
+import { appAuth } from "../../..";
+import { Channels } from "../../api/api";
 
 export const showChannels = createAction({
     name: 'show_channels', 
@@ -17,7 +16,6 @@ export const showChannels = createAction({
     displayName: 'Show Channels',
     description: 'Show channels',
     props: {
-        // Properties to ask from the user
         getChannelId: Property.ShortText({
             displayName: 'Channel ID',
             required: true,
@@ -36,8 +34,7 @@ export const showChannels = createAction({
                 return false;
             }
         } catch (error) {
-            console.error(error);
-            return false;
+            throw new Error(`Failed to show channel: ${error}`);
         }
     },
 });

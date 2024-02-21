@@ -6,9 +6,9 @@ This action lists a custom object records in Whippy.
 API Documentation: https://docs.whippy.ai/reference/listcustomobjectrecords
 */
 
-import { createAction, Property} from "@activepieces/pieces-framework";
+import { createAction, Property } from "@activepieces/pieces-framework";
+import { appAuth } from "../../..";
 import { CustomObject } from "../../api/api";
-import { appAuth } from "../../../index";
 
 export const listCustomObjectRecords = createAction({
     name: 'list_custom_object_records',
@@ -54,8 +54,7 @@ export const listCustomObjectRecords = createAction({
             return false;
           }
         } catch (error) {
-          console.error(error);
-          return false;
+            throw new Error(`Failed to list custom records: ${error}`);
         }
     },
 });

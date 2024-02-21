@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/gettags
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { Tag } from '../../api/api';
-import { appAuth } from "../../../index";
+import { appAuth } from "../../..";
 
 export const listTags = createAction({
   name: 'list_tags', 
@@ -16,7 +16,6 @@ export const listTags = createAction({
   displayName:'List Tags',
   description: 'List Tags',
   props: {
-    // Properties to ask from the user, in this ask we will take number of
     getLimit: Property.Number({
         displayName: 'Limit',
         required: false,
@@ -61,8 +60,7 @@ export const listTags = createAction({
           return false;
         }
       } catch (error) {
-        console.error(error);
-        return false;
+        throw new Error(`Failed to list tags: ${error}`);
       }
     },
 });

@@ -7,8 +7,8 @@ API Documentation: https://docs.whippy.ai/reference/getsequenceruns
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
+import { appAuth } from "../../..";
 import { Sequence } from "../../api/api";
-import { appAuth } from "../../../index";
 
 export const listSequenceContact = createAction({
     name: 'list_sequence_contact', 
@@ -30,7 +30,7 @@ export const listSequenceContact = createAction({
         }),
         getStatus: Property.Dropdown({
             displayName: 'Status',
-            description: 'Select Status',
+            description: 'Select Status for sequence contacts',
             required: false,
             options: async () => {
                 return {
@@ -72,7 +72,7 @@ export const listSequenceContact = createAction({
         }),
         getResponded: Property.Dropdown({
             displayName: 'Responded',
-            description: 'Select Respond',
+            description: 'Select Respond for sequence contacts',
             required: false,
             options: async () => {
                 return {
@@ -158,8 +158,7 @@ export const listSequenceContact = createAction({
                 return false;
             }
         } catch (error) {
-            console.error(error);
-            return false;
+            throw new Error(`Failed to list sequence contacts: ${error}`);
         }
     },
 });

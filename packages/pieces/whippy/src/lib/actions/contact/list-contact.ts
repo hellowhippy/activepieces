@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/getcontacts-1
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { Contact } from '../../api/api';
-import { appAuth } from "../../../index";
+import { appAuth } from "../../..";
 
 export const listContacts = createAction({
     name: 'list_contacts',
@@ -16,28 +16,49 @@ export const listContacts = createAction({
     displayName: 'List Contacts',
     description: 'Fetch a list of contacts',
     props: {
-        // Properties to ask from the user
-        getName: Property.ShortText({
-            displayName: 'Contact Name',
-            required: false,
-        }),
-        getEmail: Property.ShortText({
-            displayName: 'Contact Email Address',
-            required: false,
-        }),
-        getPhone: Property.Number({
-            displayName: 'Contact Phone Number',
-            required: false,
-        }),
+      getLimit: Property.Number({
+        displayName: 'Limit',
+        required: false,
+      }),
+      getOffset: Property.Number({
+        displayName: 'Offset',
+        required: false,
+      }),
+      getName: Property.ShortText({
+        displayName: 'Contact Name',
+        required: false,
+      }),
+      getEmail: Property.ShortText({
+        displayName: 'Contact Email Address',
+        required: false,
+      }),
+      getPhone: Property.Number({
+        displayName: 'Contact Phone Number',
+        required: false,
+      }),
+      getChannelsId: Property.Array({
+        displayName: 'Channels [ID]',
+        description: 'channel IDs',
+        required: false,
+      }),
+      getChannelsPhone: Property.Array({
+        displayName: 'Channels [Phone]',
+        description: 'channel phones',
+        required: false,
+      }),
     },
     async run(context) {
       const apiKey = context.auth;
+      const limit = context.propsValue['getLimit'];
+      const offset = context.propsValue['getOffset'];
       const name = context.propsValue['getName'];
       const email = context.propsValue['getEmail'];
       const phone = context.propsValue['getPhone'];
+      const channelsID = context.propsValue['getChannelsId'];
+      const channelsPhone = context.propsValue['getChannelsPhone'];
 
       try {
-          const response = await Contact.listContacts(apiKey, name, email, `+${phone?.toString()}`);
+          const response = await Contact.listContacts(apiKey, limit, offset, name, email, `+${phone?.toString()}`, channelsID, channelsPhone);
           if (response.success) {
             return response.data; 
           } else {
@@ -45,8 +66,7 @@ export const listContacts = createAction({
             return false;
           }
         } catch (error) {
-          console.error(error);
-          return false;
+          throw new Error(`Failed to list contacts: ${error}`);
         }
     },
 });

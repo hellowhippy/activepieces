@@ -8,7 +8,8 @@ API Documentation: https://docs.whippy.ai/reference/getautomationtemplates
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { Automation } from '../../api/api';
-import { appAuth } from "../../../index";
+import { appAuth } from "../../..";
+
 
 export const listAutomation = createAction({
   name: 'list_automation', 
@@ -16,7 +17,6 @@ export const listAutomation = createAction({
   displayName: 'List Automation',
   description: 'List Automation',
   props: {
-    // Properties to ask from the user
     getLimit: Property.Number({
       displayName: 'Limit',
       required: false,
@@ -26,29 +26,39 @@ export const listAutomation = createAction({
       required: false,
     }),
     getTitle: Property.ShortText({
-      displayName: 'title',
+      displayName: 'Title',
       required: false,
     }), 
     getArchived: Property.StaticDropdown({
-        displayName: 'Archived',
-        required: false,
-        options: {
-            options: [
-                {
-                    label: 'true',    
-                    value: '1'
-                },
-                {
-                    label: 'false',
-                    value: '0'
-                },
-              ]
-            }
+      displayName: 'Archived',
+      required: false,
+      options: {
+        options: [
+          {
+              label: 'true',    
+              value: '1'
+          },
+          {
+              label: 'false',
+              value: '0'
+          },
+        ]
+      }
     }),
     getAccessLevel: Property.ShortText({
-        displayName: 'Access Level',
-        required: false,
-      }),
+      displayName: 'Access Level',
+      required: false,
+    }),
+    getCreatedBy: Property.Array({
+      displayName: 'Created by',
+      description: 'Created by user IDs',
+      required: false,
+    }),
+    getUpdatedBy: Property.Array({
+      displayName: 'Updated By',
+      description: 'Updated by user IDs',
+      required: false,
+    }),
   },
   async run(context) {
     const apiKey = context.auth;
@@ -57,9 +67,12 @@ export const listAutomation = createAction({
     const title = context.propsValue['getTitle'] || "";
     const archived = context.propsValue['getArchived'];
     const accessLevel = context.propsValue['getAccessLevel'];
+    const createdBy = context.propsValue['getCreatedBy'];
+    const updatedBy = context.propsValue['getUpdatedBy'];
 
     try {
-      const response = await Automation.listAutomation(apiKey, limit, offset, title, archived, accessLevel);
+      const response = await Automation.listAutomation(apiKey, limit, offset, title, archived, accessLevel,
+        createdBy, updatedBy);
       if (response.success) {
         return response.data; 
       } else {
@@ -67,8 +80,7 @@ export const listAutomation = createAction({
         return false;
       }
     } catch (error) {
-      console.error(error);
-      return false;
+      throw new Error(`Failed to list automation templates: ${error}`);
     }
   }
 });
