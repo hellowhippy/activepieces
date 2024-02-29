@@ -36,9 +36,13 @@ export class SignInComponent {
   isCommunityEdition$: Observable<boolean>;
   showResendVerification = false;
   sendingVerificationEmail = false;
+  showDisabledUser = false;
+  domainIsNotAllowed = false;
   invitationOnlySignIn = false;
+  loginsWithEmailEnabled$: Observable<boolean>;
   showSignUpLink$: Observable<boolean>;
   sendVerificationEmail$?: Observable<void>;
+
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
@@ -46,6 +50,10 @@ export class SignInComponent {
     private redirectService: RedirectService,
     private snackbar: MatSnackBar
   ) {
+    this.loginsWithEmailEnabled$ = this.flagsService.isFlagEnabled(
+      ApFlagId.EMAIL_AUTH_ENABLED
+    );
+
     this.showSignUpLink$ = this.flagsService.isFlagEnabled(
       ApFlagId.SHOW_SIGN_UP_LINK
     );
@@ -70,6 +78,8 @@ export class SignInComponent {
       this.showInvalidEmailOrPasswordMessage = false;
       this.showResendVerification = false;
       this.invitationOnlySignIn = false;
+      this.showDisabledUser = false;
+      this.domainIsNotAllowed = false;
       const request = this.loginForm.getRawValue();
       this.authenticate$ = this.authenticationService.signIn(request).pipe(
         catchError((error: HttpErrorResponse) => {
@@ -79,16 +89,23 @@ export class SignInComponent {
           if (error.status === StatusCodes.FORBIDDEN) {
             this.showResendVerification =
               error.error.code === ErrorCode.EMAIL_IS_NOT_VERIFIED;
+            this.showDisabledUser =
+              error.error.code === ErrorCode.USER_IS_INACTIVE;
+            this.domainIsNotAllowed =
+              error.error.code === ErrorCode.DOMAIN_NOT_ALLOWED;
             this.invitationOnlySignIn =
-              error.error.code === ErrorCode.INVITATIION_ONLY_SIGN_UP;
+              error.error.code === ErrorCode.INVITATION_ONLY_SIGN_UP;
           }
 
           this.loading = false;
           return of(null);
         }),
         tap((response) => {
-          if (response) {
-            this.authenticationService.saveUser(response);
+          if (response && response.body) {
+            this.authenticationService.saveUser(
+              response.body,
+              response.body.token
+            );
             this.redirect();
           }
         }),

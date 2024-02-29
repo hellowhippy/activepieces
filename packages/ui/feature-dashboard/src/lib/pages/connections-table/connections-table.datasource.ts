@@ -23,7 +23,7 @@ import {
 } from '@activepieces/ui/common';
 import { Store } from '@ngrx/store';
 import { Params } from '@angular/router';
-import { PieceMetadataService } from 'ui-feature-pieces';
+import { PieceMetadataService } from '@activepieces/ui/feature-pieces';
 
 /**
  * Data source for the LogsTable view. This class should
@@ -78,14 +78,14 @@ export class ConnectionsTableDataSource extends DataSource<any> {
       }),
       tap((res) => {
         this.isLoading$.next(false);
-        this.paginator.next = res.next;
-        this.paginator.previous = res.previous;
+        this.paginator.setNextAndPrevious(res.next, res.previous);
         this.data = res.data;
-        console.log(this.data);
       }),
       switchMap((res) => {
         const logos: Observable<string | undefined>[] = res.data.map((item) =>
-          this.pieceMetadataService.getPieceNameLogo(item.appName).pipe(take(1))
+          this.pieceMetadataService
+            .getPieceNameLogo(item.pieceName)
+            .pipe(take(1))
         );
         return forkJoin(logos).pipe(
           map((logos) => {

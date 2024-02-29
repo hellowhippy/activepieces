@@ -4,7 +4,7 @@ import { OAuth2AuthorizationMethod } from '../oauth2-authorization-method'
 
 const commonAuthProps = {
     name: Type.String({}),
-    appName: Type.String({}),
+    pieceName: Type.String({}),
     projectId: Type.String({}),
 }
 
@@ -36,7 +36,6 @@ export const UpsertPlatformOAuth2Request = Type.Object({
         props: Type.Optional(Type.Record(Type.String(), Type.String())),
         scope: Type.String(),
         type: Type.Literal(AppConnectionType.PLATFORM_OAUTH2),
-        token_url: Type.Optional(Type.String({})),
         redirect_url: Type.String({}),
     }),
 }, {
@@ -56,7 +55,6 @@ export const UpsertCloudOAuth2Request = Type.Object({
         props: Type.Optional(Type.Record(Type.String(), Type.String())),
         scope: Type.String(),
         type: Type.Literal(AppConnectionType.CLOUD_OAUTH2),
-        token_url: Type.Optional(Type.String({})),
     }),
 }, {
     title: 'Cloud OAuth2',
@@ -82,7 +80,6 @@ export const UpsertOAuth2Request = Type.Object({
         client_id: Type.String({}),
         client_secret: Type.String({}),
         grant_type: Type.Optional(Type.Enum(OAuth2GrantType)),
-        token_url: Type.String({}),
         props: Type.Optional(Type.Record(Type.String(), Type.Any())),
         scope: Type.String(),
         code: Type.String(),

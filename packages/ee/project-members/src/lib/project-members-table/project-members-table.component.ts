@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ProjectMembersTableDataSource } from './project-members.datasource';
 import { ProjectMemberService } from '../service/project-members.service';
 import {
@@ -13,7 +18,7 @@ import {
   take,
 } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { InviteProjectMemberDialogComponent } from '../invite-project-member-dialog/invite-project-member.component';
+import { InviteProjectMemberDialogComponent } from '../dialogs/invite-project-member-dialog/invite-project-member.component';
 import {
   ProjectMemberRole,
   ProjectMemberStatus,
@@ -22,9 +27,14 @@ import { BillingService, UpgradeDialogData } from '@activepieces/ee-billing-ui';
 import { UpgradeDialogComponent } from '@activepieces/ee-billing-ui';
 import { Store } from '@ngrx/store';
 import {
+  ApPaginatorComponent,
   AuthenticationService,
+  IsFeatureEnabledBaseComponent,
   ProjectSelectors,
 } from '@activepieces/ui/common';
+import { RolesDisplayNames } from '../utils';
+import { ActivatedRoute } from '@angular/router';
+import { ApFlagId } from '@activepieces/shared';
 
 @Component({
   selector: 'app-project-members-table',
@@ -32,7 +42,12 @@ import {
   styleUrls: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectMembersTableComponent implements OnInit {
+export class ProjectMembersTableComponent
+  extends IsFeatureEnabledBaseComponent
+  implements OnInit
+{
+  @ViewChild(ApPaginatorComponent, { static: true })
+  paginator!: ApPaginatorComponent;
   dataSource!: ProjectMembersTableDataSource;
   dialogClosed$: Observable<void> | undefined;
   deleteInvitation$: Observable<void> | undefined;
@@ -42,20 +57,32 @@ export class ProjectMembersTableComponent implements OnInit {
   refreshTableAtCurrentCursor$: Subject<boolean> = new Subject();
   displayedColumns = ['email', 'role', 'status', 'created', 'action'];
   title = $localize`Project Members`;
+  RolesDisplayNames = RolesDisplayNames;
+  StatusDisplayNames: { [k: string]: string } = {
+    [ProjectMemberStatus.ACTIVE]: $localize`Active`,
+    [ProjectMemberStatus.PENDING]: $localize`Pending`,
+  };
+
   constructor(
     private matDialog: MatDialog,
     private billingService: BillingService,
     private store: Store,
     private projectMemberService: ProjectMemberService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    activatedRoute: ActivatedRoute
   ) {
+    super(activatedRoute, ApFlagId.PROJECT_MEMBERS_ENABLED);
+  }
+  ngOnInit(): void {
     this.dataSource = new ProjectMembersTableDataSource(
       this.authenticationService,
       this.projectMemberService,
-      this.refreshTableAtCurrentCursor$.asObservable().pipe(startWith(true))
+      this.refreshTableAtCurrentCursor$.asObservable().pipe(startWith(true)),
+      !this.isFeatureEnabled,
+      this.paginator,
+      this.activatedRoute.queryParams
     );
-  }
-  ngOnInit(): void {
+
     this.projectOwnerId$ = this.store
       .select(ProjectSelectors.selectCurrentProjectOwnerId)
       .pipe(take(1));
@@ -133,15 +160,6 @@ export class ProjectMembersTableComponent implements OnInit {
           this.refreshTableAtCurrentCursor$.next(true);
         })
       );
-  }
-
-  statusText(status: ProjectMemberStatus) {
-    switch (status) {
-      case ProjectMemberStatus.ACTIVE:
-        return $localize`Active`;
-      case ProjectMemberStatus.PENDING:
-        return $localize`Pending`;
-    }
   }
 
   get projectMemberRole() {

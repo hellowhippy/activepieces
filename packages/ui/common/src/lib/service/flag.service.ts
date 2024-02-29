@@ -37,6 +37,15 @@ export class FlagService {
       })
     );
   }
+
+  getArrayFlag(flag: ApFlagId): Observable<string[]> {
+    return this.getAllFlags().pipe(
+      map((value) => {
+        return value[flag] as string[];
+      })
+    );
+  }
+
   getThirdPartyProvidersMap() {
     return this.getAllFlags().pipe(
       map((res) => {
@@ -67,14 +76,6 @@ export class FlagService {
     );
   }
 
-  isChatbotEnabled(): Observable<boolean> {
-    return this.getAllFlags().pipe(
-      map((flags) => {
-        return flags['CHATBOT_ENABLED'] as boolean;
-      })
-    );
-  }
-
   isTelemetryEnabled(): Observable<boolean> {
     return this.getAllFlags().pipe(
       map((flags) => {
@@ -87,6 +88,14 @@ export class FlagService {
     return this.getAllFlags().pipe(
       map((flags) => {
         return flags[ApFlagId.WEBHOOK_URL_PREFIX] as string;
+      })
+    );
+  }
+
+  getInterfaceUrlPrefix(): Observable<string> {
+    return this.getAllFlags().pipe(
+      map((flags) => {
+        return (flags[ApFlagId.FRONTEND_URL] as string) + '/interfaces';
       })
     );
   }
@@ -147,13 +156,6 @@ export class FlagService {
     );
   }
 
-  getTemplatesSourceUrl(): Observable<string> {
-    return this.getAllFlags().pipe(
-      map((flags) => {
-        return flags[ApFlagId.TEMPLATES_SOURCE_URL] as string;
-      })
-    );
-  }
   getTheme() {
     return this.getAllFlags().pipe(
       map((flags) => {

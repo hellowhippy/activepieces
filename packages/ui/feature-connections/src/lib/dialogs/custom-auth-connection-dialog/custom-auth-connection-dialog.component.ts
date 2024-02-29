@@ -32,7 +32,7 @@ import {
 import { connectionNameRegex } from '../utils';
 
 export interface CustomAuthDialogData {
-  pieceAuthProperty: CustomAuthProperty<boolean, CustomAuthProps>;
+  pieceAuthProperty: CustomAuthProperty<CustomAuthProps>;
   pieceName: string;
   connectionToUpdate?: AppConnectionWithoutSensitiveData;
 }
@@ -110,7 +110,7 @@ export class CustomAuthConnectionDialogComponent {
       const propsValues = this.settingsForm.getRawValue();
       delete propsValues.name;
       const upsertRequest: UpsertCustomAuthRequest = {
-        appName: this.dialogData.pieceName,
+        pieceName: this.dialogData.pieceName,
         projectId: this.authenticationService.getProjectId(),
         name: this.settingsForm.getRawValue().name,
         type: AppConnectionType.CUSTOM_AUTH,

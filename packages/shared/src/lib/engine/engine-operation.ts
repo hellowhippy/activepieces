@@ -3,7 +3,7 @@ import { FlowRunId } from '../flow-run/flow-run'
 import { FlowVersion } from '../flows/flow-version'
 import { ProjectId } from '../project/project'
 import { PiecePackage } from '../pieces'
-import { ExecutionState, ExecutionType } from '../flow-run/execution/execution-output'
+import { ExecutionState, ExecutionType, ResumePayload } from '../flow-run/execution/execution-output'
 
 export enum EngineOperationType {
     EXTRACT_PIECE_METADATA = 'EXTRACT_PIECE_METADATA',
@@ -19,12 +19,13 @@ export enum TriggerHookType {
     ON_ENABLE = 'ON_ENABLE',
     ON_DISABLE = 'ON_DISABLE',
     HANDSHAKE = 'HANDSHAKE',
+    RENEW = 'RENEW',
     RUN = 'RUN',
     TEST = 'TEST',
 }
 
 export type EngineOperation =
-    | ExcuteStepOperation
+    | ExecuteStepOperation
     | ExecuteFlowOperation
     | ExecutePropsOptions
     | ExecuteTriggerOperation<TriggerHookType>
@@ -42,9 +43,9 @@ export type ExecuteValidateAuthOperation = BaseEngineOperation & {
     auth: AppConnectionValue
 }
 
-export type ExecuteExtractPieceMetadata = PiecePackage & { projectId: string }
+export type ExecuteExtractPieceMetadata = PiecePackage
 
-export type ExcuteStepOperation = BaseEngineOperation &  {
+export type ExecuteStepOperation = BaseEngineOperation &  {
     stepName: string
     flowVersion: FlowVersion
 }
@@ -53,23 +54,24 @@ export type ExecutePropsOptions = BaseEngineOperation & {
     piece: PiecePackage
     propertyName: string
     stepName: string
+    flowVersion: FlowVersion
     input: Record<string, unknown>
 }
 
 type BaseExecuteFlowOperation<T extends ExecutionType> = BaseEngineOperation & {
     flowVersion: FlowVersion
     flowRunId: FlowRunId
-    triggerPayload: unknown
     executionType: T
 }
 
 export type BeginExecuteFlowOperation = BaseExecuteFlowOperation<ExecutionType.BEGIN> & {
-    executionState?: ExecutionState
+    triggerPayload: unknown
 }
 
 export type ResumeExecuteFlowOperation = BaseExecuteFlowOperation<ExecutionType.RESUME> & {
     executionState: ExecutionState
-    resumePayload: unknown
+    tasks: number
+    resumePayload: ResumePayload
 }
 
 export type ExecuteFlowOperation = BeginExecuteFlowOperation | ResumeExecuteFlowOperation
@@ -145,8 +147,9 @@ type ExecuteOnEnableTriggerResponse = {
 export type ExecuteTriggerResponse<H extends TriggerHookType> = H extends TriggerHookType.RUN ? ExecuteTestOrRunTriggerResponse :
     H extends TriggerHookType.HANDSHAKE ? ExecuteHandshakeTriggerResponse :
         H extends TriggerHookType.TEST ? ExecuteTestOrRunTriggerResponse :
-            H extends TriggerHookType.ON_DISABLE ? Record<string, never> :
-                ExecuteOnEnableTriggerResponse
+            H extends TriggerHookType.RENEW ? Record<string, never> :
+                H extends TriggerHookType.ON_DISABLE ? Record<string, never> :
+                    ExecuteOnEnableTriggerResponse
 
 export type ExecuteActionResponse = {
     success: boolean

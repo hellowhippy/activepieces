@@ -32,7 +32,7 @@ interface BasicAuthForm {
   password: FormControl<string>;
 }
 export interface BasicAuthDialogData {
-  pieceAuthProperty: BasicAuthProperty<boolean>;
+  pieceAuthProperty: BasicAuthProperty;
   pieceName: string;
   connectionToUpdate?: AppConnectionWithoutSensitiveData;
 }
@@ -96,7 +96,7 @@ export class BasicAuthConnectionDialogComponent {
     if (this.settingsForm.valid) {
       this.loading = true;
       const upsertRequest: UpsertBasicAuthRequest = {
-        appName: this.dialogData.pieceName,
+        pieceName: this.dialogData.pieceName,
         projectId: this.authenticationService.getProjectId(),
         name: this.settingsForm.getRawValue().name,
         type: AppConnectionType.BASIC_AUTH,

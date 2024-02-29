@@ -6,7 +6,6 @@ tmp
 .nx/
 /out-tsc
 firebase-admin-sdk.json
-cache
 dev
 
 # SDK Build
@@ -23,7 +22,7 @@ node_modules
 *.launch
 .settings/
 *.sublime-workspace
-
+cache
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json
@@ -45,10 +44,10 @@ testem.log
 .DS_Store
 Thumbs.db
 
+
 .angular
 activepieces-engine.js
 .history/
-packages/backend/.env
 
 # produced by unsandboxed engine execution
 .pnpm-store
@@ -59,3 +58,5 @@ packages/backend/.env
 # scratch pad
 scratch.md
 
+# environment variables
+.env

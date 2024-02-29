@@ -4,8 +4,6 @@ import { UiCommonModule } from '@activepieces/ui/common';
 import { FlowItemComponent } from './components/flow-item-tree/flow-item/flow-item.component';
 import { FlowItemContentComponent } from './components/flow-item-tree/flow-item/flow-item-content/flow-item-content.component';
 import { FlowItemTreeComponent } from './components/flow-item-tree/flow-item-tree.component';
-import { CanvasUtilsComponent } from './components/canvas-utils/canvas-utils.component';
-import { CanvasPannerDirective } from './components/canvas-utils/panning/panner.directive';
 import { DeleteStepDialogComponent } from './components/flow-item-tree/flow-item/actions/delete-flow-item-action/delete-step-dialog/delete-step-dialog.component';
 import { IncompleteStepsWidgetComponent } from './components/widgets/incomplete-steps-widget/incomplete-steps-widget.component';
 import { DragAndDropModule } from 'angular-draggable-droppable';
@@ -19,7 +17,7 @@ import { DeleteFlowItemActionComponent } from './components/flow-item-tree/flow-
 import { ReplaceTriggerActionComponent } from './components/flow-item-tree/flow-item/actions/replace-trigger-action/replace-trigger-action.component';
 import { ActionsContainerComponent } from './components/flow-item-tree/flow-item/actions/actions-container/actions-container.component';
 import { DuplicateStepActionComponent } from './components/flow-item-tree/flow-item/actions/duplicate-step-action/duplicate-step-action.component';
-import { UiFeaturePiecesModule } from 'ui-feature-pieces';
+import { UiFeaturePiecesModule } from '@activepieces/ui/feature-pieces';
 import { EndfOfFlowWidgetComponent } from './components/widgets/end-of-flow-widget/end-of-flow-widget.component';
 
 @NgModule({
@@ -34,9 +32,7 @@ import { EndfOfFlowWidgetComponent } from './components/widgets/end-of-flow-widg
     FlowItemComponent,
     FlowItemContentComponent,
     FlowItemTreeComponent,
-    CanvasUtilsComponent,
     DeleteStepDialogComponent,
-    CanvasPannerDirective,
     IncompleteStepsWidgetComponent,
     DropZoneComponent,
     SmallAddButtonComponent,
@@ -49,6 +45,6 @@ import { EndfOfFlowWidgetComponent } from './components/widgets/end-of-flow-widg
     DuplicateStepActionComponent,
     EndfOfFlowWidgetComponent,
   ],
-  exports: [FlowItemTreeComponent, CanvasUtilsComponent, CanvasPannerDirective],
+  exports: [FlowItemTreeComponent],
 })
 export class UiFeatureBuilderCanvasModule {}

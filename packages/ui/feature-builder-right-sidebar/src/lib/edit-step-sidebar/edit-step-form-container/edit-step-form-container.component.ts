@@ -30,19 +30,17 @@ import {
   PieceTriggerSettings,
   StepSettings,
   TriggerType,
-  UnhandledSwitchCaseError,
   UpdateActionRequest,
   UpdateTriggerRequest,
 } from '@activepieces/shared';
-import { FlagService } from '@activepieces/ui/common';
+import { FlagService, FlowBuilderService } from '@activepieces/ui/common';
 import {
   BuilderSelectors,
-  CollectionBuilderService,
   Step,
   FlowsActions,
 } from '@activepieces/ui/feature-builder-store';
 import { TriggerBase, TriggerStrategy } from '@activepieces/pieces-framework';
-import { PieceMetadataService } from 'ui-feature-pieces';
+import { PieceMetadataService } from '@activepieces/ui/feature-pieces';
 
 @Component({
   selector: 'app-edit-step-form-container',
@@ -72,7 +70,7 @@ export class EditStepFormContainerComponent {
     private snackbar: MatSnackBar,
     private flagService: FlagService,
     private actionMetaService: PieceMetadataService,
-    private builderService: CollectionBuilderService
+    private builderService: FlowBuilderService
   ) {
     this.webhookUrl$ = forkJoin({
       flow: this.store.select(BuilderSelectors.selectCurrentFlow).pipe(take(1)),
@@ -255,9 +253,6 @@ export class EditStepFormContainerComponent {
           ...inputControlValue,
         };
         return settings;
-      }
-      default: {
-        throw new UnhandledSwitchCaseError(currentStep);
       }
     }
   }

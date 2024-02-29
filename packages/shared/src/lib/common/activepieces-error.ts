@@ -1,8 +1,6 @@
-import { AppConnectionId } from '../app-connection/app-connection'
 import { FileId } from '../file/file'
 import { FlowRunId } from '../flow-run/flow-run'
 import { FlowId } from '../flows/flow'
-import { FlowInstanceId } from '../flows/flow-instances'
 import { FlowVersionId } from '../flows/flow-version'
 import { ApId } from './id-generator'
 
@@ -13,7 +11,7 @@ export class ActivepiecesError extends Error {
 }
 
 type ErrorParams =
-    | AppConnectionNotFoundErrorParams
+    | AuthenticationParams
     | AuthorizationErrorParams
     | ConfigNotFoundErrorParams
     | EmailIsNotVerifiedErrorParams
@@ -22,11 +20,9 @@ type ErrorParams =
     | ExecutionTimeoutErrorParams
     | ExistingUserErrorParams
     | FileNotFoundErrorParams
-    | FlowInstanceNotFoundErrorParams
     | FlowNotFoundErrorParams
     | FlowOperationErrorParams
     | FlowRunNotFoundErrorParams
-    | FlowVersionNotFoundErrorParams
     | InvalidApiKeyParams
     | InvalidAppConnectionParams
     | InvalidBearerTokenParams
@@ -35,6 +31,7 @@ type ErrorParams =
     | InvalidCredentialsErrorParams
     | InvalidJwtTokenErrorParams
     | InvalidOtpParams
+    | InvitationOnlySignUpParams
     | JobRemovalFailureErrorParams
     | OpenAiFailedErrorParams
     | PauseMetadataMissingErrorParams
@@ -42,6 +39,7 @@ type ErrorParams =
     | PieceNotFoundErrorParams
     | PieceTriggerNotFoundErrorParams
     | QuotaExceededParams
+    | FeatureDisabledErrorParams
     | SignUpDisabledParams
     | StepNotFoundErrorParams
     | SystemInvalidErrorParams
@@ -52,6 +50,9 @@ type ErrorParams =
     | TriggerFailedErrorParams
     | ValidationErrorParams
     | InvitationOnlySignUpParams
+    | UserIsInActiveErrorParams
+    | DomainIsNotAllowedErrorParams
+    | EmailAuthIsDisabledParams
 
 export type BaseErrorParams<T, V> = {
     code: T
@@ -59,12 +60,12 @@ export type BaseErrorParams<T, V> = {
 }
 
 export type InvitationOnlySignUpParams = BaseErrorParams<
-ErrorCode.INVITATIION_ONLY_SIGN_UP,
+ErrorCode.INVITATION_ONLY_SIGN_UP,
 Record<string, never>
 >
 
 export type InvalidClaimParams = BaseErrorParams<ErrorCode.INVALID_CLAIM, { redirectUrl: string, tokenUrl: string, clientId: string }>
-export type InvalidCloudClaimParams = BaseErrorParams<ErrorCode.INVALID_CLOUD_CLAIM, { appName: string }>
+export type InvalidCloudClaimParams = BaseErrorParams<ErrorCode.INVALID_CLOUD_CLAIM, { pieceName: string }>
 
 export type InvalidBearerTokenParams = BaseErrorParams<ErrorCode.INVALID_BEARER_TOKEN, {
     message?: string
@@ -72,12 +73,7 @@ export type InvalidBearerTokenParams = BaseErrorParams<ErrorCode.INVALID_BEARER_
 
 export type FileNotFoundErrorParams = BaseErrorParams<ErrorCode.FILE_NOT_FOUND, { id: FileId }>
 
-export type AppConnectionNotFoundErrorParams = BaseErrorParams<
-ErrorCode.APP_CONNECTION_NOT_FOUND,
-{
-    id: AppConnectionId
-}
->
+export type EmailAuthIsDisabledParams = BaseErrorParams<ErrorCode.EMAIL_AUTH_DISABLED, Record<string, never>>
 
 export type AuthorizationErrorParams = BaseErrorParams<
 ErrorCode.AUTHORIZATION,
@@ -109,24 +105,10 @@ ErrorCode.FLOW_NOT_FOUND,
 }
 >
 
-export type FlowInstanceNotFoundErrorParams = BaseErrorParams<
-ErrorCode.FLOW_INSTANCE_NOT_FOUND,
-{
-    id?: FlowInstanceId
-}
->
-
 export type FlowRunNotFoundErrorParams = BaseErrorParams<
 ErrorCode.FLOW_RUN_NOT_FOUND,
 {
     id: FlowRunId
-}
->
-
-export type FlowVersionNotFoundErrorParams = BaseErrorParams<
-ErrorCode.FLOW_VERSION_NOT_FOUND,
-{
-    id: FlowVersionId
 }
 >
 
@@ -135,8 +117,22 @@ ErrorCode.INVALID_CREDENTIALS,
 null
 >
 
+export type DomainIsNotAllowedErrorParams = BaseErrorParams<
+ErrorCode.DOMAIN_NOT_ALLOWED,
+{
+    domain: string
+}
+>
+
 export type EmailIsNotVerifiedErrorParams = BaseErrorParams<
 ErrorCode.EMAIL_IS_NOT_VERIFIED,
+{
+    email: string
+}
+>
+
+export type UserIsInActiveErrorParams = BaseErrorParams<
+ErrorCode.USER_IS_INACTIVE,
 {
     email: string
 }
@@ -302,28 +298,42 @@ ErrorCode.QUOTA_EXCEEDED,
 }
 >
 
+export type FeatureDisabledErrorParams = BaseErrorParams<
+ErrorCode.FEATURE_DISABLED,
+{
+    message: string
+}>
+
 export type SignUpDisabledParams = BaseErrorParams<
 ErrorCode.SIGN_UP_DISABLED,
 Record<string, never>
 >
 
+export type AuthenticationParams = BaseErrorParams<
+ErrorCode.AUTHENTICATION,
+{
+    message: string
+}
+>
+
 export type InvalidOtpParams = BaseErrorParams<ErrorCode.INVALID_OTP, Record<string, never>>
 
 export enum ErrorCode {
-    APP_CONNECTION_NOT_FOUND = 'APP_CONNECTION_NOT_FOUND',
+    AUTHENTICATION = 'AUTHENTICATION',
     AUTHORIZATION = 'AUTHORIZATION',
     CONFIG_NOT_FOUND = 'CONFIG_NOT_FOUND',
+    DOMAIN_NOT_ALLOWED = 'DOMAIN_NOT_ALLOWED',
     EMAIL_IS_NOT_VERIFIED = 'EMAIL_IS_NOT_VERIFIED',
     ENGINE_OPERATION_FAILURE = 'ENGINE_OPERATION_FAILURE',
     ENTITY_NOT_FOUND = 'ENTITY_NOT_FOUND',
     EXECUTION_TIMEOUT = 'EXECUTION_TIMEOUT',
+    EMAIL_AUTH_DISABLED = 'EMAIL_AUTH_DISABLED',
     EXISTING_USER = 'EXISTING_USER',
     FILE_NOT_FOUND = 'FILE_NOT_FOUND',
     FLOW_INSTANCE_NOT_FOUND = 'INSTANCE_NOT_FOUND',
     FLOW_NOT_FOUND = 'FLOW_NOT_FOUND',
     FLOW_OPERATION_INVALID = 'FLOW_OPERATION_INVALID',
     FLOW_RUN_NOT_FOUND = 'FLOW_RUN_NOT_FOUND',
-    FLOW_VERSION_NOT_FOUND = 'FLOW_VERSION_NOT_FOUND',
     INVALID_API_KEY = 'INVALID_API_KEY',
     INVALID_APP_CONNECTION = 'INVALID_APP_CONNECTION',
     INVALID_BEARER_TOKEN = 'INVALID_BEARER_TOKEN',
@@ -332,7 +342,7 @@ export enum ErrorCode {
     INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
     INVALID_OR_EXPIRED_JWT_TOKEN = 'INVALID_OR_EXPIRED_JWT_TOKEN',
     INVALID_OTP = 'INVALID_OTP',
-    INVITATIION_ONLY_SIGN_UP = 'INVITATIION_ONLY_SIGN_UP',
+    INVITATION_ONLY_SIGN_UP = 'INVITATION_ONLY_SIGN_UP',
     JOB_REMOVAL_FAILURE = 'JOB_REMOVAL_FAILURE',
     OPEN_AI_FAILED = 'OPEN_AI_FAILED',
     PAUSE_METADATA_MISSING = 'PAUSE_METADATA_MISSING',
@@ -340,6 +350,7 @@ export enum ErrorCode {
     PIECE_NOT_FOUND = 'PIECE_NOT_FOUND',
     PIECE_TRIGGER_NOT_FOUND = 'PIECE_TRIGGER_NOT_FOUND',
     QUOTA_EXCEEDED = 'QUOTA_EXCEEDED',
+    FEATURE_DISABLED = 'FEATURE_DISABLED',
     SIGN_UP_DISABLED = 'SIGN_UP_DISABLED',
     STEP_NOT_FOUND = 'STEP_NOT_FOUND',
     SYSTEM_PROP_INVALID = 'SYSTEM_PROP_INVALID',
@@ -348,5 +359,6 @@ export enum ErrorCode {
     TRIGGER_DISABLE = 'TRIGGER_DISABLE',
     TRIGGER_ENABLE = 'TRIGGER_ENABLE',
     TRIGGER_FAILED = 'TRIGGER_FAILED',
+    USER_IS_INACTIVE = 'USER_IS_INACTIVE',
     VALIDATION = 'VALIDATION',
 }
