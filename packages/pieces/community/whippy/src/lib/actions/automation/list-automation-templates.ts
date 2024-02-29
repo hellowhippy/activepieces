@@ -1,9 +1,7 @@
 /**
-List Automation Templates Action
-
-This action list automation template in Whippy. 
-
-API Documentation: https://docs.whippy.ai/reference/getautomationtemplates
+  List Automation Templates Action
+  This action list automation template in Whippy. 
+  API Documentation: https://docs.whippy.ai/reference/getautomationtemplates
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
