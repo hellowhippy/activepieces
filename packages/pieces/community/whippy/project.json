@@ -1,7 +1,7 @@
 {
   "name": "pieces-whippy",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/pieces/whippy/src",
+  "sourceRoot": "packages/pieces/community/whippy/src",
   "projectType": "library",
   "targets": {
     "build": {
@@ -10,10 +10,10 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/packages/pieces/whippy",
-        "tsConfig": "packages/pieces/whippy/tsconfig.lib.json",
-        "packageJson": "packages/pieces/whippy/package.json",
-        "main": "packages/pieces/whippy/src/index.ts",
+        "outputPath": "dist/packages/pieces/community/whippy",
+        "tsConfig": "packages/pieces/community/whippy/tsconfig.lib.json",
+        "packageJson": "packages/pieces/community/whippy/package.json",
+        "main": "packages/pieces/community/whippy/src/index.ts",
         "assets": [
           "packages/pieces/whippy/*.md"
         ],
@@ -34,8 +34,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "packages/pieces/whippy/**/*.ts",
-          "packages/pieces/whippy/package.json"
+          "packages/pieces/community/whippy/**/*.ts"
         ]
       }
     }
