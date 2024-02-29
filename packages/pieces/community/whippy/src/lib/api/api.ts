@@ -29,17 +29,12 @@ export async function callAPI<T>({
       'content-type': 'application/json',
       'X-WHIPPY-KEY': apiKey,
     },
-    authentication: {
-      type: AuthenticationType.BEARER_TOKEN,
-      token: '4ef1e26c-b282-4645-966c-395d623917c6',
-    },
     body: JSON.stringify(body),
   };
 
   try {
-    const response = await fetch(url, options);
+    const response = await fetch(`${rootUrl}/${url}`, options);
     const responseData = await response.json();
-    // Use ApiResponse<T> to specify the expected data type
     return {
       success: true,
       data: responseData as T,
@@ -47,42 +42,11 @@ export async function callAPI<T>({
     };
   } catch (error) {
     console.error(error);
-    // Return an ApiResponse with success: false and an error message
     return {
       success: false,
       data: error as T,
       message: 'API request failed',
     };
-  }
-}
-
-export class Message {
-  static async sendMessage(
-    apiKey: string,
-    fromNumber: string,
-    toNumber: string,
-    body: string | undefined,
-    scheduleAt: string | undefined,
-    attachments: any[] | undefined,
-    optIn: object | undefined,
-    optChannels: boolean | undefined
-  ): Promise<ApiResponse<any>> {
-    const apiParams: APICallParams = {
-      url: `${rootUrl}/messaging/sms`,
-      method: 'POST',
-      apiKey: apiKey,
-      body: {
-        from: fromNumber,
-        to: toNumber,
-        body: body,
-        attachments: attachments,
-        schedule_at: scheduleAt,
-        opt_in_to: optIn,
-        opt_in_to_all_channels: optChannels,
-      },
-    };
-
-    return await callAPI(apiParams);
   }
 }
 
