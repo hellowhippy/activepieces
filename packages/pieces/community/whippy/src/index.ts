@@ -5,7 +5,7 @@ import { createNote } from './lib/actions/messages/create-note';
 import { updateContact } from './lib/actions/contact/update-contact';
 import { listContacts } from './lib/actions/contact/list-contact';
 import { listMessage } from './lib/actions/conversation/list-message';
-import { listConversations } from './lib/actions/conversation/list-conversationssss';
+import { listConversations } from './lib/actions/conversation/list-conversations';
 import { listUserChannels } from './lib/actions/channels/list-user-channels';
 import { listChannels } from './lib/actions/channels/list-channels';
 import { showChannels } from './lib/actions/channels/show-channel';

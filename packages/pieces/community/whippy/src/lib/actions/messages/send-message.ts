@@ -1,15 +1,15 @@
 /**
-Send SMS Action
+  Send SMS Action
 
-This action sends sms in Whippy. to (Destination phone number) 
-and from (Phone of an existing channel belonging to your organization) are required.
+  This action sends sms in Whippy. to (Destination phone number) 
+  and from (Phone of an existing channel belonging to your organization) are required.
 
-API Documentation: https://docs.whippy.ai/reference/sendsms
+  API Documentation: https://docs.whippy.ai/reference/sendsms
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
+import { createAction, Property } from '@activepieces/pieces-framework';
 import { Message } from '../../api/api';
-import { appAuth } from "../../..";
+import { appAuth } from '../../..';
 
 export const sendMessage = createAction({
   name: 'send_message',
@@ -19,7 +19,8 @@ export const sendMessage = createAction({
   props: {
     getFromNumber: Property.ShortText({
       displayName: 'Sending Number',
-      description: 'Phone of an existing channel belonging to your organization',
+      description:
+        'Phone of an existing channel belonging to your organization',
       required: true,
     }),
     getAttachments: Property.Array({
@@ -45,7 +46,7 @@ export const sendMessage = createAction({
           displayName: 'Phone',
           required: false,
         }),
-      }
+      },
     }),
     getOptChannel: Property.Dropdown({
       displayName: 'opt_in_to_all_channels',
@@ -60,19 +61,20 @@ export const sendMessage = createAction({
               value: true,
             },
             {
-              label : 'False',
-              value : false,
-            }
+              label: 'False',
+              value: false,
+            },
           ],
           defaultValue: false,
         };
       },
-      refreshers: []
+      refreshers: [],
     }),
     getScheduleAt: Property.DateTime({
       displayName: 'Schedule At',
-      description: 'Scheduling time for the message. Requires ISO 86001 format.',
-      required: false
+      description:
+        'Scheduling time for the message. Requires ISO 86001 format.',
+      required: false,
     }),
     getToNumber: Property.ShortText({
       displayName: 'Destination Number',
@@ -91,10 +93,18 @@ export const sendMessage = createAction({
 
     try {
       // Call the generic API function
-      const response = await Message.sendMessage(apiKey, `+${fromNumber.toString()}`, body, `+${toNumber.toString()}`,
-      scheduleAt, attachments, optIn, optChannels);
+      const response = await Message.sendMessage(
+        apiKey,
+        `+${fromNumber.toString()}`,
+        body,
+        `+${toNumber.toString()}`,
+        scheduleAt,
+        attachments,
+        optIn,
+        optChannels
+      );
       if (response.success) {
-        return response.data; 
+        return response.data;
       } else {
         console.error(response.message);
         return false;
