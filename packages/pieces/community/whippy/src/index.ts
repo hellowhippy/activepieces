@@ -63,7 +63,7 @@ export const appAuth = PieceAuth.SecretText({
 export const whippy = createPiece({
   displayName: 'Whippy',
   auth: appAuth,
-  minimumSupportedRelease: '0.9.0',
+  minimumSupportedRelease: '0.0.1',
   logoUrl: 'https://www.whippy.ai/logo.svg',
   authors: [],
   actions: [

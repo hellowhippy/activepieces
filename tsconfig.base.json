@@ -495,7 +495,9 @@
       "@activepieces/piece-whatsable": [
         "packages/pieces/community/whatsable/src/index.ts"
       ],
-      "@activepieces/piece-whippy": ["packages/pieces/whippy/src/index.ts"],
+      "@activepieces/piece-whippyai": [
+        "packages/pieces/community/whippy/src/index.ts"
+      ],
       "@activepieces/piece-woocommerce": [
         "packages/pieces/community/woocommerce/src/index.ts"
       ],
