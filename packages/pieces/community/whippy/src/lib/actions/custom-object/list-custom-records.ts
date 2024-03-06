@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/listcustomobjectrecords
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { CustomObject } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const listCustomObjectRecords = createAction({
     name: 'list_custom_object_records',
@@ -39,20 +39,31 @@ export const listCustomObjectRecords = createAction({
     },
     async run(context) {
         const apiKey = context.auth;
-        const customId = context.propsValue['getCusId'];
+        const custom_object_id = context.propsValue['getCusId'];
         const limit = context.propsValue['getLimit'];
         const offset = context.propsValue['getOffset'];
-        const associatedId = context.propsValue['getAssociatedId'];
-        const resourceType = context.propsValue['getResourceType'];
+        const associated_resource_id = context.propsValue['getAssociatedId'];
+        const associated_resource_type = context.propsValue['getResourceType'];
 
-      try {
-          const response = await CustomObject.listCustomRecords(apiKey, customId, limit, offset, associatedId, resourceType);
-          if (response.success) {
-            return response.data; 
-          } else {
-            console.error(response.message);
-            return false;
-          }
+        try {
+            const response = await callAPI({
+                url: `custom_objects/${custom_object_id}`,
+                method: 'GET',
+                apiKey: apiKey,
+                body : {},
+                params: {
+                    limit,
+                    offset,
+                    associated_resource_id,
+                    associated_resource_type,
+                },
+            })
+            if (response.success) {
+                return response.data; 
+            } else {
+                console.error(response.message);
+                return false;
+            }
         } catch (error) {
             throw new Error(`Failed to list custom records: ${error}`);
         }

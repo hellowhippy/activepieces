@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/getsequences
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { Sequence } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const getSequences = createAction({
     name: 'get_sequences', 
@@ -33,17 +33,27 @@ export const getSequences = createAction({
       },
     async run(context) {
       const apiKey = context.auth;
-      const limit = context.propsValue['limit'];
-      const offset = context.propsValue['offset'];
-      const title = context.propsValue['title'];
+      const limit = context.propsValue['limit'] || 50;
+      const offset = context.propsValue['offset'] || 0;
+      const title = context.propsValue['title'] || "";
 
       try {
-        const response = await Sequence.getSequences(apiKey, offset || 0 , limit ||  50 , title || "");
-        if (response.success) {
-            return response.data; 
+        const response =  await callAPI({
+          url: `sequences`,
+          method: 'GET',
+          apiKey: apiKey,
+          body : {},
+          params: {
+            limit,
+            offset,
+            title
+          }
+      })
+        if (response?.success) {
+            return response?.data; 
         } else {
-            console.error(response.message);
-            return false;
+            console.error(response?.message);
+            return response?.message;
         }
       } catch (error) {
         throw new Error(`Failed to get sequences: ${error}`);

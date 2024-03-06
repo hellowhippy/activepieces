@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/getcampaign
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { Campaign } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const showCampaign = createAction({
     name: 'show_campaign',
@@ -23,15 +23,19 @@ export const showCampaign = createAction({
     },
     async run(context) {
       const apiKey = context.auth;
-      const campaignID = context.propsValue['getId'];
+      const id = context.propsValue['getId'];
 
       try {
-          const response = await Campaign.showCampaign(apiKey, campaignID);
-          if (response.success) {
-            return response.data; 
+          const response = await callAPI({
+            url: `campaigns/${id}`,
+            method: 'GET',
+            apiKey: apiKey
+          })
+          if (response?.success) {
+            return response?.data; 
           } else {
-            console.error(response.message);
-            return false;
+            console.error(response?.message);
+            return response?.message;
           }
         } catch (error) {
           throw new Error(`Failed to show campaign: ${error}`);

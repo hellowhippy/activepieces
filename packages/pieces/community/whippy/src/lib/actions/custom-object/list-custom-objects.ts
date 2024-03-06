@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/listcustomobjects
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { CustomObject } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const listCustomObjects = createAction({
     name: 'list_custom_objects',
@@ -27,11 +27,20 @@ export const listCustomObjects = createAction({
     },
     async run(context) {
       const apiKey = context.auth;
-        const limit = context.propsValue['getLimit'];
-        const offset = context.propsValue['getOffset'];
+      const limit = context.propsValue['getLimit'];
+      const offset = context.propsValue['getOffset'];
 
       try {
-          const response = await CustomObject.listCustomObjects(apiKey, limit, offset);
+          const response = await callAPI({
+            url: "custom_objects",
+            method: 'GET',
+            apiKey: apiKey,
+            body:{},
+            params: {
+              limit,
+              offset
+            },
+          })
           if (response.success) {
             return response.data; 
           } else {

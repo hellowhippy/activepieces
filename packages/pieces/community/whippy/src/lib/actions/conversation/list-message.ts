@@ -7,7 +7,7 @@ API Documentation: https://docs.whippy.ai/reference/getconversation
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
-import { Conversation } from "../../api/api";
+import { callAPI } from "../../api/api";
 import { appAuth } from "../../..";
 
 export const listMessage = createAction({
@@ -40,16 +40,24 @@ export const listMessage = createAction({
     },
     async run(context) {
       const apiKey = context.auth;
-      const conversationId = context.propsValue['getConversationId'];
+      const id = context.propsValue['getConversationId'];
       const messages = context.propsValue['getMessages'];
 
       try {
-        const response = await Conversation.listMessages(apiKey, conversationId, messages);
-        if (response.success) {
-          return response.data; 
+        const response = await callAPI({
+          url: `conversations/${id}`,
+          method: 'GET',
+          apiKey: apiKey,
+          body :{},
+          params: {
+            messages
+          },
+        })
+        if (response?.success) {
+          return response?.data; 
         } else {
-          console.error(response.message);
-          return false;
+          console.error(response?.message);
+          return response?.message;
         }
       } catch (error) {
         throw new Error(`Failed to list message: ${error}`);

@@ -7,7 +7,7 @@ API Documentation: https://docs.whippy.ai/reference/createtag
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
-import { Tag } from '../../api/api';
+import { callAPI } from '../../api/api';
 import { appAuth } from "../../..";
 
 export const createTag = createAction({
@@ -28,35 +28,43 @@ export const createTag = createAction({
   async run(context) {
     const apiKey = context.auth;
     const name = context.propsValue['getName'] || '';   
-    const colorCode = context.propsValue['getColor'];
+    const color = context.propsValue['getColor'];
 
     if(name !== undefined)
     {
-        name.replace(/\s+/g,' ').trim()
+      name.replace(/\s+/g,' ').trim()
     }
     function isValidHexColor(color: string) {
-        const hexColorRegex = /^#[0-9A-Fa-f]{6}$/;
-        return hexColorRegex.test(color);
+      const hexColorRegex = /^#[0-9A-Fa-f]{6}$/;
+      return hexColorRegex.test(color);
     }
-    if (colorCode !== undefined)
+    if (color !== undefined)
     {
-        if (isValidHexColor(colorCode)) {
-            console.log('Valid color code:', colorCode);
-        } else {
-            console.error('Invalid color code:', colorCode);
-        }
+      if (isValidHexColor(color)) {
+        console.log('Valid color code:', color);
+      } else {
+        console.error('Invalid color code:', color);
+      }
     }
 
     try {
-        const response = await Tag.createTag(apiKey, name, colorCode);
-        if (response.success) {
-          return response.data; 
-        } else {
-          console.error(response.message);
-          return false;
-        }
-      } catch (error) {
-        throw new Error(`Failed to create tag: ${error}`);
+      const response = await callAPI({
+        url: "tags",
+        method: 'POST',
+        apiKey: apiKey,
+        body: {
+          name,
+          color
+        },
+      })
+      if (response?.success) {
+        return response?.data; 
+      } else {
+        console.error(response?.message);
+        return response?.message;
       }
-    },
+    } catch (error) {
+      throw new Error(`Failed to create tag: ${error}`);
+    }
+  },
 });

@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/createcustomproperty
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { CustomObject } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const createCustomProperty = createAction({
     name: 'create_custom_property',
@@ -48,7 +48,7 @@ export const createCustomProperty = createAction({
     },
     async run(context) {
         const apiKey = context.auth;
-        const customId = context.propsValue['getCustomId'];
+        const custom_object_id = context.propsValue['getCustomId'];
         const cusDefault = context.propsValue['getDefault'];
         const label = context.propsValue['getLabel'];
         const required = context.propsValue['getRequired'];
@@ -56,7 +56,18 @@ export const createCustomProperty = createAction({
         const key = context.propsValue['getKey']
 
       try {
-          const response = await CustomObject.createCustomProperty(apiKey, customId, key, label, required, type, cusDefault);
+          const response = await callAPI({
+            url: `custom_objects/${custom_object_id}/properties`,
+            method: 'POST',
+            apiKey: apiKey,
+            body: {
+              key,
+              label,
+              default: cusDefault,
+              required,
+              type
+            },
+          })
           if (response.success) {
             return response.data; 
           } else {

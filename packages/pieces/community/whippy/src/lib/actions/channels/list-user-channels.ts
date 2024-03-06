@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/listuserchannels-1
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { Channels } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const listUserChannels = createAction({
     name: 'list_user_channels', 
@@ -31,17 +31,26 @@ export const listUserChannels = createAction({
     },
     async run(context) {
         const apiKey = context.auth;
-        const channelId = context.propsValue['getChannelId'];
-        const offset = context.propsValue['getOffset'];
-        const limit = context.propsValue['getLimit'];
+        const id = context.propsValue['getChannelId'];
+        const offset = context.propsValue['getOffset'] || 1;
+        const limit = context.propsValue['getLimit'] || 50;
 
         try {
-            const response = await Channels.listUserChannels(apiKey, channelId, offset || 1, limit || 50);
-            if (response.success) {
-                return response.data; 
+            const response = await callAPI({
+                url: `channels/${id}/users`,
+                method: 'GET',
+                apiKey: apiKey,
+                body:{},
+                params: {
+                  offset,
+                  limit
+                },
+            })
+            if (response?.success) {
+                return response?.data; 
             } else {
-                console.error(response.message);
-                return false;
+                console.error(response?.message);
+                return response?.message;
             }
         } catch (error) {
             throw new Error(`Failed to list user channels: ${error}`);

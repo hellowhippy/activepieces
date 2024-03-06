@@ -7,7 +7,7 @@ API Documentation: https://docs.whippy.ai/reference/deletetag
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
-import { Tag } from '../../api/api';
+import { callAPI } from '../../api/api';
 import { appAuth } from "../../..";
 
 export const deleteTag = createAction({
@@ -23,15 +23,19 @@ export const deleteTag = createAction({
   },
   async run(context) {
     const apiKey = context.auth;
-    const tagId = context.propsValue['getTagId'];
+    const id = context.propsValue['getTagId'];
 
     try {
-      const response = await Tag.deleteTag(apiKey, tagId);
+      const response = await callAPI({
+        url: `tags/${id}`,
+        method: 'DELETE',
+        apiKey: apiKey
+      })
       if (response.success) {
-        return response.data; 
+        return response?.data; 
       } else {
-        console.error(response.message);
-        return false;
+        console.error(response?.message);
+        return response?.message;
       }
     } catch (error) {
       throw new Error(`Failed to delete tag: ${error}`);

@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/getsequenceruns
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { Sequence } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const listSequenceRun = createAction({
     name: 'list_sequence_run', 
@@ -33,8 +33,7 @@ export const listSequenceRun = createAction({
             required: false,
         }),
         getStatus: Property.Dropdown({
-            displayName: 'Status',
-            description: 'Select Status',
+            displayName: 'Select Status',
             required: false,
             options: async () => {
                 return {
@@ -69,22 +68,36 @@ export const listSequenceRun = createAction({
     },
     async run(context) {
         const apiKey = context.auth;
-        const sequenceId = context.propsValue['getSequenceId'];
+        const id = context.propsValue['getSequenceId'];
         const limit = context.propsValue['getLimit'] || 50;
         const offset = context.propsValue['getOffset'] || 0;
         const phone = context.propsValue['getPhone'] || "";
         const status = context.propsValue['getStatus'] || "active" ;
-        const channelId = context.propsValue['getChannelId'] || "";
+        const channel_id = context.propsValue['getChannelId'] || "";
         const before = context.propsValue['getBefore'] || "";
         const after = context.propsValue['getAfter'] || "";
 
         try {
-            const response = await Sequence.listSequenceRuns(apiKey, sequenceId, { limit, offset, phone, status, channelId, before, after });
-            if (response.success) {
-                return response.data; 
+            const response = await callAPI({
+                url: `sequences/${id}/sequence_runs`,
+                method: 'GET',
+                apiKey: apiKey,
+                body : {},
+                params: {
+                    limit,
+                    offset,
+                    status,
+                    phone,
+                    before,
+                    after,
+                    channel_id
+                }
+            })
+            if (response?.success) {
+                return response?.data; 
             } else {
-                console.error(response.message);
-                return false;
+                console.error(response?.message);
+                return response?.message;
             }
         } catch (error) {
             throw new Error(`Failed to list sequence run: ${error}`);

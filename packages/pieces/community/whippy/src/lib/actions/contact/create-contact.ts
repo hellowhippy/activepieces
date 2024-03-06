@@ -7,7 +7,7 @@ API Documentation: https://docs.whippy.ai/reference/createcontact-1
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
-import { Contact } from '../../api/api';
+import { callAPI } from '../../api/api';
 import { appAuth } from "../../..";
 
 export const createContact = createAction({
@@ -60,18 +60,29 @@ export const createContact = createAction({
     const apiKey = context.auth;
     const email = context.propsValue['getEmail'];
     const name = context.propsValue['getName'];
-    const phoneNumber = context.propsValue['getPhone'];
-    const optTo = context.propsValue['getOptTo'];
-    const optChannel = context.propsValue['getOptChannel'];
+    const phone = context.propsValue['getPhone'];
+    const opt_in_to = context.propsValue['getOptTo'];
+    const opt_in_to_all_channels = context.propsValue['getOptChannel'];
 
     try {
-      const response = await Contact.createContact(apiKey, email, name, `+${phoneNumber.toString()}`, optTo, optChannel);
-      if (response.success) {
-          return response.data; 
+      const response = await await callAPI({
+        url: "contacts",
+        method: 'POST',
+        apiKey: apiKey,
+        body: {
+          email,
+          name,
+          phone,
+          opt_in_to: opt_in_to,
+          opt_in_to_all_channels
+        },
+      })
+      if (response?.success) {
+          return response?.data; 
         } else {
-          console.error(response.message);
-          return false;
-        }
+          console.error(response?.message);
+          return response?.message;
+         }
       } catch (error) {
         throw new Error(`Failed to create contact: ${error}`);
       }

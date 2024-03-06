@@ -57,15 +57,15 @@ export const sendMessage = createAction({
           from,
           to,
           body,
-          attachments,
+          attachments: [attachments],
           schedule_at
         },
       })
-      if (response.success) {
-        return response.data;
+      if (response?.success) {
+        return response?.data;
       } else {
-        console.error(response.message);
-        return false;
+        console.error(response?.message);
+        return response?.message;
       }
     } catch (error) {
       throw new Error(`Failed to send message: ${error}`);

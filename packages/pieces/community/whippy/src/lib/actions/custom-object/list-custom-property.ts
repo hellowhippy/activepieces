@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/listcustompropertyvalues
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { CustomObject } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const listCustomPropertyValues = createAction({
     name: 'list_custom_property_values',
@@ -49,16 +49,30 @@ export const listCustomPropertyValues = createAction({
     },
     async run(context) {
         const apiKey = context.auth;
-        const customId = context.propsValue['getCusId'] || '36b720b0-a79f-4bb9-82b1-a22acf5b14ad';
+        const custom_object_id = context.propsValue['getCusId'] || '36b720b0-a79f-4bb9-82b1-a22acf5b14ad';
         const limit = context.propsValue['getLimit'] || 50;
         const offset = context.propsValue['getOffset'] || 0;
-        const associatedId = context.propsValue['getAssociatedId'] || '423b2341-24d8-4577-b149-1170a662047f';
-        const resourceType = context.propsValue['getResourceType'] || 'contact';
+        const associated_resource_id = context.propsValue['getAssociatedId'] || '423b2341-24d8-4577-b149-1170a662047f';
+        const associated_resource_type = context.propsValue['getResourceType'] || 'contact';
         const before = context.propsValue['getBefore'] || '2022-11-03T00:00:00Z';
         const after = context.propsValue['getAfter'] || '2022-11-03T00:00:00Z';
 
       try {
-          const response = await CustomObject.listCustomProperty(apiKey, customId, limit, offset, associatedId, resourceType, before, after);
+          const response = await callAPI({
+            url: "custom_objects/property_values",
+            method: 'GET',
+            apiKey: apiKey,
+            body : {},
+            params: {
+                custom_object_id,
+                limit,
+                offset,
+                associated_resource_id,
+                associated_resource_type,
+                before,
+                after
+            },
+          })
           if (response.success) {
             return response.data; 
           } else {

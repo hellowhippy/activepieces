@@ -8,6 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/sendcampaign
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
+import { callAPI } from "../../api/api";
 
 interface ToNumber {
     custom_a: string;
@@ -28,7 +29,7 @@ export const sendCampaign = createAction({
     description: 'Send Campaign',
     props: {
         getFromNumber: Property.ShortText({
-            displayName: 'Sending Number',
+            displayName: 'Send From Number',
             required: true,
         }),
         getAttachments: Property.Array({
@@ -120,7 +121,7 @@ export const sendCampaign = createAction({
             required: false,
         }),
         getToNumber: Property.Array({
-            displayName: 'Destination Number',
+            displayName: 'Send To Number',
             required: true,
             description: 'List of contacts that would receive the campaign.',
             defaultValue: [{
@@ -137,42 +138,39 @@ export const sendCampaign = createAction({
     },
     async run(context) {
         const apiKey = context.auth;
-        const fromNumber = context.propsValue['getFromNumber'];
-        const toNumber = context.propsValue['getToNumber'];
+        const from = context.propsValue['getFromNumber'].toString();
+        const to = context.propsValue['getToNumber'].toString();
         const title = context.propsValue['getTitle'];
-        const scheduleAt = context.propsValue['getSchedule'];
+        const schedule_at = context.propsValue['getSchedule'];
         const body = context.propsValue['getBody'];
-        const attachment = context.propsValue['getAttachments'];
-        const automationTemplates = context.propsValue['getAutomationTemplates'];
+        const attachments = context.propsValue['getAttachments'];
+        const automation_templates = context.propsValue['getAutomationTemplates'];
         const exclude = context.propsValue['getExclude'];
-        const customData = context.propsValue['getCustomData'];
-
-        const options = {
-            method: 'POST',
-            headers: {
-                accept: 'application/json',
-                'content-type': 'application/json',
-                'X-WHIPPY-KEY': apiKey,
-            },
-            body: JSON.stringify({
-                from: `+${fromNumber.toString()}`,
-                body: body,
-                attachments: attachment,
-                automation_templates: automationTemplates,
-                title: title,
-                schedule_at: scheduleAt,
-                to: `+${toNumber.toString()}`,
-                custom_data: customData,
-                exclude: exclude,
-            }),
-        };
+        const custom_data = context.propsValue['getCustomData'];
 
         try {
-            const response = await fetch('https://api.whippy.co/v1/campaigns/sms', options);
-            const responseData = await response.json();
-            console.log(responseData);
-
-            return responseData;
+            const response = await callAPI({
+                url: "campaigns/sms",
+                method: 'POST',
+                apiKey: apiKey,
+                body: {
+                    from,
+                    body,
+                    attachments: [attachments],
+                    automation_templates:[automation_templates],
+                    title,
+                    schedule_at,
+                    to: [to],
+                    custom_data,
+                    exclude,
+                },
+            })
+            if (response?.success) {
+                return response?.data; 
+              } else {
+                console.error(response?.message);
+                return response?.message;
+              }
         } catch (error) {
             throw new Error(`Failed to send campaign: ${error}`);
         }

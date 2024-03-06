@@ -9,7 +9,7 @@ API Documentation: https://docs.whippy.ai/reference/updatecustomobjectrecord
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { CustomObject } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const updateCustomObject = createAction({
     name: 'update_custom_object',
@@ -57,16 +57,25 @@ export const updateCustomObject = createAction({
     },
     async run(context) {
       const apiKey = context.auth;
-      const customId = context.propsValue['getCustomId'];
-      const recordId = context.propsValue['getCustomRecordId'];
-      const associatedId = context.propsValue['getAssociatedId'];
-      const recordType = context.propsValue['getRecordType'];
-      const externalId = context.propsValue['getExternalId'];
+      const custom_object_id = context.propsValue['getCustomId'];
+      const custom_object_record_id = context.propsValue['getCustomRecordId'];
+      const associated_record_id = context.propsValue['getAssociatedId'];
+      const associated_record_type = context.propsValue['getRecordType'];
+      const external_id = context.propsValue['getExternalId'];
       const properties = context.propsValue['getProperties'];
 
       try {
-          const response = await CustomObject.updateCustomObject(apiKey, customId, recordId, associatedId, recordType,
-            externalId, properties);
+          const response = await callAPI({
+            url: `custom_objects/${custom_object_id}/records/${custom_object_record_id}`,
+            method: 'PUT',
+            apiKey: apiKey,
+            body: {
+              associated_record_id,
+              associated_record_type,
+              external_id,
+              properties
+            },
+          })
           if (response.success) {
             return response.data; 
           } else {

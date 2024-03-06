@@ -7,7 +7,7 @@ API Documentation: https://docs.whippy.ai/reference/gettags
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
-import { Tag } from '../../api/api';
+import { callAPI } from '../../api/api';
 import { appAuth } from "../../..";
 
 export const listTags = createAction({
@@ -52,12 +52,24 @@ export const listTags = createAction({
     }
 
     try {
-        const response = await Tag.listTags(apiKey, limit, offset, search, state, system);
-        if (response.success) {
-          return response.data; 
+        const response = await callAPI({
+          url: "tags",
+          method: 'GET',
+          apiKey: apiKey,
+          body : {},
+          params: {
+            limit,
+            offset,
+            search,
+            state,
+            system
+          },
+        })
+        if (response?.success) {
+          return response?.data; 
         } else {
-          console.error(response.message);
-          return false;
+          console.error(response?.message);
+          return response?.message;
         }
       } catch (error) {
         throw new Error(`Failed to list tags: ${error}`);

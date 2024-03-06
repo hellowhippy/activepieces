@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/getsequenceruns
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { Sequence } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const listSequenceContact = createAction({
     name: 'list_sequence_contact', 
@@ -139,23 +139,37 @@ export const listSequenceContact = createAction({
     },
     async run(context) {
         const apiKey = context.auth;
-        const sequenceId = context.propsValue['getSequenceId'];
+        const id = context.propsValue['getSequenceId'];
         const limit = context.propsValue['getLimit'] || 50;
         const offset = context.propsValue['getOffset'] || 0;
         const status = context.propsValue['getStatus'] || "active";
-        const stepIds = context.propsValue['getStepIds'] || "";
+        const step_ids = context.propsValue['getStepIds'] || "";
         const responded = context.propsValue['getResponded'] || false;
         const unsubscribed = context.propsValue['getUnsubscribed'] || false;
-        const clickedLink = context.propsValue['getClickedLink'] || false;
+        const clicked_link = context.propsValue['getClickedLink'] || false;
 
         try {
             // Call the generic API function
-            const response = await Sequence.listSequenceContacts(apiKey, sequenceId, { limit, offset, status, stepIds, responded, unsubscribed, clickedLink });
-            if (response.success) {
-                return response.data; 
+            const response = await callAPI({
+                url: `sequences/${id}/contacts`,
+                method: 'GET',
+                apiKey: apiKey,
+                body :{},
+                params: {
+                    limit,
+                    offset,
+                    status,
+                    step_ids,
+                    responded,
+                    unsubscribed,
+                    clicked_link
+                }
+            })
+            if (response?.success) {
+                return response?.data; 
             } else {
-                console.error(response.message);
-                return false;
+                console.error(response?.message);
+                return response?.message;
             }
         } catch (error) {
             throw new Error(`Failed to list sequence contacts: ${error}`);

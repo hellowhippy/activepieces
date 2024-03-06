@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/getsinglesequencerun
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { Sequence } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const showSequenceRun = createAction({
     name: 'show_sequence_run', 
@@ -27,16 +27,20 @@ export const showSequenceRun = createAction({
       },
     async run(context) {
         const apiKey = context.auth;
-        const sequenceId = context.propsValue['getSequenceId'];
-        const sequenceRunId = context.propsValue['getSequenceRunId'];
+        const sequence_id = context.propsValue['getSequenceId'];
+        const sequence_run_id = context.propsValue['getSequenceRunId'];
 
         try {
-            const response = await Sequence.showSequenceRun(apiKey, sequenceId , sequenceRunId);
-            if (response.success) {
-                return response.data; 
+            const response = await callAPI({
+                url: `sequences/${sequence_id}/sequence_runs/${sequence_run_id}`,
+                method: 'GET',
+                apiKey: apiKey
+            })
+            if (response?.success) {
+                return response?.data; 
             } else {
-                console.error(response.message);
-                return false;
+                console.error(response?.message);
+                return response?.message;
             }
         } catch (error) {
             throw new Error(`Failed to show sequence run: ${error}`);

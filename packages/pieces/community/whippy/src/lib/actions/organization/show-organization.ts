@@ -7,7 +7,7 @@ API Documentation: https://docs.whippy.ai/reference/getorganization
 */
 
 import { createAction } from "@activepieces/pieces-framework";
-import { Organization } from "../../api/api";
+import { callAPI } from "../../api/api";
 import { appAuth } from "../../..";
 
 export const showOrganization = createAction({
@@ -21,12 +21,16 @@ export const showOrganization = createAction({
       const apiKey = context.auth;
 
       try {
-          const response = await Organization.showOrganization(apiKey);
-          if (response.success) {
-            return response.data; 
+          const response  = await callAPI({
+            url: "organization",
+            method: 'GET',
+            apiKey: apiKey,
+          })
+          if (response?.success) {
+            return response?.data; 
           } else {
-            console.error(response.message);
-            return false;
+            console.error(response?.message);
+            return response?.message;
           }
         } catch (error) {
           throw new Error(`Failed to show organization: ${error}`);

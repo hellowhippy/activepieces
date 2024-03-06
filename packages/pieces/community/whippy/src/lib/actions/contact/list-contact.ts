@@ -7,7 +7,7 @@ API Documentation: https://docs.whippy.ai/reference/getcontacts-1
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
-import { Contact } from '../../api/api';
+import { callAPI } from '../../api/api';
 import { appAuth } from "../../..";
 
 export const listContacts = createAction({
@@ -38,12 +38,10 @@ export const listContacts = createAction({
       }),
       getChannelsId: Property.Array({
         displayName: 'Channels [ID]',
-        description: 'channel IDs',
         required: false,
       }),
       getChannelsPhone: Property.Array({
         displayName: 'Channels [Phone]',
-        description: 'channel phones',
         required: false,
       }),
     },
@@ -58,12 +56,26 @@ export const listContacts = createAction({
       const channelsPhone = context.propsValue['getChannelsPhone'];
 
       try {
-          const response = await Contact.listContacts(apiKey, limit, offset, name, email, `+${phone?.toString()}`, channelsID, channelsPhone);
-          if (response.success) {
-            return response.data; 
+          const response = await callAPI({
+            url: `contacts`,
+            method: 'GET',
+            apiKey: apiKey,
+            body:{},
+            params: {
+              limit,
+              offset,
+              name,
+              email,
+              phone,
+              'channels[][id]': [channelsID],
+              'channels[][phone]': [channelsPhone],
+            },
+          })
+          if (response?.success) {
+            return response?.data; 
           } else {
-            console.error(response.message);
-            return false;
+            console.error(response?.message);
+            return response?.message;
           }
         } catch (error) {
           throw new Error(`Failed to list contacts: ${error}`);

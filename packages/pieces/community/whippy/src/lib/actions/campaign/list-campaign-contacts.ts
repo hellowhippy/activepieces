@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/getcampaigncontacts
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { Campaign } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const listCampaignContacts = createAction({
     name: 'list_campaign_contacts',
@@ -119,22 +119,34 @@ export const listCampaignContacts = createAction({
     },
     async run(context) {
         const apiKey = context.auth;
-        const campaignID = context.propsValue['getId'];
+        const id = context.propsValue['getId'];
         const limit = context.propsValue['getLimit'] || 50;
         const offset = context.propsValue['getOffset'] || 0;
         const delivered = context.propsValue['getDelivered'] || false;
         const responded = context.propsValue['getResponded'] || false;
         const unsubscribed = context.propsValue['getUnsubscribed']  || false;
-        const clickedLink = context.propsValue['getClickedLink']  || false;
+        const clicked_level = context.propsValue['getClickedLink']  || false;
 
       try {
-          const response = await Campaign.listCampaignContacts(apiKey, campaignID, limit, offset, delivered, responded,
-            unsubscribed, clickedLink);
-          if (response.success) {
-            return response.data; 
+          const response = await callAPI({
+            url: `campaigns/${id}/contacts?`,
+            method: 'GET',
+            apiKey: apiKey,
+            body: {},
+            params: {
+              limit,
+              offset,
+              delivered,
+              responded,
+              unsubscribed,
+              clicked_level
+            },
+          })
+          if (response?.success) {
+            return response?.data; 
           } else {
-            console.error(response.message);
-            return false;
+            console.error(response?.message);
+            return response?.message;
           }
         } catch (error) {
             throw new Error(`Failed to list campaign contacts: ${error}`);

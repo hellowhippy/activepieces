@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/getsequence
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { Sequence } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const showSequences = createAction({
     name: 'show_sequences', 
@@ -23,15 +23,19 @@ export const showSequences = createAction({
       },
     async run(context) {
         const apiKey = context.auth;
-        const sequenceId = context.propsValue['getSequenceId'];
+        const sequence_id = context.propsValue['getSequenceId'];
 
         try {
-            const response = await Sequence.showSequence(apiKey , sequenceId);
-            if (response.success) {
-                return response.data; 
+            const response = await callAPI({
+                url: `sequences/${sequence_id}`,
+                method: 'GET',
+                apiKey: apiKey
+            })
+            if (response?.success) {
+                return response?.data; 
             } else {
-                console.error(response.message);
-                return false;
+                console.error(response?.message);
+                return response?.message;
             }
         } catch (error) {
             throw new Error(`Failed to show sequence: ${error}`);

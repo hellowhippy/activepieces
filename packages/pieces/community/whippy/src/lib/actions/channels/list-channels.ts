@@ -8,7 +8,7 @@ API Documentation: https://docs.whippy.ai/reference/getchannels
 
 import { createAction } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { Channels } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const listChannels = createAction({
     name: 'list_channels', 
@@ -20,12 +20,16 @@ export const listChannels = createAction({
     async run(context) {
         const apiKey = context.auth;
         try {
-            const response = await Channels.listChannels(apiKey);
-            if (response.success) {
-                return response.data; 
-            } else {
-                console.error(response.message);
-                return false;
+            const response = await callAPI({
+                url: "channels",
+                method: 'GET',
+                apiKey: apiKey
+            })
+            if (response?.success) {
+                return response?.data; 
+              } else {
+                console.error(response?.message);
+                return response?.message;
             }
         } catch (error) {
             throw new Error(`Failed to list channels : ${error}`);

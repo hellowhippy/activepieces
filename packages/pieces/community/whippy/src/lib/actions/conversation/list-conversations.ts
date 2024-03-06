@@ -7,7 +7,7 @@ API Documentation: https://docs.whippy.ai/reference/getconversations
 */
 
 import { createAction, Property } from '@activepieces/pieces-framework';
-import { Conversation } from '../../api/api';
+import { callAPI } from '../../api/api';
 import { appAuth } from '../../..';
 
 export const listConversations = createAction({
@@ -84,8 +84,7 @@ export const listConversations = createAction({
       required: false,
     }),
     getLastMessage: Property.Object({
-      displayName: 'Last Message',
-      description: 'Last Message date',
+      displayName: 'Last Message Date',
       required: false,
       defaultValue: {
         after: Property.DateTime({
@@ -99,8 +98,7 @@ export const listConversations = createAction({
       },
     }),
     getCreatedAt: Property.Object({
-      displayName: 'Created At',
-      description: 'Created At date',
+      displayName: 'Created At Date',
       required: false,
       defaultValue: {
         after: Property.DateTime({
@@ -114,8 +112,7 @@ export const listConversations = createAction({
       },
     }),
     getUpdatedAt: Property.Object({
-      displayName: 'Updated At',
-      description: 'Updated At date',
+      displayName: 'Updated At Date',
       required: false,
       defaultValue: {
         after: Property.DateTime({
@@ -129,8 +126,7 @@ export const listConversations = createAction({
       },
     }),
     getAssignedUsers: Property.Array({
-      displayName: 'Assigned Users',
-      description: 'assigned user IDs',
+      displayName: 'Assigned User IDs',
       required: false,
     }),
   },
@@ -138,44 +134,48 @@ export const listConversations = createAction({
     const apiKey = context.auth;
     const limit = context.propsValue['getLimit'];
     const offset = context.propsValue['getOffset'];
-    const unreadCount = context.propsValue['getUnreadCount'];
+    const unread_count = context.propsValue['getUnreadCount'];
     const status = context.propsValue['getStatus'];
     const type = context.propsValue['getType'];
     const channelsId = context.propsValue['getChannelsId'];
     const channelsPhone = context.propsValue['getChannelsPhone'];
-    const contactId = context.propsValue['getContactsId'];
-    const contactPhone = context.propsValue['getContactsPhone'];
-    const contactEmail = context.propsValue['getContactsEmail'];
-    const contactName = context.propsValue['getContactsName'];
-    const lastMessage = context.propsValue['getLastMessage'];
-    const createdAt = context.propsValue['getCreatedAt'];
-    const updatedAt = context.propsValue['getUpdatedAt'];
-    const assignedUsers = context.propsValue['getAssignedUsers'];
+    const contactsId = context.propsValue['getContactsId'];
+    const contactsPhone = context.propsValue['getContactsPhone'];
+    const contactsEmail = context.propsValue['getContactsEmail'];
+    const contactsName = context.propsValue['getContactsName'];
+    const last_message_date = context.propsValue['getLastMessage'];
+    const created_at = context.propsValue['getCreatedAt'];
+    const updated_at = context.propsValue['getUpdatedAt'];
+    const assigned_users = context.propsValue['getAssignedUsers'];
 
     try {
-      const response = await Conversation.listConversations(
-        apiKey,
-        limit,
-        offset,
-        unreadCount,
-        status,
-        type,
-        channelsId,
-        channelsPhone,
-        contactId,
-        contactName,
-        contactPhone,
-        contactEmail,
-        lastMessage,
-        createdAt,
-        updatedAt,
-        assignedUsers
-      );
-      if (response.success) {
-        return response.data;
+      const response = await callAPI({
+        url: "conversations",
+        method: 'GET',
+        apiKey: apiKey,
+        body: {
+          limit,
+          offset,
+          unread_count,
+          status: [status],
+          type,
+          'channels[][id]': [channelsId],
+          'channels[][phone]': [channelsPhone],
+          'contacts[][id]': [contactsId],
+          'contacts[][phone]': [contactsPhone],
+          'contacts[][email]': [contactsEmail],
+          'contacts[][name]': [contactsName],
+          last_message_date,
+          created_at,
+          updated_at,
+          'assigned_users[]': [assigned_users]
+        },
+      })
+      if (response?.success) {
+        return response?.data;
       } else {
-        console.error(response.message);
-        return false;
+        console.error(response?.message);
+        return response?.message;
       }
     } catch (error) {
       throw new Error(`Failed to list conversations: ${error}`);

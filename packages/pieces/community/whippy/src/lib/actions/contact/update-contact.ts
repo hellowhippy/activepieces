@@ -7,7 +7,7 @@ API Documentation: https://docs.whippy.ai/reference/updatecontact-1
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
-import { Contact } from '../../api/api';
+import { callAPI } from '../../api/api';
 import { appAuth } from "../../..";
 
 export const updateContact = createAction({
@@ -35,18 +35,27 @@ export const updateContact = createAction({
   },
   async run(context) {
     const apiKey = context.auth;
-    const contactId = context.propsValue['getContactId'];
+    const id = context.propsValue['getContactId'];
     const email = context.propsValue['getEmail'];
     const name = context.propsValue['getName'];
-    const phoneNumber = context.propsValue['getPhone'];
+    const phone = context.propsValue['getPhone'];
 
     try {
-      const response = await Contact.updateContacts(apiKey, contactId, email, name, `+${phoneNumber?.toString()}`);
+      const response = await callAPI({
+        url: `contacts/${id}`,
+        method: 'PUT',
+        apiKey: apiKey,
+        body: {
+          phone,
+          email,
+          name
+        },
+      })
       if (response.success) {
         return response.data; 
       } else {
         console.error(response.message);
-        return false;
+        return response?.message;
       }
     } catch (error) {
       throw new Error(`Failed to update contact: ${error}`);

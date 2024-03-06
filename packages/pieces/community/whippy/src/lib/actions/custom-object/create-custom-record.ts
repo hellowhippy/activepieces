@@ -9,7 +9,7 @@ API Documentation: https://docs.whippy.ai/reference/createcustomobjectrecord
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { CustomObject } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const createCustomRecord = createAction({
     name: 'create_custom_record',
@@ -57,15 +57,24 @@ export const createCustomRecord = createAction({
     },
     async run(context) {
       const apiKey = context.auth;
-      const customId = context.propsValue['getCustomId'];
-      const associatedId = context.propsValue['getAssociatedId'];
-      const recordType = context.propsValue['getRecordType'];
-      const externalId = context.propsValue['getExternalId'];
+      const custom_object_id = context.propsValue['getCustomId'];
+      const associated_record_id = context.propsValue['getAssociatedId'];
+      const associated_record_type = context.propsValue['getRecordType'];
+      const external_id = context.propsValue['getExternalId'];
       const properties = context.propsValue['getProperties'];
 
       try {
-          const response = await CustomObject.createCustomRecord(apiKey, customId, associatedId, recordType, externalId,
-            properties);
+          const response = await callAPI({
+            url: `custom_objects/${custom_object_id}/records`,
+            method: 'POST',
+            apiKey: apiKey,
+            body: {
+              associated_record_id,
+              associated_record_type,
+              external_id,
+              properties
+            },
+          })
           if (response.success) {
             return response.data; 
           } else {

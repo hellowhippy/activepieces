@@ -9,7 +9,7 @@ API Documentation: https://docs.whippy.ai/reference/updatecustompropertyvalue
 
 import { createAction, Property } from "@activepieces/pieces-framework";
 import { appAuth } from "../../..";
-import { CustomObject } from "../../api/api";
+import { callAPI } from "../../api/api";
 
 export const updateCustomProperty = createAction({
     name: 'update_custom_property',
@@ -36,13 +36,20 @@ export const updateCustomProperty = createAction({
     },
     async run(context) {
         const apiKey = context.auth;
-        const customId = context.propsValue['getCustomId'];
-        const recordId = context.propsValue['getCustomRecordId'];
-        const propertyId = context.propsValue['getPropertyId'];
+        const custom_object_id = context.propsValue['getCustomId'];
+        const custom_object_record_id = context.propsValue['getCustomRecordId'];
+        const custom_property_id = context.propsValue['getPropertyId'];
         const value = context.propsValue['getValue'];
 
       try {
-          const response = await CustomObject.updateCustomProperty(apiKey, customId, recordId, propertyId, value);
+          const response = await callAPI({
+            url: `custom_objects/${custom_object_id}/records/${custom_object_record_id}/properties/${custom_property_id}`,
+            method: 'PUT',
+            apiKey: apiKey,
+            body: {
+              value
+            },
+          })
           if (response.success) {
             return response.data; 
           } else {
