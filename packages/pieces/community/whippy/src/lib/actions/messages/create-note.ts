@@ -21,44 +21,17 @@ export const createNote = createAction({
       displayName: 'Send From Number',
       required: true,
     }),
-    getAttachments: Property.Array({
-      displayName: 'Attachment of URLs',
-      required: false,
+    getToNumber: Property.ShortText({
+      displayName: 'Send To Number',
+      required: true,
     }),
     getBody: Property.LongText({
       displayName: 'Note Body',
       required: false,
     }),
-    getOptTo: Property.Object({
-      displayName: 'opt_in_to',
-      description: 'Setting to opt in contact to specific channels',
+    getAttachments: Property.Array({
+      displayName: 'Attachment of URLs',
       required: false,
-      defaultValue: {
-        idOb: "",
-        phoneOb: "",
-        id: Property.ShortText({
-          displayName: 'ID',
-          required: false,
-        }),
-        phone: Property.ShortText({
-          displayName: 'Phone',
-          required: false,
-        }),
-      }
-    }),
-    getOptChannel: Property.StaticDropdown({
-      displayName: 'opt_in_to_all_channels',
-      description: 'Setting to opt in contact to all channels',
-      required: false,
-      options: { 
-        options: [
-          { label: 'true', value: '0' },
-          { label: 'false', value: '1' }
-        ] } 
-    }),
-    getToNumber: Property.ShortText({
-      displayName: 'Send To Number',
-      required: true,
     }),
   },
   async run(context) {
@@ -66,9 +39,7 @@ export const createNote = createAction({
     const body = context.propsValue['getBody'] || '';
     const from = context.propsValue['getFromNumber'];
     const to = context.propsValue['getToNumber'];
-    const attachments = context.propsValue['getAttachments'];
-    const opt_in_to = context.propsValue['getOptTo'];
-    const opt_in_to_all_channels = context.propsValue['getOptChannel'];
+    const attachments = context.propsValue['getAttachments'] || []
 
     try {
       const response = await callAPI({
@@ -79,9 +50,7 @@ export const createNote = createAction({
           from,
           to,
           body,
-          attachments: [attachments],
-          opt_in_to,
-          opt_in_to_all_channels
+          attachments: attachments
         },
       })
       if (response?.success) {
