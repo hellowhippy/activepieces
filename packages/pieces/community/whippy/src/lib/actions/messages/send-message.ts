@@ -45,7 +45,7 @@ export const sendMessage = createAction({
     const body = context.propsValue['getBody'];
     const from = context.propsValue['getFromNumber'].toString();
     const to = context.propsValue['getToNumber'].toString();
-    const attachments = context.propsValue['getAttachments'] as string[] || null;
+    const attachments = context.propsValue['getAttachments'] as string[] || [];
     const schedule_at = context.propsValue['getScheduleAt'];
 
     try {
@@ -57,7 +57,7 @@ export const sendMessage = createAction({
           from,
           to,
           body,
-          attachments: [attachments],
+          attachments,
           schedule_at
         },
       })
