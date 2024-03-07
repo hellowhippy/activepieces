@@ -1,9 +1,7 @@
 /**
-Create Contact Action
-
-This action creates a contact in Whippy. Phone number is required. 
-
-API Documentation: https://docs.whippy.ai/reference/createcontact-1
+  Create Contact Action
+  This action creates a contact in Whippy. Phone number is required. 
+  API Documentation: https://docs.whippy.ai/reference/createcontact-1
 */
 
 import { createAction, Property } from "@activepieces/pieces-framework";
@@ -24,15 +22,10 @@ export const createContact = createAction({
 			displayName: 'Contact Name',
 			required: false,
 		}), 
-    getPhone: Property.Number({
+    getPhone: Property.ShortText({
 			displayName: 'Contact Phone Number',
 			required: true,
 		}),
-    getOptTo: Property.Array({
-      displayName: 'opt_in_to',
-      description: 'Setting to opt in contact to specific channels',
-      required: false
-    }),
     getOptChannel: Property.Dropdown({
       displayName: 'opt_in_to_all_channels',
       description: 'Setting to opt in contact to all channels',
@@ -61,11 +54,10 @@ export const createContact = createAction({
     const email = context.propsValue['getEmail'];
     const name = context.propsValue['getName'];
     const phone = context.propsValue['getPhone'];
-    const opt_in_to = context.propsValue['getOptTo'];
     const opt_in_to_all_channels = context.propsValue['getOptChannel'];
 
     try {
-      const response = await await callAPI({
+      const response = await callAPI({
         url: "contacts",
         method: 'POST',
         apiKey: apiKey,
@@ -73,7 +65,6 @@ export const createContact = createAction({
           email,
           name,
           phone,
-          opt_in_to: opt_in_to,
           opt_in_to_all_channels
         },
       })
