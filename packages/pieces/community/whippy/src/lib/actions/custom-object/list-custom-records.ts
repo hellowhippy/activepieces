@@ -38,7 +38,7 @@ export const listCustomObjectRecords = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.auth;
+        const api_key = context.auth;
         const custom_object_id = context.propsValue['getCusId'];
         const limit = context.propsValue['getLimit'];
         const offset = context.propsValue['getOffset'];
@@ -49,7 +49,7 @@ export const listCustomObjectRecords = createAction({
             const response = await callAPI({
                 url: `custom_objects/${custom_object_id}`,
                 method: 'GET',
-                apiKey: apiKey,
+                api_key: api_key,
                 body : {},
                 params: {
                     limit,

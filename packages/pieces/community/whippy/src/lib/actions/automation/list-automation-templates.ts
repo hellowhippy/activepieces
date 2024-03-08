@@ -57,7 +57,7 @@ export const listAutomation = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.auth;
+    const api_key = context.auth;
     const limit = context.propsValue['getLimit'] || 50;
     const offset = context.propsValue['getOffset'] || 0;
     const title = context.propsValue['getTitle'] || "";
@@ -70,7 +70,7 @@ export const listAutomation = createAction({
       const response = await callAPI({
         url: "automations/templates",
         method: 'POST',
-        apiKey: apiKey,
+        api_key: api_key,
         body : {},
         params: {
           limit,

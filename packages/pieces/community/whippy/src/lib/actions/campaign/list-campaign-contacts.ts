@@ -118,7 +118,7 @@ export const listCampaignContacts = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.auth;
+        const api_key = context.auth;
         const id = context.propsValue['getId'];
         const limit = context.propsValue['getLimit'] || 50;
         const offset = context.propsValue['getOffset'] || 0;
@@ -131,7 +131,7 @@ export const listCampaignContacts = createAction({
           const response = await callAPI({
             url: `campaigns/${id}/contacts?`,
             method: 'GET',
-            apiKey: apiKey,
+            api_key: api_key,
             body: {},
             params: {
               limit,

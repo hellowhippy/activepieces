@@ -137,7 +137,7 @@ export const sendCampaign = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.auth;
+        const api_key = context.auth;
         const from = context.propsValue['getFromNumber'].toString();
         const to = context.propsValue['getToNumber'].toString();
         const title = context.propsValue['getTitle'];
@@ -152,7 +152,7 @@ export const sendCampaign = createAction({
             const response = await callAPI({
                 url: "campaigns/sms",
                 method: 'POST',
-                apiKey: apiKey,
+                api_key: api_key,
                 body: {
                     from,
                     body,

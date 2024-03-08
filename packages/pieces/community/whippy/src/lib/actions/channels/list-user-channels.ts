@@ -30,7 +30,7 @@ export const listUserChannels = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.auth;
+        const api_key = context.auth;
         const id = context.propsValue['getChannelId'];
         const offset = context.propsValue['getOffset'] || 1;
         const limit = context.propsValue['getLimit'] || 50;
@@ -39,7 +39,7 @@ export const listUserChannels = createAction({
             const response = await callAPI({
                 url: `channels/${id}/users`,
                 method: 'GET',
-                apiKey: apiKey,
+                api_key: api_key,
                 body:{},
                 params: {
                   offset,

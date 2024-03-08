@@ -26,7 +26,7 @@ export const createTag = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.auth;
+    const api_key = context.auth;
     const name = context.propsValue['getName'] || '';   
     const color = context.propsValue['getColor'];
 
@@ -51,7 +51,7 @@ export const createTag = createAction({
       const response = await callAPI({
         url: "tags",
         method: 'POST',
-        apiKey: apiKey,
+        api_key: api_key,
         body: {
           name,
           color

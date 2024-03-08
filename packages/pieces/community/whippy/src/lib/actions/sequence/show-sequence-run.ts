@@ -26,7 +26,7 @@ export const showSequenceRun = createAction({
         })
       },
     async run(context) {
-        const apiKey = context.auth;
+        const api_key = context.auth;
         const sequence_id = context.propsValue['getSequenceId'];
         const sequence_run_id = context.propsValue['getSequenceRunId'];
 
@@ -34,7 +34,7 @@ export const showSequenceRun = createAction({
             const response = await callAPI({
                 url: `sequences/${sequence_id}/sequence_runs/${sequence_run_id}`,
                 method: 'GET',
-                apiKey: apiKey
+                api_key: api_key
             })
             if (response?.success) {
                 return response?.data; 

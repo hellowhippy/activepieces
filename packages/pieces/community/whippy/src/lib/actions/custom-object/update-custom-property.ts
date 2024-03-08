@@ -35,7 +35,7 @@ export const updateCustomProperty = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.auth;
+        const api_key = context.auth;
         const custom_object_id = context.propsValue['getCustomId'];
         const custom_object_record_id = context.propsValue['getCustomRecordId'];
         const custom_property_id = context.propsValue['getPropertyId'];
@@ -45,7 +45,7 @@ export const updateCustomProperty = createAction({
           const response = await callAPI({
             url: `custom_objects/${custom_object_id}/records/${custom_object_record_id}/properties/${custom_property_id}`,
             method: 'PUT',
-            apiKey: apiKey,
+            api_key: api_key,
             body: {
               value
             },

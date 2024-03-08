@@ -22,14 +22,14 @@ export const deleteTag = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.auth;
+    const api_key = context.auth;
     const id = context.propsValue['getTagId'];
 
     try {
       const response = await callAPI({
         url: `tags/${id}`,
         method: 'DELETE',
-        apiKey: apiKey
+        api_key: api_key
       })
       if (response.success) {
         return response?.data; 

@@ -35,7 +35,7 @@ export const createNote = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.auth;
+    const api_key = context.auth;
     const body = context.propsValue['getBody'] || '';
     const from = context.propsValue['getFromNumber'];
     const to = context.propsValue['getToNumber'];
@@ -45,7 +45,7 @@ export const createNote = createAction({
       const response = await callAPI({
         url: "messaging/note",
         method: 'POST',
-        apiKey: apiKey,
+        api_key: api_key,
         body: {
           from,
           to,

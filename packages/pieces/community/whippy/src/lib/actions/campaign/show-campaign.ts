@@ -22,14 +22,14 @@ export const showCampaign = createAction({
         }),
     },
     async run(context) {
-      const apiKey = context.auth;
+      const api_key = context.auth;
       const id = context.propsValue['getId'];
 
       try {
           const response = await callAPI({
             url: `campaigns/${id}`,
             method: 'GET',
-            apiKey: apiKey
+            api_key: api_key
           })
           if (response?.success) {
             return response?.data; 

@@ -18,13 +18,13 @@ export const showOrganization = createAction({
     props: {
     },
     async run(context) {
-      const apiKey = context.auth;
+      const api_key = context.auth;
 
       try {
           const response  = await callAPI({
             url: "organization",
             method: 'GET',
-            apiKey: apiKey,
+            api_key: api_key,
           })
           if (response?.success) {
             return response?.data; 

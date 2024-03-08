@@ -56,7 +56,7 @@ export const updateCustomObject = createAction({
         }),
     },
     async run(context) {
-      const apiKey = context.auth;
+      const api_key = context.auth;
       const custom_object_id = context.propsValue['getCustomId'];
       const custom_object_record_id = context.propsValue['getCustomRecordId'];
       const associated_record_id = context.propsValue['getAssociatedId'];
@@ -68,7 +68,7 @@ export const updateCustomObject = createAction({
           const response = await callAPI({
             url: `custom_objects/${custom_object_id}/records/${custom_object_record_id}`,
             method: 'PUT',
-            apiKey: apiKey,
+            api_key: api_key,
             body: {
               associated_record_id,
               associated_record_type,

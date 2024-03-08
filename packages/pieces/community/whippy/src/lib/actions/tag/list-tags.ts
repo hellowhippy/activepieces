@@ -39,7 +39,7 @@ export const listTags = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.auth;
+    const api_key = context.auth;
     const limit = context.propsValue['getLimit'];
     const offset = context.propsValue['getOffset'];
     const search = context.propsValue['getSearch'];
@@ -55,7 +55,7 @@ export const listTags = createAction({
         const response = await callAPI({
           url: "tags",
           method: 'GET',
-          apiKey: apiKey,
+          api_key: api_key,
           body : {},
           params: {
             limit,

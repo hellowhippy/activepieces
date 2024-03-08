@@ -58,7 +58,7 @@ export const createCustomObjects = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.auth;
+        const api_key = context.auth;
         const key = context.propsValue['getKey'];
         const label = context.propsValue['getLabel'];
         const custom_properties = context.propsValue['getCustomProperties'];
@@ -67,7 +67,7 @@ export const createCustomObjects = createAction({
           const response = await callAPI({
             url: "custom_objects",
             method: 'POST',
-            apiKey: apiKey,
+            api_key: api_key,
             body: {
                 key,
                 label,

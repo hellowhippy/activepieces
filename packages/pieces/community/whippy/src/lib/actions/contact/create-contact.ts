@@ -50,7 +50,7 @@ export const createContact = createAction({
     }),
 	},
 	async run(context) {
-    const apiKey = context.auth;
+    const api_key = context.auth;
     const email = context.propsValue['getEmail'];
     const name = context.propsValue['getName'];
     const phone = context.propsValue['getPhone'];
@@ -60,7 +60,7 @@ export const createContact = createAction({
       const response = await callAPI({
         url: "contacts",
         method: 'POST',
-        apiKey: apiKey,
+        api_key: api_key,
         body: {
           email,
           name,

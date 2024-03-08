@@ -1,7 +1,7 @@
 export interface APICallParams {
   url: string;
   method: string;
-  apiKey: string;
+  api_key: string;
   body?: object;
   params?: object;
 }
@@ -17,7 +17,7 @@ const rootUrl = 'https://api.whippy.co/v1';
 export async function callAPI<T>({
   url,
   method,
-  apiKey,
+  api_key,
   body,
   params,
 }: APICallParams): Promise<ApiResponse<T>> {
@@ -45,10 +45,12 @@ export async function callAPI<T>({
     headers: {
       accept: 'application/json',
       'content-type': 'application/json',
-      'X-WHIPPY-KEY': apiKey,
+      'X-WHIPPY-KEY': api_key,
     },
     body: body ? JSON.stringify(body) : undefined,
   };
+
+  console.log('Options:', options);
 
   try {
     const response = await fetch(apiUrl, options);

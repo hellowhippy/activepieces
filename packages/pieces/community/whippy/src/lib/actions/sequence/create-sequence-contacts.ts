@@ -73,7 +73,7 @@ export const createSequenceContacts = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.auth;
+        const api_key = context.auth;
         const id = context.propsValue['getSequenceID'];
         const from = context.propsValue['getFromNumber'];
         const to = context.propsValue['getToNumber'];
@@ -85,7 +85,7 @@ export const createSequenceContacts = createAction({
             const response = await callAPI({
                 url: `sequences/${id}/contacts`,
                 method: 'POST',
-                apiKey: apiKey,
+                api_key: api_key,
                 body: {
                     custom_data,
                     from,

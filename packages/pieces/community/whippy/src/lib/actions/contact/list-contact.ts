@@ -32,7 +32,7 @@ export const listContacts = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.auth;
+    const api_key = context.auth;
     const offset = context.propsValue['getOffset'];
     const name = context.propsValue['getName'];
     const email = context.propsValue['getEmail'];
@@ -55,7 +55,7 @@ export const listContacts = createAction({
       const response = await callAPI({
         url: `contacts?${params}`,
         method: 'GET',
-        apiKey: apiKey,
+        api_key: api_key,
       });
       if (response?.success) {
         return response?.data;

@@ -32,7 +32,7 @@ export const getSequences = createAction({
         }),
       },
     async run(context) {
-      const apiKey = context.auth;
+      const api_key = context.auth;
       const limit = context.propsValue['limit'] || 50;
       const offset = context.propsValue['offset'] || 0;
       const title = context.propsValue['title'] || "";
@@ -41,7 +41,7 @@ export const getSequences = createAction({
         const response =  await callAPI({
           url: `sequences`,
           method: 'GET',
-          apiKey: apiKey,
+          api_key: api_key,
           body : {},
           params: {
             limit,

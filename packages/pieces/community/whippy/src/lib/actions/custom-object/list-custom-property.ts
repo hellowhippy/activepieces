@@ -48,7 +48,7 @@ export const listCustomPropertyValues = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.auth;
+        const api_key = context.auth;
         const custom_object_id = context.propsValue['getCusId'] || '36b720b0-a79f-4bb9-82b1-a22acf5b14ad';
         const limit = context.propsValue['getLimit'] || 50;
         const offset = context.propsValue['getOffset'] || 0;
@@ -61,7 +61,7 @@ export const listCustomPropertyValues = createAction({
           const response = await callAPI({
             url: "custom_objects/property_values",
             method: 'GET',
-            apiKey: apiKey,
+            api_key: api_key,
             body : {},
             params: {
                 custom_object_id,

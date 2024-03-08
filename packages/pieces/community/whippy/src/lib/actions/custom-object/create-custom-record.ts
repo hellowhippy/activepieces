@@ -56,7 +56,7 @@ export const createCustomRecord = createAction({
       }),
     },
     async run(context) {
-      const apiKey = context.auth;
+      const api_key = context.auth;
       const custom_object_id = context.propsValue['getCustomId'];
       const associated_record_id = context.propsValue['getAssociatedId'];
       const associated_record_type = context.propsValue['getRecordType'];
@@ -67,7 +67,7 @@ export const createCustomRecord = createAction({
           const response = await callAPI({
             url: `custom_objects/${custom_object_id}/records`,
             method: 'POST',
-            apiKey: apiKey,
+            api_key: api_key,
             body: {
               associated_record_id,
               associated_record_type,

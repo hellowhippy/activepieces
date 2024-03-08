@@ -47,7 +47,7 @@ export const updateTag = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.auth;
+    const api_key = context.auth;
     const id = context.propsValue['getTagId'];
     const color = context.propsValue['getColor'];
     let name = context.propsValue['getName'];
@@ -74,7 +74,7 @@ export const updateTag = createAction({
       const response = await callAPI({
         url: `tags/${id}`,
         method: 'PUT',
-        apiKey: apiKey,
+        api_key: api_key,
         body: {
           color,
           name,

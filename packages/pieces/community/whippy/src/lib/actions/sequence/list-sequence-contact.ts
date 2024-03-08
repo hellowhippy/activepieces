@@ -138,7 +138,7 @@ export const listSequenceContact = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.auth;
+        const api_key = context.auth;
         const id = context.propsValue['getSequenceId'];
         const limit = context.propsValue['getLimit'] || 50;
         const offset = context.propsValue['getOffset'] || 0;
@@ -153,7 +153,7 @@ export const listSequenceContact = createAction({
             const response = await callAPI({
                 url: `sequences/${id}/contacts`,
                 method: 'GET',
-                apiKey: apiKey,
+                api_key: api_key,
                 body :{},
                 params: {
                     limit,

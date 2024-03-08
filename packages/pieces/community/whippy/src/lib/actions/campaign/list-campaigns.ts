@@ -50,7 +50,7 @@ export const listCampaigns = createAction({
       }),
     },
     async run(context) {
-      const apiKey = context.auth;
+      const api_key = context.auth;
       const limit = context.propsValue['getLimit'];
       const offset = context.propsValue['getOffset'];
       const title = context.propsValue['getTitle'];
@@ -64,7 +64,7 @@ export const listCampaigns = createAction({
           const response = await callAPI({
             url: "campaigns",
             method: 'GET',
-            apiKey: apiKey,
+            api_key: api_key,
             body :{},
             params: {
               limit,

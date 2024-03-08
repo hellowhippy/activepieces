@@ -39,7 +39,7 @@ export const listMessage = createAction({
       }),
     },
     async run(context) {
-      const apiKey = context.auth;
+      const api_key = context.auth;
       const id = context.propsValue['getConversationId'];
       const messages = context.propsValue['getMessages'];
 
@@ -47,7 +47,7 @@ export const listMessage = createAction({
         const response = await callAPI({
           url: `conversations/${id}`,
           method: 'GET',
-          apiKey: apiKey,
+          api_key: api_key,
           body :{},
           params: {
             messages

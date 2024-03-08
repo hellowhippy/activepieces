@@ -34,7 +34,7 @@ export const updateContact = createAction({
     }),
   },
   async run(context) {
-    const apiKey = context.auth;
+    const api_key = context.auth;
     const id = context.propsValue['getContactId'];
     const email = context.propsValue['getEmail'];
     const name = context.propsValue['getName'];
@@ -44,7 +44,7 @@ export const updateContact = createAction({
       const response = await callAPI({
         url: `contacts/${id}`,
         method: 'PUT',
-        apiKey: apiKey,
+        api_key: api_key,
         body: {
           phone,
           email,

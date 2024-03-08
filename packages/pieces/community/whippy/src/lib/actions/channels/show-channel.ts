@@ -22,14 +22,14 @@ export const showChannels = createAction({
         }),
     },
     async run(context) {
-        const apiKey = context.auth;
+        const api_key = context.auth;
         const id = context.propsValue['getChannelId'];
 
         try {
             const response = await callAPI({
                 url: `channels/${id}`,
                 method: 'GET',
-                apiKey: apiKey,
+                api_key: api_key,
             })
             if (response?.success) {
                 return response?.data; 

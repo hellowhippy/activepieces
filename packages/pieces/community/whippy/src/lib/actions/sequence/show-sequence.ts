@@ -22,14 +22,14 @@ export const showSequences = createAction({
         }),
       },
     async run(context) {
-        const apiKey = context.auth;
+        const api_key = context.auth;
         const sequence_id = context.propsValue['getSequenceId'];
 
         try {
             const response = await callAPI({
                 url: `sequences/${sequence_id}`,
                 method: 'GET',
-                apiKey: apiKey
+                api_key: api_key
             })
             if (response?.success) {
                 return response?.data; 
