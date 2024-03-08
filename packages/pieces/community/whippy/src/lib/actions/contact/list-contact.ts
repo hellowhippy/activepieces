@@ -1,84 +1,70 @@
 /**
-list Contacts Action
-
-This action list all contacts in Whippy. 
-
-API Documentation: https://docs.whippy.ai/reference/getcontacts-1
+  List Contacts Action
+  This action list all contacts in Whippy. 
+  API Documentation: https://docs.whippy.ai/reference/getcontacts-1
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
+import { createAction, Property } from '@activepieces/pieces-framework';
 import { callAPI } from '../../api/api';
-import { appAuth } from "../../..";
+import { appAuth } from '../../..';
 
 export const listContacts = createAction({
-    name: 'list_contacts',
-    auth: appAuth,
-    displayName: 'List Contacts',
-    description: 'Fetch a list of contacts',
-    props: {
-      getLimit: Property.Number({
-        displayName: 'Limit',
-        required: false,
-      }),
-      getOffset: Property.Number({
-        displayName: 'Offset',
-        required: false,
-      }),
-      getName: Property.ShortText({
-        displayName: 'Contact Name',
-        required: false,
-      }),
-      getEmail: Property.ShortText({
-        displayName: 'Contact Email Address',
-        required: false,
-      }),
-      getPhone: Property.Number({
-        displayName: 'Contact Phone Number',
-        required: false,
-      }),
-      getChannelsId: Property.Array({
-        displayName: 'Channels [ID]',
-        required: false,
-      }),
-      getChannelsPhone: Property.Array({
-        displayName: 'Channels [Phone]',
-        required: false,
-      }),
-    },
-    async run(context) {
-      const apiKey = context.auth;
-      const limit = context.propsValue['getLimit'];
-      const offset = context.propsValue['getOffset'];
-      const name = context.propsValue['getName'];
-      const email = context.propsValue['getEmail'];
-      const phone = context.propsValue['getPhone'];
-      const channelsID = context.propsValue['getChannelsId'];
-      const channelsPhone = context.propsValue['getChannelsPhone'];
+  name: 'list_contacts',
+  auth: appAuth,
+  displayName: 'List Contacts',
+  description: 'Fetch a list of contacts',
+  props: {
+    getName: Property.ShortText({
+      displayName: 'Contact Name',
+      required: false,
+    }),
+    getEmail: Property.ShortText({
+      displayName: 'Contact Email Address',
+      required: false,
+    }),
+    getPhone: Property.ShortText({
+      displayName: 'Contact Phone Number',
+      required: false,
+    }),
+    getOffset: Property.Number({
+      displayName: 'API Offset',
+      required: false,
+    }),
+  },
+  async run(context) {
+    const apiKey = context.auth;
+    const offset = context.propsValue['getOffset'];
+    const name = context.propsValue['getName'];
+    const email = context.propsValue['getEmail'];
+    const phone = context.propsValue['getPhone'];
 
-      try {
-          const response = await callAPI({
-            url: `contacts`,
-            method: 'GET',
-            apiKey: apiKey,
-            body:{},
-            params: {
-              limit,
-              offset,
-              name,
-              email,
-              phone,
-              'channels[][id]': [channelsID],
-              'channels[][phone]': [channelsPhone],
-            },
-          })
-          if (response?.success) {
-            return response?.data; 
-          } else {
-            console.error(response?.message);
-            return response?.message;
-          }
-        } catch (error) {
-          throw new Error(`Failed to list contacts: ${error}`);
-        }
-    },
+    // generate query params if the user has provided any of the optional fields
+    let params = `offset=${offset}`;
+
+    if (name) {
+      params += `&name=${name}`;
+    }
+    if (email) {
+      params += `&email=${email}`;
+    }
+    if (phone) {
+      params += `&phone=${phone}`;
+    }
+
+    try {
+      const response = await callAPI({
+        url: `contacts?${params}`,
+        method: 'GET',
+        apiKey: apiKey,
+      });
+      if (response?.success) {
+        return response?.data;
+      } else {
+        console.error(response?.message);
+        return response?.message;
+      }
+    } catch (error) {
+      throw new Error(`Failed to list contacts: ${error}`);
+    }
+  },
 });
