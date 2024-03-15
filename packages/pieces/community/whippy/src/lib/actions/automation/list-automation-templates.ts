@@ -4,9 +4,9 @@
   API Documentation: https://docs.whippy.ai/reference/getautomationtemplates
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
+import { createAction, Property } from '@activepieces/pieces-framework';
 import { callAPI } from '../../api/api';
-import { appAuth } from "../../..";
+import { appAuth } from '../../..';
 
 
 export const listAutomation = createAction({
@@ -66,21 +66,32 @@ export const listAutomation = createAction({
     const created_by = context.propsValue['getCreatedBy'];
     const updated_by = context.propsValue['getUpdatedBy'];
 
+    let params = `offset=${offset}`;
+
+    if (limit) {
+      params += `&limit=${limit}`;
+    }
+    if (title) {
+      params += `&title=${title}`;
+    }
+    if (archived) {
+      params += `&archived=${archived}`;
+    }
+    if(access_level) {
+      params += `$access_level=${access_level}`;
+    }
+    if (created_by) {
+      params += `&created_by[]=${created_by}`;
+    }
+    if (updated_by) {
+      params += `&updated_by[]=${updated_by}`;
+    }
+
     try {
       const response = await callAPI({
-        url: "automations/templates",
-        method: 'POST',
+        url: `automations/templates?${params}`,
+        method: 'GET',
         api_key: api_key,
-        body : {},
-        params: {
-          limit,
-          offset,
-          title,
-          archived, 
-          access_level,
-          created_by: [created_by],
-          updated_by: [updated_by]
-        },
       })
       if (response?.success) {
         return response?.data; 

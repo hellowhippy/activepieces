@@ -6,9 +6,9 @@ This action lists a custom property values in Whippy.
 API Documentation: https://docs.whippy.ai/reference/listcustompropertyvalues
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
-import { appAuth } from "../../..";
-import { callAPI } from "../../api/api";
+import { createAction, Property } from '@activepieces/pieces-framework';
+import { appAuth } from '../../..';
+import { callAPI } from '../../api/api';
 
 export const listCustomPropertyValues = createAction({
     name: 'list_custom_property_values',
@@ -57,28 +57,38 @@ export const listCustomPropertyValues = createAction({
         const before = context.propsValue['getBefore'] || '2022-11-03T00:00:00Z';
         const after = context.propsValue['getAfter'] || '2022-11-03T00:00:00Z';
 
-      try {
-          const response = await callAPI({
-            url: "custom_objects/property_values",
-            method: 'GET',
-            api_key: api_key,
-            body : {},
-            params: {
-                custom_object_id,
-                limit,
-                offset,
-                associated_resource_id,
-                associated_resource_type,
-                before,
-                after
-            },
-          })
-          if (response.success) {
-            return response.data; 
-          } else {
-            console.error(response.message);
-            return false;
-          }
+        let params = `offset=${offset}`;
+        if (limit) {
+            params += `&limit=${limit}`;
+        }
+        if (custom_object_id) {
+            params += `&custom_object_id=${custom_object_id}`;
+        }
+        if (associated_resource_id) {
+            params += `&associated_resource_id=${associated_resource_id}`;
+        }
+        if (associated_resource_type) {
+            params += `&associated_resource_type=${associated_resource_type}`;
+        }
+        if (before) {
+            params += `&before=${before}`;
+        }
+        if (after) {
+            params += `&after=${after}`;
+        }
+
+        try {
+            const response = await callAPI({
+                url: `custom_objects/property_values?${params}`,
+                method: 'GET',
+                api_key: api_key
+            })
+            if (response?.success) {
+                return response?.data; 
+            } else {
+                console.error(response?.message);
+                return response?.message;
+            }
         } catch (error) {
             throw new Error(`Failed to list custom property: ${error}`);
         }

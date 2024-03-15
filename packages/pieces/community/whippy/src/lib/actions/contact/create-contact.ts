@@ -4,9 +4,9 @@
   API Documentation: https://docs.whippy.ai/reference/createcontact-1
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
+import { createAction, Property } from '@activepieces/pieces-framework';
 import { callAPI } from '../../api/api';
-import { appAuth } from "../../..";
+import { appAuth } from '../../..';
 
 export const createContact = createAction({
 	name: 'create_contact', 
@@ -26,27 +26,22 @@ export const createContact = createAction({
 			displayName: 'Contact Phone Number',
 			required: true,
 		}),
-    getOptChannel: Property.Dropdown({
+    getOptChannel: Property.StaticDropdown({
       displayName: 'opt_in_to_all_channels',
       description: 'Setting to opt in contact to all channels',
       required: false,
-      options: async () => {
-          return {
-              disabled: false,
-              options: [
-                  {
-                      label: 'True',
-                      value: true,
-                  },
-                  {
-                      label : 'False',
-                      value : false,
-                  }
-              ],
-              defaultValue: false,
-          };
+      options: {
+        options: [
+            {
+              label: 'True',
+              value: true,
+            },
+            {
+              label : 'False',
+              value : false,
+            }
+        ],
       },
-      refreshers: []
     }),
 	},
 	async run(context) {
@@ -58,7 +53,7 @@ export const createContact = createAction({
 
     try {
       const response = await callAPI({
-        url: "contacts",
+        url: `contacts`,
         method: 'POST',
         api_key: api_key,
         body: {

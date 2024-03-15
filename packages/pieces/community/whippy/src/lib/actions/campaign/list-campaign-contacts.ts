@@ -6,9 +6,9 @@ This action lists campaign contacts in Whippy. Campaign ID is required.
 API Documentation: https://docs.whippy.ai/reference/getcampaigncontacts
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
-import { appAuth } from "../../..";
-import { callAPI } from "../../api/api";
+import { createAction, Property } from '@activepieces/pieces-framework';
+import { appAuth } from '../../..';
+import { callAPI } from '../../api/api';
 
 export const listCampaignContacts = createAction({
     name: 'list_campaign_contacts',
@@ -32,76 +32,59 @@ export const listCampaignContacts = createAction({
             displayName: 'Offset',
             required: false,
         }),
-        getDelivered: Property.Dropdown({
+        getDelivered: Property.StaticDropdown({
             displayName: 'Delivered',
             required: false,
-            options: async () => {
-                return {
-                    disabled: false,
-                    options: [
-                        {
-                            label: 'True',
-                            value: true,
-                        },
-                        {
-                            label : 'False',
-                            value : false,
-                        }
-                    ],
-                    defaultValue: false,
-                };
+            options: {
+                options: [
+                    {
+                        label: 'True',
+                        value: true,
+                    },
+                    {
+                        label : 'False',
+                        value : false,
+                    }
+                ],
             },
-            refreshers: []
         }),
-        getResponded: Property.Dropdown({
+        getResponded: Property.StaticDropdown({
           displayName: 'Responded',
           required: false,
-          options: async () => {
-            return {
-              disabled: false,
-              options: [
+          options: {
+            options: [
                 {
-                  label: 'True',
-                  value: true,
+                    label: 'True',
+                    value: true,
                 },
                 {
-                  label : 'False',
-                  value : false,
+                    label : 'False',
+                    value : false,
                 }
-              ],
-              defaultValue: false,
-            };
+            ],
           },
-          refreshers: []
         }),
-        getUnsubscribed: Property.Dropdown({
+        getUnsubscribed: Property.StaticDropdown({
           displayName: 'Unsubscribed',
           required: false,
-          options: async () => {
-            return {
-              disabled: false,
-              options: [
+          options: {
+            options: [
                 {
-                  label: 'True',
-                  value: true,
+                    label: 'True',
+                    value: true,
                 },
                 {
-                  label : 'False',
-                  value : false,
+                    label : 'False',
+                    value : false,
                 }
-              ],
-              defaultValue: false,
-            };
+            ],
           },
-          refreshers: []
         }),
-        getClickedLink: Property.Dropdown({
+        getClickedLink: Property.StaticDropdown({
           displayName: 'Clicked Link',
           required: false,
-          options: async () => {
-            return {
-              disabled: false,
-              options: [
+          options: {
+            options: [
                 {
                   label: 'True',
                   value: true,
@@ -110,11 +93,8 @@ export const listCampaignContacts = createAction({
                   label : 'False',
                   value : false,
                 }
-              ],
-              defaultValue: false,
-            };
+            ],
           },
-          refreshers: []
         }),
     },
     async run(context) {
@@ -127,27 +107,36 @@ export const listCampaignContacts = createAction({
         const unsubscribed = context.propsValue['getUnsubscribed']  || false;
         const clicked_level = context.propsValue['getClickedLink']  || false;
 
-      try {
-          const response = await callAPI({
-            url: `campaigns/${id}/contacts?`,
-            method: 'GET',
-            api_key: api_key,
-            body: {},
-            params: {
-              limit,
-              offset,
-              delivered,
-              responded,
-              unsubscribed,
-              clicked_level
-            },
-          })
-          if (response?.success) {
-            return response?.data; 
-          } else {
-            console.error(response?.message);
-            return response?.message;
-          }
+        let params = `offset=${offset}`;
+
+        if (limit) {
+        params += `&limit=${limit}`;
+        }
+        if (delivered) {
+        params += `&delivered=${delivered}`;
+        }
+        if (responded) {
+        params += `&responded=${responded}`;
+        }
+        if(unsubscribed) {
+        params += `$unsubscribed=${unsubscribed}`;
+        }
+        if (clicked_level) {
+        params += `&clicked_level[]=${clicked_level}`;
+        }
+
+        try {
+            const response = await callAPI({
+                url: `campaigns/${id}/contacts?${params}`,
+                method: 'GET',
+                api_key: api_key,
+            })
+            if (response?.success) {
+                return response?.data; 
+            } else {
+                console.error(response?.message);
+                return response?.message;
+            }
         } catch (error) {
             throw new Error(`Failed to list campaign contacts: ${error}`);
         }

@@ -6,9 +6,9 @@ This action list conversations in Whippy.
 API Documentation: https://docs.whippy.ai/reference/getconversations
 */
 
-import { createAction, Property } from '@activepieces/pieces-framework';
-import { callAPI } from '../../api/api';
-import { appAuth } from '../../..';
+import { createAction, Property } from "@activepieces/pieces-framework";
+import { callAPI } from "../../api/api";
+import { appAuth } from "../../..";
 
 export const listConversations = createAction({
   name: 'list_conversations',
@@ -30,28 +30,33 @@ export const listConversations = createAction({
     }),
     getStatus: Property.Array({
       displayName: 'Statuses',
+      defaultValue: [{
+        fieldType: Property.StaticDropdown({
+          displayName: 'Field Type',
+          required: true,
+          defaultValue: 'closed',
+          options: {
+            options: [
+              { label: 'open', value: 'open' },
+              { label: 'closed', value: 'closed' },
+              { label: 'automated', value: 'automated' },
+              { label: 'spam', value: 'spam' }
+            ],
+          },
+        }),
+      }],
       required: false,
     }),
-    getType: Property.Dropdown({
+    getType: Property.StaticDropdown({
       displayName: 'Type',
       required: false,
-      options: async () => {
-        return {
-          disabled: false,
-          options: [
-            {
-              label: 'phone',
-              value: 'phone',
-            },
-            {
-              label: 'email',
-              value: 'email',
-            },
-          ],
-          defaultValue: 'email',
-        };
+      defaultValue: 'email',
+      options: {
+        options: [
+          { label: 'phone', value: 'phone' },
+          { label: 'email', value: 'email' },
+        ],
       },
-      refreshers: [],
     }),
     getChannelsId: Property.Array({
       displayName: 'Channels [ID]',
@@ -80,7 +85,7 @@ export const listConversations = createAction({
     }),
     getContactsName: Property.Array({
       displayName: 'Contacts [name]',
-      description: 'conatct name',
+      description: 'contact name',
       required: false,
     }),
     getLastMessage: Property.Object({
@@ -129,6 +134,10 @@ export const listConversations = createAction({
       displayName: 'Assigned User IDs',
       required: false,
     }),
+    getTest:Property.DateTime({
+      displayName: 'Test',
+      required: false
+    }),
   },
   async run(context) {
     const api_key = context.auth;
@@ -137,40 +146,68 @@ export const listConversations = createAction({
     const unread_count = context.propsValue['getUnreadCount'];
     const status = context.propsValue['getStatus'];
     const type = context.propsValue['getType'];
-    const channelsId = context.propsValue['getChannelsId'];
-    const channelsPhone = context.propsValue['getChannelsPhone'];
-    const contactsId = context.propsValue['getContactsId'];
-    const contactsPhone = context.propsValue['getContactsPhone'];
-    const contactsEmail = context.propsValue['getContactsEmail'];
-    const contactsName = context.propsValue['getContactsName'];
+    const channels_id = context.propsValue['getChannelsId'];
+    const channels_phone = context.propsValue['getChannelsPhone'];
+    const contacts_id = context.propsValue['getContactsId'];
+    const contacts_phone = context.propsValue['getContactsPhone'];
+    const contacts_email = context.propsValue['getContactsEmail'];
+    const contacts_name = context.propsValue['getContactsName'];
     const last_message_date = context.propsValue['getLastMessage'];
     const created_at = context.propsValue['getCreatedAt'];
     const updated_at = context.propsValue['getUpdatedAt'];
     const assigned_users = context.propsValue['getAssignedUsers'];
 
+    let params = `offset=${offset}`;
+
+    if (limit) {
+      params += `&limit=${limit}`;
+    }
+    if (unread_count) {
+      params += `&unread_count=${unread_count}`;
+    }
+    if (status) {
+      params += `&status[]=${status}`;
+    }
+    if (type) {
+      params += `&type=${type}`;
+    }
+    if (channels_id) {
+      params += `&channels[][id]=${channels_id}`;
+    }
+    if (channels_phone) {
+      params += `&channels[][phone]=${channels_phone}`;
+    }
+    if (contacts_id) {
+      params += `&contacts[][id]=${contacts_id}`;
+    }
+    if (contacts_phone) {
+      params += `&contacts[][phone]=${contacts_phone}`;
+    }
+    if (contacts_name) {
+      params += `&contacts[][name]=${contacts_name}`;
+    }
+    if (contacts_email) {
+      params += `&contacts[][email]=${contacts_email}`;
+    }
+    if (last_message_date) {
+      params += `&last_message_date=${last_message_date}`;
+    }
+    if (created_at) {
+      params += `&created_at=${created_at}`;
+    }
+    if (updated_at) {
+      params += `&updated_at=${updated_at}`;
+    }
+    if (assigned_users) {
+      params += `&assigned_users[]=${assigned_users}`;
+    }
+
     try {
       const response = await callAPI({
-        url: "conversations",
+        url: `conversations?${params}`,
         method: 'GET',
         api_key: api_key,
-        body: {
-          limit,
-          offset,
-          unread_count,
-          status: [status],
-          type,
-          'channels[][id]': [channelsId],
-          'channels[][phone]': [channelsPhone],
-          'contacts[][id]': [contactsId],
-          'contacts[][phone]': [contactsPhone],
-          'contacts[][email]': [contactsEmail],
-          'contacts[][name]': [contactsName],
-          last_message_date,
-          created_at,
-          updated_at,
-          'assigned_users[]': [assigned_users]
-        },
-      })
+      });
       if (response?.success) {
         return response?.data;
       } else {
@@ -178,7 +215,7 @@ export const listConversations = createAction({
         return response?.message;
       }
     } catch (error) {
-      throw new Error(`Failed to list conversations: ${error}`);
+      throw new Error(`Failed to list contacts: ${error}`);
     }
   },
 });

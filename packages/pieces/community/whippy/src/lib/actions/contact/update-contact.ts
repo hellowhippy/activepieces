@@ -6,9 +6,9 @@ This action updates a contact in Whippy. Contact ID is required.
 API Documentation: https://docs.whippy.ai/reference/updatecontact-1
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
+import { createAction, Property } from '@activepieces/pieces-framework';
 import { callAPI } from '../../api/api';
-import { appAuth } from "../../..";
+import { appAuth } from '../../..';
 
 export const updateContact = createAction({
   name: 'update_contact', 
@@ -51,10 +51,10 @@ export const updateContact = createAction({
           name
         },
       })
-      if (response.success) {
-        return response.data; 
+      if (response?.success) {
+        return response?.data; 
       } else {
-        console.error(response.message);
+        console.error(response?.message);
         return response?.message;
       }
     } catch (error) {

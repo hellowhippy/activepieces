@@ -6,9 +6,9 @@ This action Get a single sequence run based on the sequence id and the sequence 
 API Documentation: https://docs.whippy.ai/reference/getsinglesequencerun
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
-import { appAuth } from "../../..";
-import { callAPI } from "../../api/api";
+import { createAction, Property } from '@activepieces/pieces-framework';
+import { appAuth } from '../../..';
+import { callAPI } from '../../api/api';
 
 export const showSequenceRun = createAction({
     name: 'show_sequence_run', 

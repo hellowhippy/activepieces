@@ -6,9 +6,9 @@ This action creates a tag in Whippy.
 API Documentation: https://docs.whippy.ai/reference/createtag
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
+import { createAction, Property } from '@activepieces/pieces-framework';
 import { callAPI } from '../../api/api';
-import { appAuth } from "../../..";
+import { appAuth } from '../../..';
 
 export const createTag = createAction({
   name: 'create_tag', 
@@ -49,7 +49,7 @@ export const createTag = createAction({
 
     try {
       const response = await callAPI({
-        url: "tags",
+        url: `tags`,
         method: 'POST',
         api_key: api_key,
         body: {

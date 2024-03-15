@@ -6,9 +6,9 @@ This action Returns a list of Users in given Organization with access to the Cha
 API Documentation: https://docs.whippy.ai/reference/listuserchannels-1
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
-import { appAuth } from "../../..";
-import { callAPI } from "../../api/api";
+import { createAction, Property } from '@activepieces/pieces-framework';
+import { appAuth } from '../../..';
+import { callAPI } from '../../api/api';
 
 export const listUserChannels = createAction({
     name: 'list_user_channels', 
@@ -35,16 +35,17 @@ export const listUserChannels = createAction({
         const offset = context.propsValue['getOffset'] || 1;
         const limit = context.propsValue['getLimit'] || 50;
 
+        let params = `offset=${offset}`;
+
+        if (limit) {
+        params += `&limit=${limit}`;
+        }
+
         try {
             const response = await callAPI({
-                url: `channels/${id}/users`,
+                url: `channels/${id}/users?${params}`,
                 method: 'GET',
                 api_key: api_key,
-                body:{},
-                params: {
-                  offset,
-                  limit
-                },
             })
             if (response?.success) {
                 return response?.data; 

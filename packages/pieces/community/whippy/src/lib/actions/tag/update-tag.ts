@@ -6,9 +6,9 @@ This action updates a tag in Whippy. Tag ID is required.
 API Documentation: https://docs.whippy.ai/reference/updatetag
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
+import { createAction, Property } from '@activepieces/pieces-framework';
 import { callAPI } from '../../api/api';
-import { appAuth } from "../../..";
+import { appAuth } from '../../..';
 
 
 export const updateTag = createAction({
@@ -30,20 +30,20 @@ export const updateTag = createAction({
       required: false,
     }), 
     getState: Property.StaticDropdown({
-        displayName: 'Tag State',
-        required: false,
-        options: {
-            options: [
-                {
-                    label: 'archived',    
-                    value: 'archived'
-                },
-                {
-                    label: 'active',
-                    value: 'active'
-                }
-            ]
-        }
+      displayName: 'Tag State',
+      required: false,
+      options: {
+        options: [
+          {
+            label: 'archived',    
+            value: 'archived'
+          },
+          {
+            label: 'active',
+            value: 'active'
+          }
+        ]
+      }
     }),
   },
   async run(context) {
@@ -55,19 +55,19 @@ export const updateTag = createAction({
 
     if(name !== undefined)
     {
-        name = name.replace(/\s+/g,' ').trim()
+      name = name.replace(/\s+/g,' ').trim()
     }
     function isValidHexColor(color: string) {
-        const hexColorRegex = /^#[0-9A-Fa-f]{6}$/;
-        return hexColorRegex.test(color);
+      const hexColorRegex = /^#[0-9A-Fa-f]{6}$/;
+      return hexColorRegex.test(color);
     }
     if (color !== undefined)
     {
-        if (isValidHexColor(color)) {
-            console.log('Valid color code:', color);
-        } else {
-            console.error('Invalid color code:', color);
-        }
+      if (isValidHexColor(color)) {
+        console.log('Valid color code:', color);
+      } else {
+        console.error('Invalid color code:', color);
+      }
     }
 
     try {

@@ -6,9 +6,9 @@ This action lists a custom object records in Whippy.
 API Documentation: https://docs.whippy.ai/reference/listcustomobjectrecords
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
-import { appAuth } from "../../..";
-import { callAPI } from "../../api/api";
+import { createAction, Property } from '@activepieces/pieces-framework';
+import { appAuth } from '../../..';
+import { callAPI } from '../../api/api';
 
 export const listCustomObjectRecords = createAction({
     name: 'list_custom_object_records',
@@ -45,24 +45,28 @@ export const listCustomObjectRecords = createAction({
         const associated_resource_id = context.propsValue['getAssociatedId'];
         const associated_resource_type = context.propsValue['getResourceType'];
 
+        let params = `offset=${offset}`;
+        if (limit) {
+            params += `&limit=${limit}`;
+        }
+        if (associated_resource_id) {
+            params += `&associated_resource_id=${associated_resource_id}`;
+        }
+        if (associated_resource_type) {
+            params += `&associated_resource_type=${associated_resource_type}`;
+        }
+
         try {
             const response = await callAPI({
-                url: `custom_objects/${custom_object_id}`,
+                url: `custom_objects/${custom_object_id}?${params}`,
                 method: 'GET',
-                api_key: api_key,
-                body : {},
-                params: {
-                    limit,
-                    offset,
-                    associated_resource_id,
-                    associated_resource_type,
-                },
+                api_key: api_key
             })
-            if (response.success) {
-                return response.data; 
+            if (response?.success) {
+                return response?.data; 
             } else {
-                console.error(response.message);
-                return false;
+                console.error(response?.message);
+                return response?.message;
             }
         } catch (error) {
             throw new Error(`Failed to list custom records: ${error}`);

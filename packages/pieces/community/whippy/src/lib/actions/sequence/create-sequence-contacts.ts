@@ -6,9 +6,9 @@ This action creates a sequence contacts in Whippy. Sequence ID, From, and To are
 API Documentation: https://docs.whippy.ai/reference/createsequencecontacts
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
-import { appAuth } from "../../..";
-import { callAPI } from "../../api/api";
+import { createAction, Property } from '@activepieces/pieces-framework';
+import { appAuth } from '../../..';
+import { callAPI } from '../../api/api';
 
 interface ToNumber {
     custom_a: string;
@@ -91,7 +91,7 @@ export const createSequenceContacts = createAction({
                     from,
                     schedule_at,
                     step_id,
-                    to: [to],
+                    to,
                 }
             })
             if (response?.success) {

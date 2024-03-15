@@ -6,9 +6,9 @@ This action creates a custom property in Whippy. Custom_object_id, Key, type and
 API Documentation: https://docs.whippy.ai/reference/createcustomproperty
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
-import { appAuth } from "../../..";
-import { callAPI } from "../../api/api";
+import { createAction, Property } from '@activepieces/pieces-framework';
+import { appAuth } from '../../..';
+import { callAPI } from '../../api/api';
 
 export const createCustomProperty = createAction({
     name: 'create_custom_property',
@@ -55,25 +55,25 @@ export const createCustomProperty = createAction({
         const type = context.propsValue['getType'];
         const key = context.propsValue['getKey']
 
-      try {
-          const response = await callAPI({
-            url: `custom_objects/${custom_object_id}/properties`,
-            method: 'POST',
-            api_key: api_key,
-            body: {
-              key,
-              label,
-              default: cusDefault,
-              required,
-              type
-            },
-          })
-          if (response.success) {
-            return response.data; 
-          } else {
-            console.error(response.message);
-            return false;
-          }
+        try {
+            const response = await callAPI({
+                url: `custom_objects/${custom_object_id}/properties`,
+                method: 'POST',
+                api_key: api_key,
+                body: {
+                key,
+                label,
+                default: cusDefault,
+                required,
+                type
+                },
+            })
+            if (response?.success) {
+                return response?.data; 
+            } else {
+                console.error(response?.message);
+                return response?.message;
+            }
         } catch (error) {
             throw new Error(`Failed to create custom property: ${error}`);
         }

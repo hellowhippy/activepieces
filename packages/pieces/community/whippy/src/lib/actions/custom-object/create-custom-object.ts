@@ -6,9 +6,9 @@ This action creates a custom objects in Whippy. Key and Label are required.
 API Documentation: https://docs.whippy.ai/reference/createcustomobject
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
-import { appAuth } from "../../..";
-import { callAPI } from "../../api/api";
+import { createAction, Property } from '@activepieces/pieces-framework';
+import { appAuth } from '../../..';
+import { callAPI } from '../../api/api';
 
 export const createCustomObjects = createAction({
     name: 'create_custom_objects',
@@ -63,23 +63,23 @@ export const createCustomObjects = createAction({
         const label = context.propsValue['getLabel'];
         const custom_properties = context.propsValue['getCustomProperties'];
 
-      try {
-          const response = await callAPI({
-            url: "custom_objects",
-            method: 'POST',
-            api_key: api_key,
-            body: {
-                key,
-                label,
-                custom_properties
-            },
-          })
-          if (response.success) {
-            return response.data; 
-          } else {
-            console.error(response.message);
-            return false;
-          }
+        try {
+            const response = await callAPI({
+                url: `custom_objects`,
+                method: 'POST',
+                api_key: api_key,
+                body: {
+                    key,
+                    label,
+                    custom_properties
+                },
+            })
+            if (response?.success) {
+                return response?.data; 
+            } else {
+                console.error(response?.message);
+                return response?.message;
+            }
         } catch (error) {
             throw new Error(`Failed to create custom object: ${error}`);
         }

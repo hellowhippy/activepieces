@@ -6,9 +6,9 @@ This action Lists channels (locations) for an organization.
 API Documentation: https://docs.whippy.ai/reference/getchannels
 */
 
-import { createAction } from "@activepieces/pieces-framework";
-import { appAuth } from "../../..";
-import { callAPI } from "../../api/api";
+import { createAction } from '@activepieces/pieces-framework';
+import { appAuth } from '../../..';
+import { callAPI } from '../../api/api';
 
 export const listChannels = createAction({
     name: 'list_channels', 
@@ -21,7 +21,7 @@ export const listChannels = createAction({
         const api_key = context.auth;
         try {
             const response = await callAPI({
-                url: "channels",
+                url: `channels`,
                 method: 'GET',
                 api_key: api_key
             })

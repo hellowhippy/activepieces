@@ -1,10 +1,10 @@
 /**
-  Send SMS Action
+Send SMS Action
 
-  This action sends sms in Whippy. to (Destination phone number) 
-  and from (Phone of an existing channel belonging to your organization) are required.
+This action sends sms in Whippy. to (Destination phone number) 
+and from (Phone of an existing channel belonging to your organization) are required.
 
-  API Documentation: https://docs.whippy.ai/reference/sendsms
+API Documentation: https://docs.whippy.ai/reference/sendsms
 */
 
 import { createAction, Property } from '@activepieces/pieces-framework';
@@ -50,7 +50,7 @@ export const sendMessage = createAction({
 
     try {
       const response = await callAPI({
-        url: "messaging/sms",
+        url: `messaging/sms`,
         method: 'POST',
         api_key: api_key,
         body: {

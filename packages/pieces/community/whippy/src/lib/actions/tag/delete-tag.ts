@@ -6,9 +6,9 @@ This action deletes a tag in Whippy. Tag ID is required.
 API Documentation: https://docs.whippy.ai/reference/deletetag
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
+import { createAction, Property } from '@activepieces/pieces-framework';
 import { callAPI } from '../../api/api';
-import { appAuth } from "../../..";
+import { appAuth } from '../../..';
 
 export const deleteTag = createAction({
   name: 'delete_tag', 

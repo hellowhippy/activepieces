@@ -6,9 +6,9 @@ This action Lists sequence runs based on filters.
 API Documentation: https://docs.whippy.ai/reference/getsequenceruns
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
-import { appAuth } from "../../..";
-import { callAPI } from "../../api/api";
+import { createAction, Property } from '@activepieces/pieces-framework';
+import { appAuth } from '../../..';
+import { callAPI } from '../../api/api';
 
 export const listSequenceRun = createAction({
     name: 'list_sequence_run', 
@@ -77,21 +77,29 @@ export const listSequenceRun = createAction({
         const before = context.propsValue['getBefore'] || "";
         const after = context.propsValue['getAfter'] || "";
 
+        let params = `offset=${offset}`;
+
+        if (limit) {
+            params += `&limit=${limit}`;
+        }
+        if (status) {
+            params += `&status=${status}`;
+        }
+        if (channel_id) {
+            params += `&channel_id=${channel_id}`;
+        }
+        if (before) {
+            params += `&before=${before}`;
+        }
+        if (after) {
+            params += `&after=${after}`;
+        }
+
         try {
             const response = await callAPI({
-                url: `sequences/${id}/sequence_runs`,
+                url: `sequences/${id}/sequence_runs?${params}`,
                 method: 'GET',
-                api_key: api_key,
-                body : {},
-                params: {
-                    limit,
-                    offset,
-                    status,
-                    phone,
-                    before,
-                    after,
-                    channel_id
-                }
+                api_key: api_key
             })
             if (response?.success) {
                 return response?.data; 

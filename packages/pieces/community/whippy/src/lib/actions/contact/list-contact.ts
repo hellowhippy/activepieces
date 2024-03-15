@@ -1,7 +1,9 @@
 /**
-  List Contacts Action
-  This action list all contacts in Whippy. 
-  API Documentation: https://docs.whippy.ai/reference/getcontacts-1
+list Contacts Action
+
+This action list all contacts in Whippy. 
+
+API Documentation: https://docs.whippy.ai/reference/getcontacts-1
 */
 
 import { createAction, Property } from '@activepieces/pieces-framework';

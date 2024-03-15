@@ -6,9 +6,9 @@ This actionLists sequence contacts based on filters.
 API Documentation: https://docs.whippy.ai/reference/getsequenceruns
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
-import { appAuth } from "../../..";
-import { callAPI } from "../../api/api";
+import { createAction, Property } from '@activepieces/pieces-framework';
+import { appAuth } from '../../..';
+import { callAPI } from '../../api/api';
 
 export const listSequenceContact = createAction({
     name: 'list_sequence_contact', 
@@ -148,22 +148,33 @@ export const listSequenceContact = createAction({
         const unsubscribed = context.propsValue['getUnsubscribed'] || false;
         const clicked_link = context.propsValue['getClickedLink'] || false;
 
+        let params = `offset=${offset}`;
+
+        if (limit) {
+            params += `&limit=${limit}`;
+        }
+        if (status) {
+            params += `&status=${status}`;
+        }
+        if (step_ids) {
+            params += `&step_ids=${step_ids}`;
+        }
+        if (responded) {
+            params += `&responded=${responded}`;
+        }
+        if (unsubscribed) {
+            params += `&unsubscribed=${unsubscribed}`;
+        }
+        if (clicked_link) {
+            params += `&clicked_link=${clicked_link}`;
+        }
+
         try {
             // Call the generic API function
             const response = await callAPI({
-                url: `sequences/${id}/contacts`,
+                url: `sequences/${id}/contacts?${params}`,
                 method: 'GET',
-                api_key: api_key,
-                body :{},
-                params: {
-                    limit,
-                    offset,
-                    status,
-                    step_ids,
-                    responded,
-                    unsubscribed,
-                    clicked_link
-                }
+                api_key: api_key
             })
             if (response?.success) {
                 return response?.data; 

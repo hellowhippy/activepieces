@@ -7,9 +7,9 @@ and from (Phone of an existing channel belonging to your organization) are requi
 API Documentation: https://docs.whippy.ai/reference/createconversationnote
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
+import { createAction, Property } from '@activepieces/pieces-framework';
 import { callAPI } from '../../api/api';
-import { appAuth } from "../../..";
+import { appAuth } from '../../..';
 
 export const createNote = createAction({
   name: 'create_note', 
@@ -37,13 +37,13 @@ export const createNote = createAction({
   async run(context) {
     const api_key = context.auth;
     const body = context.propsValue['getBody'] || '';
-    const from = context.propsValue['getFromNumber'];
-    const to = context.propsValue['getToNumber'];
-    const attachments = context.propsValue['getAttachments'] || []
+    const from = context.propsValue['getFromNumber'].toString();
+    const to = context.propsValue['getToNumber'].toString();
+    const attachments = context.propsValue['getAttachments'] as string[] || [];
 
     try {
       const response = await callAPI({
-        url: "messaging/note",
+        url: `messaging/note`,
         method: 'POST',
         api_key: api_key,
         body: {

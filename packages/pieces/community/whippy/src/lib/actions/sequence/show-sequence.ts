@@ -6,9 +6,9 @@ This action Returns information about a specific sequence.
 API Documentation: https://docs.whippy.ai/reference/getsequence
 */
 
-import { createAction, Property } from "@activepieces/pieces-framework";
-import { appAuth } from "../../..";
-import { callAPI } from "../../api/api";
+import { createAction, Property } from '@activepieces/pieces-framework';
+import { appAuth } from '../../..';
+import { callAPI } from '../../api/api';
 
 export const showSequences = createAction({
     name: 'show_sequences', 
