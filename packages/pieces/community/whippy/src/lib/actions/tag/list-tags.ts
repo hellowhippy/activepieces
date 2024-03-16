@@ -26,7 +26,7 @@ export const listTags = createAction({
     }),
     getSearch: Property.LongText({
       displayName: 'Search by Tag Name',
-      required: false,
+      required: true,
     }),
     getState: Property.ShortText({
       displayName: 'State',

@@ -31,7 +31,7 @@ export const createNote = createAction({
     }),
     getAttachments: Property.Array({
       displayName: 'Attachment of URLs',
-      required: false,
+      required: true,
     }),
   },
   async run(context) {
@@ -50,7 +50,7 @@ export const createNote = createAction({
           from,
           to,
           body,
-          attachments: attachments
+          attachments
         },
       })
       if (response?.success) {

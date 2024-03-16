@@ -31,7 +31,7 @@ export const sendMessage = createAction({
     }),
     getAttachments: Property.Array({
       displayName: 'Attachment of URLs',
-      required: false,
+      required: true,
     }),
     getScheduleAt: Property.DateTime({
       displayName: 'Schedule At',

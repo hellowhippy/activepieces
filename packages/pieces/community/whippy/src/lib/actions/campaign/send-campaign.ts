@@ -33,7 +33,7 @@ export const sendCampaign = createAction({
     }),
     getAttachments: Property.Array({
       displayName: 'Attachment of URLs',
-      required: false,
+      required: true,
     }),
     getAutomationTemplates: Property.Array({
       displayName: 'IDs of Automation Templates',

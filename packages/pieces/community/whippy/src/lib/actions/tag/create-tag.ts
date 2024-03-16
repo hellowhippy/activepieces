@@ -18,7 +18,7 @@ export const createTag = createAction({
   props: {
     getName: Property.LongText({
       displayName: 'Tag Name',
-      required: false,
+      required: true,
     }),
     getColor: Property.ShortText({
       displayName: 'Tag Color',
