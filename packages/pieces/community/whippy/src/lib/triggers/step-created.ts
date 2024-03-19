@@ -1,4 +1,4 @@
-import { TriggerStrategy, createTrigger, Property } from "@activepieces/pieces-framework";
+import { TriggerStrategy, createTrigger } from "@activepieces/pieces-framework";
 import { appAuth } from "../..";
 import { WebhookInform, exampleCommon } from "../common";
 
@@ -7,54 +7,12 @@ export const stepCreated = createTrigger({
     name: 'step_created',
     displayName: 'step.created',
     description: 'Triggers when a developer created a step',
-    props: {
-        sequenceID: Property.ShortText({
-            displayName: 'Sequence ID',
-            required: true,
-        }),
-        title: Property.ShortText({
-            displayName: 'Title',
-            required: false,
-        }),
-        body: Property.ShortText({
-            displayName: 'Body',
-            required: false,
-        }),
-        status: Property.Dropdown({
-            displayName: 'Status',
-            description: 'Step status',
-            required: false,
-            options: async () => {
-                return {
-                    disabled: false,
-                    options: [
-                        {
-                            label: 'finished',
-                            value : 'finished',
-                        },
-                        {
-                            label : 'active',
-                            value : 'active',
-                        }
-                    ],
-                    defaultValue: ' ',
-                };
-            },
-            refreshers: []
-        })
-    },
+    props: {},
     type: TriggerStrategy.WEBHOOK,
     async onEnable(context) {
-        const target: any = {
-            sequence_id: context.propsValue.sequenceID,
-            title: context.propsValue.title,
-            body: context.propsValue.body,
-            status: context.propsValue.status
-        }
-        const randomTag = 'step.created';
+        const event = 'step.created';
         const webhook = await exampleCommon.subscribeWebhook(
-            target,
-            randomTag,
+            event,
             context.webhookUrl,
             context.auth
         );

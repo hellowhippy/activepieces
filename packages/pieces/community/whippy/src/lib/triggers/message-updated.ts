@@ -1,4 +1,4 @@
-import { TriggerStrategy, createTrigger, Property } from "@activepieces/pieces-framework";
+import { TriggerStrategy, createTrigger } from "@activepieces/pieces-framework";
 import { appAuth } from "../..";
 import { WebhookInform, exampleCommon } from "../common";
 
@@ -7,37 +7,12 @@ export const messageUpdated = createTrigger({
     name: 'message_updated',
     displayName: 'message.updated',
     description: 'Triggers when a developer updated a message',
-    props: {
-        id: Property.ShortText({
-            displayName: 'ID',
-            description: 'Id  of Message',
-            required: true
-        }),
-        body: Property.LongText({
-            displayName: 'Message Body',
-            required: false,
-        }),
-        toNumber: Property.ShortText({
-            displayName: 'Destination Number',
-            required: false,
-        }),
-        fromNumber: Property.ShortText({
-            displayName: "Sending Number",
-            required: false,
-        })
-    },
+    props: {},
     type: TriggerStrategy.WEBHOOK,
     async onEnable(context) {
-        const target: any = {
-            id: context.propsValue.id,
-            to: context.propsValue.toNumber,
-            body: context.propsValue.body,
-            from: context.propsValue.fromNumber
-        }
-        const randomTag = 'message.updated';
+        const event = 'message.updated';
         const webhook = await exampleCommon.subscribeWebhook(
-            target,
-            randomTag,
+            event,
             context.webhookUrl,
             context.auth
         );

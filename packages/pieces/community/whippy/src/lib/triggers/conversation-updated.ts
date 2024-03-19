@@ -1,4 +1,4 @@
-import { TriggerStrategy, createTrigger, Property } from "@activepieces/pieces-framework";
+import { TriggerStrategy, createTrigger } from "@activepieces/pieces-framework";
 import { appAuth } from "../..";
 import { WebhookInform, exampleCommon } from "../common";
 
@@ -7,59 +7,12 @@ export const conversationUpdated = createTrigger({
     name: 'conversation_updated',
     displayName: 'conversation.updated',
     description: 'Triggers when a developer updated a conversation',
-    props: {
-        id: Property.ShortText({
-            displayName: 'ID',
-            description: 'Id  of Conversation',
-            required: false
-        }),
-        assignedUser: Property.Number({
-            displayName: 'Assigned user ID',
-            required: false,
-        }),
-        status: Property.Dropdown({
-            displayName: 'Status',
-            description: 'Conversation status',
-            required: false,
-            options: async () => {
-                return {
-                    disabled: false,
-                    options: [
-                        {
-                            label: 'open',
-                            value : 'open',
-                        },
-                        {
-                            label : 'closed',
-                            value : 'closed',
-                        },
-                        {
-                            label: 'spam',
-                            value: 'spam',
-                        }
-                    ],
-                    defaultValue: ' ',
-                };
-            },
-            refreshers: []
-        }),
-        unreadCount: Property.Number({
-            displayName: "Unread Count",
-            required: false,
-        })
-    },
+    props: {},
     type: TriggerStrategy.WEBHOOK,
     async onEnable(context) {
-        const target: any = {
-            id: context.propsValue.id,
-            assigned_user: context.propsValue.assignedUser,
-            status: context.propsValue.status,
-            unread_count: context.propsValue.unreadCount
-        }
-        const randomTag = 'conversation.updated';
+        const event = 'conversation.updated';
         const webhook = await exampleCommon.subscribeWebhook(
-            target,
-            randomTag,
+            event,
             context.webhookUrl,
             context.auth
         );

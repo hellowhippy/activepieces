@@ -10,11 +10,10 @@ export const messageCreated = createTrigger({
   props: {},
   type: TriggerStrategy.WEBHOOK,
   async onEnable(context) {
-    const randomTag = 'message.created';
+    const event = 'message.created';
     console.log('webhook url', context.webhookUrl);
     const webhook = await exampleCommon.subscribeWebhook(
-      'target',
-      randomTag,
+      event,
       context.webhookUrl,
       context.auth
     );

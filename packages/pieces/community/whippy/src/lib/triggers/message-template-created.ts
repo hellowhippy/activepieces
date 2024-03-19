@@ -1,4 +1,4 @@
-import { TriggerStrategy, createTrigger, Property } from "@activepieces/pieces-framework";
+import { TriggerStrategy, createTrigger } from "@activepieces/pieces-framework";
 import { appAuth } from "../..";
 import { WebhookInform, exampleCommon } from "../common";
 
@@ -7,26 +7,12 @@ export const templateCreated = createTrigger({
     name: 'message_template_created',
     displayName: 'message_template.created',
     description: 'Triggers when a developer created a message template',
-    props: {
-        title: Property.ShortText({
-            displayName: 'Title',
-            required: false,
-        }),
-        message: Property.ShortText({
-            displayName: "Message",
-            required: false,
-        })
-    },
+    props: {},
     type: TriggerStrategy.WEBHOOK,
     async onEnable(context) {
-        const target: any = {
-            title: context.propsValue.title,
-            message: context.propsValue.message
-        }
-        const randomTag = 'message_template.created';
+        const event = 'message_template.created';
         const webhook = await exampleCommon.subscribeWebhook(
-            target,
-            randomTag,
+            event,
             context.webhookUrl,
             context.auth
         );

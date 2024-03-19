@@ -1,4 +1,4 @@
-import { AuthenticationType , HttpMethod , HttpRequest , httpClient } from "@activepieces/pieces-common"
+import { HttpMethod , HttpRequest , httpClient } from "@activepieces/pieces-common"
 
 export interface WebhookInformation {
     limit: string
@@ -20,24 +20,19 @@ export interface WebhookInform {
 }
 
 export const exampleCommon = {
-    subscribeWebhook: async (target: string, event: string, webhookUrl: string, accessToken: string) => {
+    subscribeWebhook: async (event: string, url: string, api_key: string) => {
         const request: HttpRequest = {
             method: HttpMethod.POST,
             url: `${baseUrl}developers/endpoints`,
             headers: {
                 "Content-Type": "application/json",
-                "X-WHIPPY-KEY": accessToken
+                "X-WHIPPY-KEY": api_key
             },
             body: {
                 developer_application_id: "e5639aa5-6d8d-4802-a146-5be9caafc93b",
                 active: true,
-                url: webhookUrl,
+                url: url,
                 event_types: [event],
-                target: target
-            },
-            authentication: {
-                type: AuthenticationType.BEARER_TOKEN,
-                token: accessToken,
             },
             queryParams: {},
         };
@@ -45,16 +40,13 @@ export const exampleCommon = {
         await httpClient.sendRequest(request);
     },
   
-    async unsubscribeWebhook(accessToken: string, webhookId: string) {
+    async unsubscribeWebhook(api_key: string, webhookId: string) {
         const request: HttpRequest = {
             method: HttpMethod.DELETE,
             url: `${baseUrl}/webhooks/${webhookId}`,
             headers: {
-                "Content-Type": "application/json"
-            },
-            authentication: {
-                type: AuthenticationType.BEARER_TOKEN,
-                token: accessToken,
+                "Content-Type": "application/json",
+                "X-WHIPPY-KEY": api_key
             },
         };
         return await httpClient.sendRequest(request);

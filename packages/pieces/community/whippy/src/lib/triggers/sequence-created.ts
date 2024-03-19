@@ -1,4 +1,4 @@
-import { TriggerStrategy, createTrigger, Property } from "@activepieces/pieces-framework";
+import { TriggerStrategy, createTrigger } from "@activepieces/pieces-framework";
 import { appAuth } from "../..";
 import { WebhookInform, exampleCommon } from "../common";
 
@@ -7,44 +7,12 @@ export const sequenceCreated = createTrigger({
     name: 'sequence_created',
     displayName: 'sequence.created',
     description: 'Triggers when a developer created a sequence',
-    props: {
-        title: Property.ShortText({
-            displayName: 'Title',
-            required: false,
-        }),
-        status: Property.Dropdown({
-            displayName: 'Status',
-            description: 'Sequence status',
-            required: false,
-            options: async () => {
-                return {
-                    disabled: false,
-                    options: [
-                        {
-                            label: 'finished',
-                            value : 'finished',
-                        },
-                        {
-                            label : 'active',
-                            value : 'active',
-                        }
-                    ],
-                    defaultValue: ' ',
-                };
-            },
-            refreshers: []
-        })
-    },
+    props: {},
     type: TriggerStrategy.WEBHOOK,
     async onEnable(context) {
-        const target: any = {
-            title: context.propsValue.title,
-            status: context.propsValue.status
-        }
-        const randomTag = 'sequence.created';
+        const event = 'sequence.created';
         const webhook = await exampleCommon.subscribeWebhook(
-            target,
-            randomTag,
+            event,
             context.webhookUrl,
             context.auth
         );

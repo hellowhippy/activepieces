@@ -1,4 +1,4 @@
-import { TriggerStrategy, createTrigger, Property } from "@activepieces/pieces-framework";
+import { TriggerStrategy, createTrigger } from "@activepieces/pieces-framework";
 import { appAuth } from "../..";
 import { WebhookInform, exampleCommon } from "../common";
 
@@ -7,22 +7,12 @@ export const templateDeleted = createTrigger({
     name: 'message_template_deleted',
     displayName: 'message_template.deleted',
     description: 'Triggers when a developer deleted a message template',
-    props: {
-        id: Property.ShortText({
-            displayName: 'ID',
-            description: 'Id  of Message Template',
-            required: true
-        })
-    },
+    props: {},
     type: TriggerStrategy.WEBHOOK,
     async onEnable(context) {
-        const target: any = {
-            id: context.propsValue.id
-        }
-        const randomTag = 'message_template.deleted';
+        const event = 'message_template.deleted';
         const webhook = await exampleCommon.subscribeWebhook(
-            target,
-            randomTag,
+            event,
             context.webhookUrl,
             context.auth
         );
