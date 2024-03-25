@@ -57,7 +57,10 @@ export const listCustomPropertyValues = createAction({
         const before = context.propsValue['getBefore'] || '2022-11-03T00:00:00Z';
         const after = context.propsValue['getAfter'] || '2022-11-03T00:00:00Z';
 
-        let params = `offset=${offset}`;
+        let params = '';
+        if (offset) {
+          params += `offset=${offset}`;
+        }
         if (limit) {
             params += `&limit=${limit}`;
         }

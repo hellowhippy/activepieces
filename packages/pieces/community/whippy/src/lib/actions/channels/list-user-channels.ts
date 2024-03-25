@@ -35,10 +35,12 @@ export const listUserChannels = createAction({
         const offset = context.propsValue['getOffset'] || 1;
         const limit = context.propsValue['getLimit'] || 50;
 
-        let params = `offset=${offset}`;
-
+        let params = '';
+        if (offset) {
+            params += `offset=${offset}`;
+        }
         if (limit) {
-        params += `&limit=${limit}`;
+            params += `&limit=${limit}`;
         }
 
         try {

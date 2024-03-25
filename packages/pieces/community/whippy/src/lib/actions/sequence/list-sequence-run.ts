@@ -77,8 +77,10 @@ export const listSequenceRun = createAction({
         const before = context.propsValue['getBefore'] || "";
         const after = context.propsValue['getAfter'] || "";
 
-        let params = `offset=${offset}`;
-
+        let params = '';
+        if (offset) {
+          params += `offset=${offset}`;
+        }
         if (limit) {
             params += `&limit=${limit}`;
         }

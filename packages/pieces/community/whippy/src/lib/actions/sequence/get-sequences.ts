@@ -37,7 +37,10 @@ export const getSequences = createAction({
     const offset = context.propsValue['offset'] || 0;
     const title = context.propsValue['title'] || "";
 
-    let params = `offset=${offset}`;
+    let params = '';
+    if (offset) {
+      params += `offset=${offset}`;
+    }
     if (limit) {
       params += `&limit=${limit}`;
     }

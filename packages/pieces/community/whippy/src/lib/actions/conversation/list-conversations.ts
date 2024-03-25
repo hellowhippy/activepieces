@@ -133,11 +133,7 @@ export const listConversations = createAction({
     getAssignedUsers: Property.Array({
       displayName: 'Assigned User IDs',
       required: false,
-    }),
-    getTest:Property.DateTime({
-      displayName: 'Test',
-      required: false
-    }),
+    })
   },
   async run(context) {
     const api_key = context.auth;
@@ -157,8 +153,10 @@ export const listConversations = createAction({
     const updated_at = context.propsValue['getUpdatedAt'];
     const assigned_users = context.propsValue['getAssignedUsers'];
 
-    let params = `offset=${offset}`;
-
+    let params = '';
+    if (offset) {
+      params += `offset=${offset}`;
+    }
     if (limit) {
       params += `&limit=${limit}`;
     }

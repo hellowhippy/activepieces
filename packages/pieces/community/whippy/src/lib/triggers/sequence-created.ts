@@ -1,6 +1,6 @@
-import { TriggerStrategy, createTrigger } from "@activepieces/pieces-framework";
-import { appAuth } from "../..";
-import { WebhookInform, exampleCommon } from "../common";
+import { TriggerStrategy, createTrigger } from '@activepieces/pieces-framework';
+import { appAuth } from '../..';
+import { WebhookInform, exampleCommon } from '../common';
 
 export const sequenceCreated = createTrigger({
     auth: appAuth,
@@ -29,39 +29,39 @@ export const sequenceCreated = createTrigger({
         return [context.payload.body];
     },
     sampleData: {
-        data: {
-            "id": "e4a747a3-a290-48da-b671-d3cd591f920b",
-            "type": "sequential",
-            "steps": [],
-            "title": "Sequence",
-            "status": "active",
-            "industry": '',
-            "settings": {
-              "max_time": '',
-              "on_re_add": "exclude",
-              "on_response": "remove",
-              "max_add_time": 86400,
-              "max_add_per_time": 86400,
-              "skip_sending_on_weekend": {
-                "enabled": true,
-                "use_contact_timezone": true
-              },
-              "support_sms_quiet_hours": {
-                "enabled": true,
-                "use_contact_timezone": true
-              },
-              "max_contact_sequence_runs": 5,
-              "only_send_during_business_hours": {
-                "enabled": true,
-                "use_contact_timezone": true
-              }
+      data: {
+          id: 'e4a747a3-a290-48da-b671-d3cd591f920b',
+          type: 'sequential',
+          steps: [],
+          title: 'Sequence',
+          status: 'active',
+          industry: '',
+          settings: {
+            max_time: '',
+            on_re_add: 'exclude',
+            on_response: 'remove',
+            max_add_time: 86400,
+            max_add_per_time: 86400,
+            skip_sending_on_weekend: {
+              enabled: true,
+              use_contact_timezone: true
             },
-            "created_at": "2023-11-02T14:02:13",
-            "updated_at": "2023-11-02T14:02:13",
-            "description": "Sequence",
-            "access_level": "organization"
-        },
-        "event": "sequence.created",
-        "request_id": "ad89ad7b-fb12-4bb3-8319-ad4bcb522a9e"
+            support_sms_quiet_hours: {
+              enabled: true,
+              use_contact_timezone: true
+            },
+            max_contact_sequence_runs: 5,
+            only_send_during_business_hours: {
+              enabled: true,
+              use_contact_timezone: true
+            }
+          },
+          created_at: '2023-11-02T14:02:13',
+          updated_at: '2023-11-02T14:02:13',
+          description: 'Sequence',
+          access_level: 'organization'
+      },
+      event: 'sequence.created',
+      request_id: 'ad89ad7b-fb12-4bb3-8319-ad4bcb522a9e'
     },
 });

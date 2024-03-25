@@ -16,10 +16,6 @@ export const listCampaignContacts = createAction({
     displayName: 'List Campaign Contacts',
     description: 'List Campaign Contacts',
     props: {
-        getAPIKey: Property.ShortText({
-            displayName: 'API Key',
-            required: true,
-        }),
         getId: Property.ShortText({
             displayName: 'Campaign ID',
             required: true,
@@ -107,8 +103,10 @@ export const listCampaignContacts = createAction({
         const unsubscribed = context.propsValue['getUnsubscribed']  || false;
         const clicked_level = context.propsValue['getClickedLink']  || false;
 
-        let params = `offset=${offset}`;
-
+        let params = '';
+        if (offset) {
+            params += `offset=${offset}`;
+        }
         if (limit) {
         params += `&limit=${limit}`;
         }

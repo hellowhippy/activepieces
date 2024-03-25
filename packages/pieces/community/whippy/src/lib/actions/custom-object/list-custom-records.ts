@@ -45,7 +45,10 @@ export const listCustomObjectRecords = createAction({
         const associated_resource_id = context.propsValue['getAssociatedId'];
         const associated_resource_type = context.propsValue['getResourceType'];
 
-        let params = `offset=${offset}`;
+        let params = '';
+        if (offset) {
+          params += `offset=${offset}`;
+        }
         if (limit) {
             params += `&limit=${limit}`;
         }

@@ -30,7 +30,10 @@ export const listCustomObjects = createAction({
     const limit = context.propsValue['getLimit'];
     const offset = context.propsValue['getOffset'];
 
-    let params = `offset=${offset}`;
+    let params = '';
+    if (offset) {
+      params += `offset=${offset}`;
+    }
     if (limit) {
       params += `&limit=${limit}`;
     }

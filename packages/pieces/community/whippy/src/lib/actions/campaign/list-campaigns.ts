@@ -60,8 +60,10 @@ export const listCampaigns = createAction({
     const created_by = context.propsValue['getCreatedBy'];
     const updated_by = context.propsValue['getUpdatedBy'];
 
-    let params = `offset=${offset}`;
-
+    let params = '';
+    if (offset) {
+      params += `offset=${offset}`;
+    }
     if (limit) {
     params += `&limit=${limit}`;
     }

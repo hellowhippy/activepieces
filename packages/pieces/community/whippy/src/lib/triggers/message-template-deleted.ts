@@ -1,6 +1,6 @@
-import { TriggerStrategy, createTrigger } from "@activepieces/pieces-framework";
-import { appAuth } from "../..";
-import { WebhookInform, exampleCommon } from "../common";
+import { TriggerStrategy, createTrigger } from '@activepieces/pieces-framework';
+import { appAuth } from '../..';
+import { WebhookInform, exampleCommon } from '../common';
 
 export const templateDeleted = createTrigger({
     auth: appAuth,
@@ -30,19 +30,19 @@ export const templateDeleted = createTrigger({
     },
     sampleData: {
         data: {
-            "id": "bb2df9dd-5d46-4488-80a5-df1e278553ac",
-            "title": "Whippy Message Template",
-            "message": "Don't Panic.",
-            "created_at": "2023-09-26T15:55:43.771415Z",
-            "updated_at": "2023-09-26T15:55:53.433021Z",
-            "attachments": [],
-            "channel_ids": [],
-            "access_level": "organization",
-            "created_by_id": 42,
-            "updated_by_id": 84,
-            "organization_id": "be1ecaf2-9ce7-448c-8755-e5009ccc4345"
+            id: 'bb2df9dd-5d46-4488-80a5-df1e278553ac',
+            title: 'Whippy Message Template',
+            message: "Don't Panic.",
+            created_at: '2023-09-26T15:55:43.771415Z',
+            updated_at: '2023-09-26T15:55:53.433021Z',
+            attachments: [],
+            channel_ids: [],
+            access_level: 'organization',
+            created_by_id: 42,
+            updated_by_id: 84,
+            organization_id: 'be1ecaf2-9ce7-448c-8755-e5009ccc4345'
         },
-        "event": "message_template.deleted",
-        "request_id": "905c5573-c528-47d3-9995-ce18eb7bfbd7"
+        event: 'message_template.deleted',
+        request_id: '905c5573-c528-47d3-9995-ce18eb7bfbd7'
     },
 });

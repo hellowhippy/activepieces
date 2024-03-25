@@ -1,6 +1,6 @@
-import { TriggerStrategy, createTrigger } from "@activepieces/pieces-framework";
-import { appAuth } from "../..";
-import { WebhookInform, exampleCommon } from "../common";
+import { TriggerStrategy, createTrigger } from '@activepieces/pieces-framework';
+import { appAuth } from '../..';
+import { WebhookInform, exampleCommon } from '../common';
 
 export const conversationUpdated = createTrigger({
     auth: appAuth,
@@ -30,21 +30,21 @@ export const conversationUpdated = createTrigger({
     },
     sampleData: {
         data: {
-            "id":"81f291d7-3693-4100-96f1-9957faceebfe",
-            "status":"open",
-            "language":"en",
-            "channel_id":"029f876c-e60f-454b-8e51-4c38f0484140",
-            "contact_id":"db737fac-9b54-48ba-9fdc-7db30f907fab",
-            "created_at":"2023-09-08T13:55:10.584156Z",
-            "updated_at":"2023-09-08T13:55:10.584156Z",
-            "channel_type":"phone",
-            "unread_count":1,
-            "assigned_team_id":'',
-            "assigned_user_id":2,
-            "contact_language":"en",
-            "last_message_date":''
+            id: '81f291d7-3693-4100-96f1-9957faceebfe',
+            status: 'open',
+            language: 'en',
+            channel_id: '029f876c-e60f-454b-8e51-4c38f0484140',
+            contact_id: 'db737fac-9b54-48ba-9fdc-7db30f907fab',
+            created_at: '2023-09-08T13:55:10.584156Z',
+            updated_at: '2023-09-08T13:55:10.584156Z',
+            channel_type: 'phone',
+            unread_count: 1,
+            assigned_team_id: '',
+            assigned_user_id: 2,
+            contact_language: 'en',
+            last_message_date: ''
         },
-        "event":"conversation.created",
-        "request_id":"13d0abf8-e54e-4bf0-a645-f7ff68c703a4"
+        event: 'conversation.created',
+        request_id: '13d0abf8-e54e-4bf0-a645-f7ff68c703a4'
     },
 });

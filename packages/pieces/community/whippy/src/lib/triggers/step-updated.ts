@@ -1,6 +1,6 @@
-import { TriggerStrategy, createTrigger } from "@activepieces/pieces-framework";
-import { appAuth } from "../..";
-import { WebhookInform, exampleCommon } from "../common";
+import { TriggerStrategy, createTrigger } from '@activepieces/pieces-framework';
+import { appAuth } from '../..';
+import { WebhookInform, exampleCommon } from '../common';
 
 export const stepUpdated = createTrigger({
     auth: appAuth,
@@ -30,31 +30,31 @@ export const stepUpdated = createTrigger({
     },
     sampleData: {
         data: {
-            "id": "5137e2c4-fe04-4c55-8810-943b33fd0f72",
-            "body": "Step 1",
-            "title": "Step 1",
-            "status": "active",
-            "position": 0,
-            "analytics": {
-              "responses": 0,
-              "link_clicks": 0,
-              "unsubscribes": 0,
-              "sent_messages": 0,
-              "slated_messages": 0,
-              "failed_deliveries": 0
+            id: '5137e2c4-fe04-4c55-8810-943b33fd0f72',
+            body: 'Step 1',
+            title: 'Step 1',
+            status: 'active',
+            position: 0,
+            analytics: {
+              responses: 0,
+              link_clicks: 0,
+              unsubscribes: 0,
+              sent_messages: 0,
+              slated_messages: 0,
+              failed_deliveries: 0
             },
-            "created_at": "2023-11-02T14:02:24",
-            "updated_at": "2023-11-02T14:02:33",
-            "attachments": [],
-            "sequence_id": "e4a747a3-a290-48da-b671-d3cd591f920b",
-            "schedule_options": {
-              "days": "0",
-              "hours": "0",
-              "minutes": "0",
-              "timezone": "America/Detroit"
+            created_at: '2023-11-02T14:02:24',
+            updated_at: '2023-11-02T14:02:33',
+            attachments: [],
+            sequence_id: 'e4a747a3-a290-48da-b671-d3cd591f920b',
+            schedule_options: {
+              days: '0',
+              hours: '0',
+              minutes: '0',
+              timezone: 'America/Detroit'
             }
         },
-        "event": "step.updated",
-        "request_id": "0a759a14-98d9-4c99-a810-61be02fe50b0"
+        event: 'step.updated',
+        request_id: '0a759a14-98d9-4c99-a810-61be02fe50b0'
     },
 });

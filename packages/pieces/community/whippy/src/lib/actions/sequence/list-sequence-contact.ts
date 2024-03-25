@@ -148,8 +148,10 @@ export const listSequenceContact = createAction({
         const unsubscribed = context.propsValue['getUnsubscribed'] || false;
         const clicked_link = context.propsValue['getClickedLink'] || false;
 
-        let params = `offset=${offset}`;
-
+        let params = '';
+        if (offset) {
+          params += `offset=${offset}`;
+        }
         if (limit) {
             params += `&limit=${limit}`;
         }

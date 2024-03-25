@@ -29,20 +29,22 @@ export const listContacts = createAction({
       required: false,
     }),
     getOffset: Property.Number({
-      displayName: 'API Offset',
+      displayName: 'Offset',
       required: false,
     }),
   },
   async run(context) {
     const api_key = context.auth;
-    const offset = context.propsValue['getOffset'];
-    const name = context.propsValue['getName'];
-    const email = context.propsValue['getEmail'];
-    const phone = context.propsValue['getPhone'];
+    const offset = context.propsValue['getOffset'] || 0;
+    const name = context.propsValue['getName'] || '';
+    const email = context.propsValue['getEmail'] || '';
+    const phone = context.propsValue['getPhone'] || '';
 
     // generate query params if the user has provided any of the optional fields
-    let params = `offset=${offset}`;
-
+    let params = '';
+    if (offset) {
+      params += `offset=${offset}`;
+    }
     if (name) {
       params += `&name=${name}`;
     }

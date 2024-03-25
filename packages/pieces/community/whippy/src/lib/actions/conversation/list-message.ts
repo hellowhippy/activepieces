@@ -43,16 +43,15 @@ export const listMessage = createAction({
     const id = context.propsValue['getConversationId'];
     const messages = context.propsValue['getMessages'];
 
-    const params = `messages=${messages}`;
-
+    let params = '';
+    if (messages) {
+      params += `messages=${messages}`;
+    }
     try {
       const response = await callAPI({
         url: `conversations/${id}?${params}`,
         method: 'GET',
         api_key: api_key,
-        body :{
-          messages
-        },
       })
       if (response?.success) {
         return response?.data; 

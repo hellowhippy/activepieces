@@ -62,7 +62,10 @@ export const listTags = createAction({
       console.log("Tag state can be either 'active' or 'achieved'");
     }
 
-    let params = `limit=${limit}`;
+    let params = '';
+    if (limit) {
+      params += `limit=${limit}`;
+    }
     if(offset) {
       params += `&offset=${offset}`;
     }
